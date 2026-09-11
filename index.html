@@ -1677,13 +1677,53 @@ textarea.form-control{min-height:115px}
                                     Foto Hazard
                                 </h5>
 
-                                <input
-                                    type="file"
-                                    class="form-control"
-                                    id="reportPhoto"
-                                    accept="image/*"
-                                    capture="environment"
+                                <div class="d-flex gap-2 flex-wrap">
+                                    <input
+                                        type="file"
+                                        class="form-control flex-grow-1"
+                                        id="reportPhoto"
+                                        accept="image/*"
+                                    >
+                                    <button
+                                        type="button"
+                                        class="btn btn-outline-warning"
+                                        id="openCameraButton"
+                                    >
+                                        <i class="bi bi-camera"></i> Ambil dari Kamera
+                                    </button>
+                                </div>
+
+                                <div
+                                    id="cameraPanel"
+                                    style="display:none;margin-top:12px;padding:12px;border:1px solid #e5e7eb;border-radius:12px;background:#f8fafc;"
                                 >
+                                    <video
+                                        id="cameraVideo"
+                                        autoplay
+                                        playsinline
+                                        style="width:100%;max-height:320px;border-radius:10px;background:#000;"
+                                    ></video>
+
+                                    <div class="d-flex gap-2 mt-2">
+                                        <button
+                                            type="button"
+                                            class="btn btn-warning flex-grow-1"
+                                            id="capturePhotoButton"
+                                        >
+                                            <i class="bi bi-camera-fill"></i> Ambil Foto
+                                        </button>
+
+                                        <button
+                                            type="button"
+                                            class="btn btn-outline-secondary"
+                                            id="closeCameraButton"
+                                        >
+                                            Tutup
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <canvas id="cameraCanvas" style="display:none;"></canvas>
 
                                 <img
                                     id="photoPreview"
@@ -3039,78 +3079,163 @@ document.addEventListener("click", function() {
    PHOTO PREVIEW
 ========================================================= */
 
+/* =========================================================
+   PHOTO PREVIEW + CAMERA
+========================================================= */
+
+let cameraStream = null;
+
+function validateAndPreviewPhoto(file) {
+
+    const preview =
+        document.getElementById("photoPreview");
+
+    if (!file) {
+        preview.style.display = "none";
+        preview.src = "";
+        return;
+    }
+
+    if (!file.type.startsWith("image/")) {
+        alert("File harus berupa gambar.");
+        return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+        alert("Ukuran foto maksimal 5 MB.");
+        return;
+    }
+
+    const reader = new FileReader();
+
+    reader.onload = function(event) {
+        preview.src = event.target.result;
+        preview.style.display = "block";
+    };
+
+    reader.readAsDataURL(file);
+}
+
 document
     .getElementById("reportPhoto")
-    .addEventListener(
-        "change",
-        function() {
+    .addEventListener("change", function() {
+        validateAndPreviewPhoto(this.files[0]);
+    });
 
-            const file =
-                this.files[0];
+document
+    .getElementById("openCameraButton")
+    .addEventListener("click", async function() {
 
-            const preview =
-                document.getElementById("photoPreview");
+        const panel = document.getElementById("cameraPanel");
+        const video = document.getElementById("cameraVideo");
 
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+            alert("Kamera langsung tidak didukung oleh browser ini. Gunakan pilihan foto dari galeri.");
+            return;
+        }
 
-            if (!file) {
+        try {
 
-                preview.style.display =
-                    "none";
+            cameraStream =
+                await navigator.mediaDevices.getUserMedia({
+                    video: {
+                        facingMode: {
+                            ideal: "environment"
+                        }
+                    },
+                    audio: false
+                });
 
-                preview.src = "";
+            video.srcObject = cameraStream;
+            panel.style.display = "block";
 
-                return;
+        } catch (error) {
 
-            }
-
-
-            if (!file.type.startsWith("image/")) {
-
-                alert(
-                    "File harus berupa gambar."
-                );
-
-                this.value = "";
-
-                return;
-
-            }
-
-
-            if (file.size > 5 * 1024 * 1024) {
-
-                alert(
-                    "Ukuran foto maksimal 5 MB."
-                );
-
-                this.value = "";
-
-                return;
-
-            }
-
-
-            const reader =
-                new FileReader();
-
-
-            reader.onload =
-                function(event) {
-
-                    preview.src =
-                        event.target.result;
-
-                    preview.style.display =
-                        "block";
-
-                };
-
-
-            reader.readAsDataURL(file);
+            console.error(error);
+            alert(
+                "Kamera tidak dapat dibuka. Pastikan izin kamera diberikan pada browser."
+            );
 
         }
-    );
 
+    });
+
+document
+    .getElementById("capturePhotoButton")
+    .addEventListener("click", function() {
+
+        const video =
+            document.getElementById("cameraVideo");
+
+        const canvas =
+            document.getElementById("cameraCanvas");
+
+        if (!video.videoWidth || !video.videoHeight) {
+            alert("Kamera belum siap. Tunggu beberapa detik lalu coba lagi.");
+            return;
+        }
+
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+        canvas.toBlob(function(blob) {
+
+            if (!blob) {
+                alert("Foto gagal diambil.");
+                return;
+            }
+
+            const file =
+                new File(
+                    [blob],
+                    "hazard-camera-" + Date.now() + ".jpg",
+                    { type: "image/jpeg" }
+                );
+
+            const dataTransfer = new DataTransfer();
+            dataTransfer.items.add(file);
+
+            document.getElementById("reportPhoto").files =
+                dataTransfer.files;
+
+            validateAndPreviewPhoto(file);
+            closeCamera();
+
+        }, "image/jpeg", 0.9);
+
+    });
+
+document
+    .getElementById("closeCameraButton")
+    .addEventListener("click", closeCamera);
+
+function closeCamera() {
+
+    const video =
+        document.getElementById("cameraVideo");
+
+    const panel =
+        document.getElementById("cameraPanel");
+
+    if (cameraStream) {
+
+        cameraStream.getTracks().forEach(
+            track => track.stop()
+        );
+
+        cameraStream = null;
+
+    }
+
+    video.srcObject = null;
+    panel.style.display = "none";
+
+}
+
+window.addEventListener("beforeunload", closeCamera);
 
 /* =========================================================
    CREATE REPORT
