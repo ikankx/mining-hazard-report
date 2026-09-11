@@ -840,6 +840,24 @@ textarea.form-control{min-height:115px}
 
 .progress-bar{border-radius:99px}
 
+
+/* =========================================================
+   DASHBOARD ANALYTICS
+========================================================= */
+.analytics-list{display:flex;flex-direction:column;gap:11px}
+.analytics-row{display:grid;grid-template-columns:30px minmax(0,1fr) 45px;align-items:center;gap:10px}
+.analytics-rank{font-weight:800;color:#6b7280;font-size:12px}
+.analytics-name{font-size:12px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.analytics-value{text-align:right;font-size:12px;font-weight:850}
+.analytics-bar,.trend-bar{height:7px;border-radius:99px;background:#eef1f5;overflow:hidden;margin-top:5px}
+.analytics-bar>span,.trend-bar>span{display:block;height:100%;border-radius:99px;background:var(--primary)}
+.analytics-empty{text-align:center;padding:22px 10px;color:#9ca3af;font-size:12px}
+
+@media (max-width:575px){
+    .analytics-row{grid-template-columns:25px minmax(0,1fr) 40px}
+    .trend-row{grid-template-columns:68px minmax(0,1fr) 25px}
+}
+
 /* =========================================================
    RESPONSIVE
 ========================================================= */
@@ -1376,10 +1394,33 @@ textarea.form-control{min-height:115px}
 
                 </div>
 
+            
+
+<!-- DASHBOARD ANALYTICS -->
+                <div class="row g-3 mb-4">
+                    <div class="col-lg-6">
+                        <div class="card-box">
+                            <div class="card-header-custom">
+                                <h5><i class="bi bi-trophy"></i> Top 10 Hazard</h5>
+                            </div>
+                            <div id="top10Hazards"></div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="card-box">
+                            <div class="card-header-custom">
+                                <h5><i class="bi bi-building"></i> Department dengan Laporan Terbanyak</h5>
+                            </div>
+                            <div id="departmentReportRanking"></div>
+                        </div>
+                    </div>
+                </div>
+
             </section>
 
 
-            <!-- =================================================
+            
+                <!-- =================================================
                  CREATE REPORT
             ================================================= -->
 
@@ -1446,7 +1487,7 @@ textarea.form-control{min-height:115px}
                                         </div>
                                         <div class="col-md-6">
                                             <label class="form-label">Waktu</label>
-                                            <input type="time" class="form-control" id="reportTime">
+                                            <input type="time" class="form-control" id="reportTime" min="00:00" max="23:59" step="60">
                                         </div>
                                     </div>
                                 </div>
@@ -2483,6 +2524,66 @@ document
    DASHBOARD
 ========================================================= */
 
+
+let dashboardTrendMode="weekly";
+
+function dashboardReportDate(r){
+    if(r.date){
+        const a=String(r.date).split("-");
+        if(a.length===3){
+            const d=new Date(+a[0],+a[1]-1,+a[2]);
+            if(!isNaN(d)) return d;
+        }
+    }
+    if(r.createdAt){
+        const d=new Date(r.createdAt);
+        if(!isNaN(d)) return d;
+    }
+    return null;
+}
+
+function renderAnalyticsRanking(id,items,empty){
+    const el=document.getElementById(id);
+    if(!el)return;
+    if(!items.length){el.innerHTML=`<div class="analytics-empty">${empty}</div>`;return;}
+    const max=Math.max(...items.map(x=>x.value),1);
+    el.innerHTML=`<div class="analytics-list">${items.map((x,i)=>`
+        <div class="analytics-row">
+            <div class="analytics-rank">${i+1}</div>
+            <div>
+                <div class="analytics-name">${escapeHTML(x.name)}</div>
+                <div class="analytics-bar"><span style="width:${Math.round(x.value/max*100)}%"></span></div>
+            </div>
+            <div class="analytics-value">${x.value}</div>
+        </div>`).join("")}</div>`;
+}
+
+function renderTop10Hazards(reports){
+    const c={};
+    reports.forEach(r=>{const k=r.category||"Other";c[k]=(c[k]||0)+1;});
+    const items=Object.entries(c).map(([name,value])=>({name,value}))
+        .sort((a,b)=>b.value-a.value).slice(0,10);
+    renderAnalyticsRanking("top10Hazards",items,"Belum ada data hazard.");
+}
+
+function renderDepartmentReports(reports){
+    const c={};
+    reports.forEach(r=>{const k=r.department||"Tidak diketahui";c[k]=(c[k]||0)+1;});
+    const items=Object.entries(c).map(([name,value])=>({name,value}))
+        .sort((a,b)=>b.value-a.value);
+    renderAnalyticsRanking("departmentReportRanking",items,"Belum ada data department.");
+}
+
+
+
+function updateDashboardAnalytics(){
+    // Semua statistik dashboard mengacu langsung ke data Hazard Reports.
+    const reports = getReports();
+
+    renderTop10Hazards(reports);
+    renderDepartmentReports(reports);
+}
+
 function updateDashboard() {
 
     const reports = getReports();
@@ -2556,6 +2657,8 @@ function updateDashboard() {
 
 
     renderRecentReports();
+
+    updateDashboardAnalytics();
 
 }
 
@@ -3467,6 +3570,23 @@ function stopCamera() {
     }
 
     clearCameraError();
+}
+
+document.getElementById("trendMonthlyBtn").addEventListener("click",function(){
+    dashboardTrendMode="monthly";
+    this.classList.add("active");
+    document.getElementById("trendWeeklyBtn").classList.remove("active");
+    renderHazardTrend(getReports());
+});
+
+/* WAKTU: mulai 00:00 dan berhenti di 23:59 */
+const reportTimeInput = document.getElementById("reportTime");
+if (reportTimeInput) {
+    reportTimeInput.addEventListener("pointerdown", function() {
+        if (!this.value) {
+            this.value = "00:00";
+        }
+    });
 }
 
 /* =========================================================
