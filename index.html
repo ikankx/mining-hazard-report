@@ -250,6 +250,93 @@ body{
     50%{opacity:.45}
 }
 
+/* Hazard Reports filter layout */
+.filter-row{
+    display:grid;
+    grid-template-columns:2fr 1.1fr 1.1fr 1.35fr 1.25fr 1.7fr 1fr 1.1fr;
+    gap:.5rem;
+    align-items:center;
+}
+
+.filter-item{
+    min-width:0;
+}
+
+.date-filter-wrap{
+    position:relative;
+}
+
+.date-filter-button{
+    background:#fff;
+    border:1px solid #dee2e6;
+    padding:.65rem .8rem;
+    color:#212529;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+.date-filter-button::after{
+    float:right;
+    margin-top:.35rem;
+}
+
+.date-filter-panel{
+    display:none;
+    position:absolute;
+    z-index:1050;
+    top:calc(100% + 6px);
+    left:0;
+    width:300px;
+    padding:12px;
+    background:#fff;
+    border:1px solid #dee2e6;
+    border-radius:8px;
+    box-shadow:0 8px 20px rgba(0,0,0,.15);
+}
+
+.date-filter-panel.show{
+    display:block;
+}
+
+.date-filter-option + .date-filter-option{
+    margin-top:12px;
+}
+
+.date-filter-option label{
+    display:block;
+    margin-bottom:8px;
+    font-size:15px;
+    cursor:pointer;
+}
+
+.date-filter-option input[type="radio"],
+.date-filter-option input[type="checkbox"]{
+    width:18px;
+    height:18px;
+    margin-right:7px;
+    vertical-align:-3px;
+}
+
+@media (max-width:575px){
+    .date-filter-panel{
+        width:100%;
+        min-width:260px;
+    }
+}
+
+@media (max-width:1100px){
+    .filter-row{
+        grid-template-columns:repeat(4,1fr);
+    }
+}
+
+@media (max-width:575px){
+    .filter-row{
+        grid-template-columns:1fr;
+    }
+}
+
 /* =========================================================
    APP SHELL
 ========================================================= */
@@ -303,6 +390,83 @@ body{
     color:#8d99ab;
     letter-spacing:1.1px;
     margin-top:3px;
+}
+
+.brand-content{
+    min-width:0;
+}
+
+.sidebar-toggle{
+    margin-left:auto;
+    width:30px;
+    height:30px;
+    border:1px solid rgba(255,255,255,.10);
+    background:rgba(255,255,255,.05);
+    color:#aeb8c8;
+    border-radius:8px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    flex-shrink:0;
+    transition:.2s ease;
+}
+
+.sidebar-toggle:hover{
+    background:rgba(255,255,255,.10);
+    color:#fff;
+}
+
+.sidebar.collapsed{
+    width:78px;
+}
+
+.sidebar.collapsed .brand{
+    padding:0 17px;
+    justify-content:center;
+}
+
+.sidebar.collapsed .brand-icon{
+    margin-right:0;
+}
+
+.sidebar.collapsed .brand-content,
+.sidebar.collapsed .menu-label,
+.sidebar.collapsed .menu-item{
+    font-size:0;
+}
+
+.sidebar.collapsed .brand-content{
+    display:none;
+}
+
+.sidebar.collapsed .sidebar-menu{
+    padding:20px 13px;
+}
+
+.sidebar.collapsed .menu-item{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:12px 8px;
+}
+
+.sidebar.collapsed .menu-item i{
+    width:auto;
+    font-size:15px;
+}
+
+.sidebar.collapsed .menu-label{
+    padding:0;
+    height:8px;
+}
+
+.sidebar.collapsed .sidebar-toggle i{
+    transform:rotate(180deg);
+}
+
+.main.sidebar-collapsed{
+    margin-left:78px;
 }
 
 .sidebar-menu{padding:20px 13px}
@@ -698,43 +862,43 @@ textarea.form-control{min-height:115px}
 @media (max-width:575px){
     #loginPage{
         min-height:100dvh;
-        padding:10px;
+        padding:12px;
         overflow-y:auto;
         align-items:center;
         justify-content:center;
     }
     .login-card{
         width:100%;
-        max-width:340px;
-        padding:20px 17px;
-        border-radius:18px;
+        max-width:370px;
+        padding:24px 20px;
+        border-radius:20px;
     }
     .logo-box{
-        width:52px;
-        height:52px;
-        border-radius:14px;
-        font-size:23px;
-        margin:0 auto 11px;
+        width:58px;
+        height:58px;
+        border-radius:16px;
+        font-size:25px;
+        margin:0 auto 14px;
     }
-    .login-title{font-size:21px;margin-bottom:4px}
-    .login-subtitle{font-size:11px;margin-bottom:17px}
-    .login-card .form-label{font-size:10px;margin-bottom:5px}
+    .login-title{font-size:23px;margin-bottom:5px}
+    .login-subtitle{font-size:12px;margin-bottom:21px}
+    .login-card .form-label{font-size:11px;margin-bottom:6px}
     .login-card .form-control{
-        min-height:43px;
-        height:43px;
-        padding:8px 12px;
-        font-size:13px;
-        border-radius:9px;
+        min-height:46px;
+        height:46px;
+        padding:10px 13px;
+        font-size:14px;
+        border-radius:10px;
     }
     .login-card .btn-warning{
-        min-height:43px;
-        height:43px;
-        font-size:14px;
-        border-radius:9px;
+        min-height:46px;
+        height:46px;
+        font-size:15px;
+        border-radius:10px;
     }
-    .login-system-status{margin-top:10px;font-size:8px}
-    .login-card .text-center{margin-top:10px !important;font-size:10px !important}
-    .login-card::after{margin-top:12px;font-size:7px;letter-spacing:1px}
+    .login-system-status{margin-top:12px;font-size:9px}
+    .login-card .text-center{margin-top:12px !important;font-size:11px !important}
+    .login-card::after{margin-top:15px;font-size:8px;letter-spacing:1.1px}
     .topbar{height:68px;padding:0 15px}
     .content{padding:15px}
     .page-title{font-size:23px}
@@ -743,6 +907,30 @@ textarea.form-control{min-height:115px}
     .card-box{padding:16px}
     .hide-mobile{display:none}
 }
+
+/* Hide native date input placeholder text in the date filter only */
+#filterDateFrom::-webkit-datetime-edit-text,
+#filterDateFrom::-webkit-datetime-edit-month-field,
+#filterDateFrom::-webkit-datetime-edit-day-field,
+#filterDateFrom::-webkit-datetime-edit-year-field,
+#filterDateTo::-webkit-datetime-edit-text,
+#filterDateTo::-webkit-datetime-edit-month-field,
+#filterDateTo::-webkit-datetime-edit-day-field,
+#filterDateTo::-webkit-datetime-edit-year-field{
+    color:transparent;
+}
+
+#filterDateFrom.has-date::-webkit-datetime-edit-text,
+#filterDateFrom.has-date::-webkit-datetime-edit-month-field,
+#filterDateFrom.has-date::-webkit-datetime-edit-day-field,
+#filterDateFrom.has-date::-webkit-datetime-edit-year-field,
+#filterDateTo.has-date::-webkit-datetime-edit-text,
+#filterDateTo.has-date::-webkit-datetime-edit-month-field,
+#filterDateTo.has-date::-webkit-datetime-edit-day-field,
+#filterDateTo.has-date::-webkit-datetime-edit-year-field{
+    color:inherit;
+}
+
 </style>
 </head>
 
@@ -831,7 +1019,7 @@ textarea.form-control{min-height:115px}
                 <i class="bi bi-shield-check"></i>
             </div>
 
-            <div>
+            <div class="brand-content">
                 <div class="brand-text">
                     HAZARD REPORT
                 </div>
@@ -840,6 +1028,10 @@ textarea.form-control{min-height:115px}
                     MINING SAFETY SYSTEM
                 </div>
             </div>
+
+            <button class="sidebar-toggle" id="sidebarToggle" type="button" aria-label="Minimize menu" title="Minimize menu">
+                <i class="bi bi-chevron-left"></i>
+            </button>
 
         </div>
 
@@ -1217,6 +1409,48 @@ textarea.form-control{min-height:115px}
                                     Informasi Hazard
                                 </h5>
 
+                                <div class="mb-4">
+                                    <div class="fw-bold mb-3">Dilaporkan Oleh:</div>
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <label class="form-label">Perusahaan</label>
+                                            <select class="form-select" id="reporterCompany">
+                                                <option value="">Pilih Perusahaan</option>
+                                                <option>PT Bakti Pertiwi Nusantara</option>
+                                                <option>PT Kaia Pilar Indonesia</option>
+                                                <option>PT Empat Pilar Adidaya</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <label class="form-label">Nama</label>
+                                            <input type="text" class="form-control" id="reporterName" placeholder="Masukkan nama">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Jabatan</label>
+                                            <select class="form-select" id="reporterPosition">
+                                                <option value="">Pilih jabatan</option>
+                                                <option>Crew</option>
+                                                <option>Admin</option>
+                                                <option>Foreman</option>
+                                                <option>Supervisor</option>
+                                                <option>Superintendent</option>
+                                                <option>Manager</option>
+                                                <option>General Manager</option>
+                                                <option>PJO</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Tanggal</label>
+                                            <input type="date" class="form-control" id="reportDate">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Waktu</label>
+                                            <input type="time" class="form-control" id="reportTime">
+                                        </div>
+                                    </div>
+                                </div>
+
 
                                 <div class="row g-3">
 
@@ -1271,15 +1505,17 @@ textarea.form-control{min-height:115px}
                                                 Pilih department
                                             </option>
 
-                                            <option>Mining Operation</option>
                                             <option>Engineering</option>
+                                            <option>Environment</option>
+                                            <option>Finance Accounting</option>
                                             <option>Geology</option>
-                                            <option>HSE</option>
-                                            <option>Maintenance</option>
-                                            <option>IT</option>
-                                            <option>Warehouse</option>
                                             <option>HRGA</option>
-                                            <option>Security</option>
+                                            <option>IT</option>
+                                            <option>Mechanical &amp; Electrical</option>
+                                            <option>OHS - Divisi Technical Operation</option>
+                                            <option>Operation</option>
+                                            <option>Procurement &amp; Logistic</option>
+                                            <option>QAQC</option>
 
                                         </select>
 
@@ -1303,16 +1539,40 @@ textarea.form-control{min-height:115px}
                                                 Pilih kategori
                                             </option>
 
-                                            <option>Unsafe Condition</option>
-                                            <option>Unsafe Act</option>
-                                            <option>Environmental</option>
-                                            <option>Equipment</option>
-                                            <option>Housekeeping</option>
-                                            <option>Electrical</option>
-                                            <option>Traffic</option>
-                                            <option>Fire</option>
-                                            <option>PPE</option>
-                                            <option>Other</option>
+                                            <option>Unsafe Condition — Kondisi tidak aman</option>
+                                            <option>Unsafe Act — Tindakan tidak aman</option>
+                                            <option>Environmental — Lingkungan</option>
+                                            <option>Equipment / Machinery — Alat &amp; unit</option>
+                                            <option>Road &amp; Traffic — Jalan &amp; lalu lintas</option>
+                                            <option>Electrical — Kelistrikan</option>
+                                            <option>Fire &amp; Explosion — Kebakaran &amp; ledakan</option>
+                                            <option>PPE — Alat pelindung diri</option>
+                                            <option>Housekeeping — Kebersihan &amp; kerapian</option>
+                                            <option>Working at Height — Bekerja di ketinggian</option>
+                                            <option>Confined Space — Ruang terbatas</option>
+                                            <option>Lifting &amp; Rigging — Pengangkatan &amp; rigging</option>
+                                            <option>Mining Operation — Operasional pertambangan</option>
+                                            <option>Drilling &amp; Blasting — Pengeboran &amp; peledakan</option>
+                                            <option>Ground Control — Stabilitas tanah/lereng</option>
+                                            <option>Dust &amp; Air Quality — Debu &amp; kualitas udara</option>
+                                            <option>Noise &amp; Vibration — Kebisingan &amp; getaran</option>
+                                            <option>Chemical / Hazardous Material — Bahan kimia/B3</option>
+                                            <option>Fuel &amp; Lubricant — BBM &amp; pelumas</option>
+                                            <option>Waste Management — Pengelolaan limbah</option>
+                                            <option>Water Management — Pengelolaan air</option>
+                                            <option>Ergonomics — Ergonomi</option>
+                                            <option>Occupational Health — Kesehatan kerja</option>
+                                            <option>Communication — Komunikasi</option>
+                                            <option>Emergency / Evacuation — Keadaan darurat &amp; evakuasi</option>
+                                            <option>Security — Keamanan</option>
+                                            <option>Tools &amp; Hand Equipment — Peralatan kerja</option>
+                                            <option>Workshop — Workshop/bengkel</option>
+                                            <option>Camp &amp; Facility — Camp &amp; fasilitas</option>
+                                            <option>Personal Hygiene / Sanitation — Higiene &amp; sanitasi</option>
+                                            <option>Contractor / Subcontractor — Kontraktor/subkontraktor</option>
+                                            <option>Procedure / SOP — Prosedur &amp; SOP</option>
+                                            <option>Signage / Barricade — Rambu &amp; pembatas</option>
+                                            <option>Other — Lainnya</option>
 
                                         </select>
 
@@ -1486,62 +1746,56 @@ textarea.form-control{min-height:115px}
 
                 <div class="card-box">
 
-                    <div class="row g-2 mb-4">
-
-                        <div class="col-md-4">
-
-                            <input
-                                type="search"
-                                id="searchReport"
-                                class="form-control"
-                                placeholder="Cari report..."
-                            >
-
+                    <div class="filter-row mb-4">
+                        <div class="filter-item date-filter-wrap">
+                            <button type="button" class="form-select text-start date-filter-button" id="filterDateButton">Tanggal</button>
+                            <div class="date-filter-panel" id="dateFilterPanel">
+                                <div class="date-filter-option">
+                                    <label><input type="radio" name="dateMode" id="dateFromMode" checked> Dari tanggal</label>
+                                    <input type="date" class="form-control" id="filterDateFrom">
+                                </div>
+                                <div class="date-filter-option">
+                                    <label for="dateToMode"><input type="checkbox" id="dateToMode"> Hingga tanggal</label>
+                                    <input type="date" class="form-control" id="filterDateTo" disabled>
+                                </div>
+                            </div>
                         </div>
-
-
-                        <div class="col-md-2">
-
-                            <select
-                                class="form-select"
-                                id="filterStatus"
-                            >
-
-                                <option value="">Semua Status</option>
+                        
+                        <div class="filter-item">
+                            <select class="form-select" id="filterStatus">
+                                <option value="" disabled selected>Status</option>
                                 <option value="Open">Open</option>
                                 <option value="In Progress">In Progress</option>
                                 <option value="Closed">Closed</option>
-
                             </select>
-
                         </div>
-
-
-                        <div class="col-md-2">
-
-                            <select
-                                class="form-select"
-                                id="filterRisk"
-                            >
-
-                                <option value="">Semua Risiko</option>
+                        <div class="filter-item">
+                            <select class="form-select" id="filterRisk">
+                                <option value="" disabled selected>Risiko</option>
                                 <option value="High">High</option>
                                 <option value="Medium">Medium</option>
                                 <option value="Low">Low</option>
-
                             </select>
-
                         </div>
-
-
-                        <div class="col-md-2">
-
-                            <select
-                                class="form-select"
-                                id="filterLocation"
-                            >
-
-                                <option value="">Semua Lokasi</option>
+                        <div class="filter-item">
+                            <select class="form-select" id="filterDepartment">
+                                <option value="" disabled selected>Department</option>
+                                <option>Engineering</option>
+                                <option>Environment</option>
+                                <option>Finance Accounting</option>
+                                <option>Geology</option>
+                                <option>HRGA</option>
+                                <option>IT</option>
+                                <option>Mechanical & Electrical</option>
+                                <option>OHS - Divisi Technical Operation</option>
+                                <option>Operation</option>
+                                <option>Procurement & Logistic</option>
+                                <option>QAQC</option>
+                            </select>
+                        </div>
+                        <div class="filter-item">
+                            <select class="form-select" id="filterLocation">
+                                <option value="" disabled selected>Lokasi</option>
                                 <option>PIT</option>
                                 <option>Hauling Road</option>
                                 <option>Workshop</option>
@@ -1552,26 +1806,33 @@ textarea.form-control{min-height:115px}
                                 <option>Fuel Station</option>
                                 <option>Crusher</option>
                                 <option>Stockpile</option>
-
                             </select>
-
                         </div>
-
-
-                        <div class="col-md-2">
-
-                            <button
-                                class="btn btn-outline-secondary w-100"
-                                id="resetFilter"
-                            >
-                                <i class="bi bi-arrow-counterclockwise"></i>
-                                Reset
+                        <div class="filter-item">
+                            <select class="form-select" id="filterCategory">
+                                <option value="" disabled selected>Category</option>
+                                <option>Unsafe Condition</option><option>Unsafe Act</option><option>Environmental</option>
+                                <option>Equipment / Machinery</option><option>Road & Traffic</option><option>Electrical</option>
+                                <option>Fire & Explosion</option><option>PPE</option><option>Housekeeping</option>
+                                <option>Working at Height</option><option>Confined Space</option><option>Lifting & Rigging</option>
+                                <option>Mining Operation</option><option>Drilling & Blasting</option><option>Ground Control</option>
+                                <option>Dust & Air Quality</option><option>Noise & Vibration</option><option>Chemical / Hazardous Material</option>
+                                <option>Fuel & Lubricant</option><option>Waste Management</option><option>Water Management</option>
+                                <option>Ergonomics</option><option>Occupational Health</option><option>Communication</option>
+                                <option>Emergency / Evacuation</option><option>Security</option><option>Tools & Hand Equipment</option>
+                                <option>Workshop</option><option>Camp & Facility</option><option>Personal Hygiene / Sanitation</option>
+                                <option>Contractor / Subcontractor</option><option>Procedure / SOP</option><option>Signage / Barricade</option><option>Other</option>
+                            </select>
+                        </div>
+<div class="filter-item">
+                            <input type="search" id="searchReport" class="form-control" placeholder="Cari report...">
+                        </div>
+                        <div class="filter-item">
+                            <button class="btn btn-outline-secondary w-100" id="resetFilter">
+                                <i class="bi bi-arrow-counterclockwise"></i> Reset
                             </button>
-
                         </div>
-
                     </div>
-
 
                     <div
                         class="table-responsive"
@@ -1800,7 +2061,8 @@ function initializeData() {
 
             {
                 id: crypto.randomUUID(),
-                number: "HR-2026-00001",
+                number: "HZR-BPN-IX-2026-0001",
+                reporterCompany: "PT Bakti Pertiwi Nusantara",
                 date: "2026-09-09",
                 time: "08:15",
                 reporter: "Supervisor Mining",
@@ -1820,7 +2082,8 @@ function initializeData() {
 
             {
                 id: crypto.randomUUID(),
-                number: "HR-2026-00002",
+                number: "HZR-KPI-IX-2026-0001",
+                reporterCompany: "PT Kaia Pilar Indonesia",
                 date: "2026-09-08",
                 time: "14:30",
                 reporter: "HSE Officer",
@@ -1840,7 +2103,8 @@ function initializeData() {
 
             {
                 id: crypto.randomUUID(),
-                number: "HR-2026-00003",
+                number: "HZR-EPA-IX-2026-0001",
+                reporterCompany: "PT Empat Pilar Adidaya",
                 date: "2026-09-07",
                 time: "10:10",
                 reporter: "Administrator",
@@ -1982,6 +2246,7 @@ function showApplication(user) {
         user.name.charAt(0).toUpperCase();
 
 
+
     initializeData();
 
     updateDashboard();
@@ -2120,6 +2385,26 @@ function showPage(pageName) {
     }
 
 }
+
+
+/* =========================================================
+   SIDEBAR TOGGLE
+========================================================= */
+
+document
+    .getElementById("sidebarToggle")
+    .addEventListener("click", function() {
+
+        const sidebar =
+            document.getElementById("sidebar");
+
+        const main =
+            document.querySelector(".main");
+
+        sidebar.classList.toggle("collapsed");
+        main.classList.toggle("sidebar-collapsed");
+
+    });
 
 
 /* =========================================================
@@ -2336,6 +2621,25 @@ function renderRecentReports() {
    REPORT TABLE
 ========================================================= */
 
+function updateDateFilterButton() {
+
+    const button = document.getElementById("filterDateButton");
+    const from = document.getElementById("filterDateFrom").value;
+    const to = document.getElementById("filterDateTo").value;
+
+    if (!from) {
+        button.textContent = "Tanggal";
+        return;
+    }
+
+    if (to) {
+        button.textContent = `${formatDate(from)} - ${formatDate(to)}`;
+    } else {
+        button.textContent = `Dari: ${formatDate(from)}`;
+    }
+}
+
+
 function renderReports() {
 
     const search =
@@ -2358,6 +2662,26 @@ function renderReports() {
     const location =
         document
             .getElementById("filterLocation")
+            .value;
+
+    const department =
+        document
+            .getElementById("filterDepartment")
+            .value;
+
+    const category =
+        document
+            .getElementById("filterCategory")
+            .value;
+
+    const dateFrom =
+        document
+            .getElementById("filterDateFrom")
+            .value;
+
+    const dateTo =
+        document
+            .getElementById("filterDateTo")
             .value;
 
 
@@ -2407,6 +2731,26 @@ function renderReports() {
                 (!location ||
                     report.location === location)
 
+                &&
+
+                (!department ||
+                    report.department === department)
+
+                &&
+
+                (!category ||
+                    report.category === category)
+
+                &&
+
+                (!dateFrom ||
+                    report.date >= dateFrom)
+
+                &&
+
+                (!dateTo ||
+                    report.date <= dateTo)
+
             );
 
         });
@@ -2441,6 +2785,7 @@ function renderReports() {
 
                 <tr>
 
+                    <th>Tanggal</th>
                     <th>Report</th>
                     <th>Lokasi</th>
                     <th>Department</th>
@@ -2464,16 +2809,13 @@ function renderReports() {
             <tr>
 
                 <td>
+                    ${formatDate(report.date)}
+                </td>
 
+                <td>
                     <div class="report-number">
                         ${escapeHTML(report.number)}
                     </div>
-
-                    <div class="location-text">
-                        ${formatDate(report.date)}
-                        ${escapeHTML(report.time)}
-                    </div>
-
                 </td>
 
                 <td>
@@ -2533,19 +2875,21 @@ function renderReports() {
    FILTER EVENTS
 ========================================================= */
 
+document
+    .getElementById("searchReport")
+    .addEventListener("input", renderReports);
+
 [
-    "searchReport",
     "filterStatus",
     "filterRisk",
-    "filterLocation"
+    "filterDepartment",
+    "filterLocation",
+    "filterCategory"
 ].forEach(id => {
 
     document
         .getElementById(id)
-        .addEventListener(
-            "input",
-            renderReports
-        );
+        .addEventListener("change", renderReports);
 
 });
 
@@ -2566,9 +2910,128 @@ document
         document.getElementById("filterLocation").value =
             "";
 
+        document.getElementById("filterDepartment").value =
+            "";
+
+        document.getElementById("filterCategory").value =
+            "";
+
+        document.getElementById("filterDateFrom").value =
+            "";
+        document.getElementById("filterDateFrom").classList.remove("has-date");
+
+        document.getElementById("filterDateTo").value =
+            "";
+        document.getElementById("filterDateTo").classList.remove("has-date");
+
+        document.getElementById("dateToMode").checked = false;
+        document.getElementById("filterDateTo").disabled = true;
+        document.getElementById("filterDateButton").textContent = "Tanggal";
+
         renderReports();
 
     });
+
+
+/* =========================================================
+   DATE FILTER
+========================================================= */
+
+document.getElementById("filterDateButton").addEventListener("click", function(e) {
+    e.stopPropagation();
+    document.getElementById("dateFilterPanel").classList.toggle("show");
+});
+
+document.getElementById("dateFilterPanel").addEventListener("click", function(e) {
+    e.stopPropagation();
+});
+
+function enableAndOpenDateToPicker() {
+    const checkbox = document.getElementById("dateToMode");
+    const to = document.getElementById("filterDateTo");
+
+    if (!checkbox.checked) return;
+
+    // Pastikan field benar-benar aktif sebelum kalender dibuka.
+    to.disabled = false;
+    to.removeAttribute("disabled");
+
+    if (typeof to.showPicker === "function") {
+        try {
+            to.showPicker();
+        } catch (error) {
+            // Fallback: input tetap aktif dan kalender dapat dibuka dengan klik.
+        }
+    }
+}
+
+document.getElementById("dateToMode").addEventListener("change", function() {
+    const to = document.getElementById("filterDateTo");
+
+    if (this.checked) {
+        to.disabled = false;
+        to.removeAttribute("disabled");
+
+        // Beri waktu browser menyelesaikan perubahan checkbox,
+        // lalu buka kalender native.
+        setTimeout(enableAndOpenDateToPicker, 0);
+    } else {
+        to.disabled = true;
+        to.value = "";
+    }
+
+    updateDateFilterButton();
+    renderReports();
+});
+
+// Tetap bisa membuka kalender dengan menekan field "Hingga tanggal".
+document.getElementById("filterDateTo").addEventListener("pointerdown", function() {
+    enableAndOpenDateToPicker();
+});
+
+document.getElementById("filterDateTo").addEventListener("click", function() {
+    enableAndOpenDateToPicker();
+});
+
+function syncDateDisplay(input) {
+    if (input.value) {
+        input.classList.add("has-date");
+    } else {
+        input.classList.remove("has-date");
+    }
+}
+
+document.getElementById("filterDateFrom").addEventListener("input", function() {
+    syncDateDisplay(this);
+});
+
+document.getElementById("filterDateTo").addEventListener("input", function() {
+    syncDateDisplay(this);
+});
+
+document.getElementById("filterDateFrom").addEventListener("change", function() {
+    syncDateDisplay(this);
+    const to = document.getElementById("filterDateTo");
+    if (to.value && this.value && to.value < this.value) {
+        to.value = this.value;
+    }
+    updateDateFilterButton();
+    renderReports();
+});
+
+document.getElementById("filterDateTo").addEventListener("change", function() {
+    syncDateDisplay(this);
+    const from = document.getElementById("filterDateFrom");
+    if (from.value && this.value && this.value < from.value) {
+        this.value = from.value;
+    }
+    updateDateFilterButton();
+    renderReports();
+});
+
+document.addEventListener("click", function() {
+    document.getElementById("dateFilterPanel").classList.remove("show");
+});
 
 
 /* =========================================================
@@ -2678,6 +3141,14 @@ document
             const reportNumber =
                 generateReportNumber();
 
+            if (!reportNumber) {
+
+                alert("Silakan pilih perusahaan terlebih dahulu.");
+
+                return;
+
+            }
+
 
             const photoFile =
                 document
@@ -2705,20 +3176,29 @@ document
                 number: reportNumber,
 
                 date:
-                    now.toISOString()
-                        .slice(0,10),
+                    document
+                        .getElementById("reportDate")
+                        .value,
 
                 time:
-                    now.toLocaleTimeString(
-                        "id-ID",
-                        {
-                            hour: "2-digit",
-                            minute: "2-digit"
-                        }
-                    ),
+                    document
+                        .getElementById("reportTime")
+                        .value,
+
+                reporterCompany:
+                    document
+                        .getElementById("reporterCompany")
+                        .value,
 
                 reporter:
-                    currentUser.name,
+                    document
+                        .getElementById("reporterName")
+                        .value,
+
+                reporterPosition:
+                    document
+                        .getElementById("reporterPosition")
+                        .value,
 
                 location:
                     document
@@ -2809,36 +3289,56 @@ function generateReportNumber() {
     const reports =
         getReports();
 
+    const now =
+        new Date();
 
     const year =
-        new Date()
-            .getFullYear();
+        now.getFullYear();
 
+    const month =
+        now.getMonth() + 1;
 
-    let max =
-        0;
+    const monthRoman = [
+        "I", "II", "III", "IV", "V", "VI",
+        "VII", "VIII", "IX", "X", "XI", "XII"
+    ][month - 1];
 
+    const company =
+        document.getElementById("reporterCompany").value;
+
+    const companyCode = {
+        "PT Bakti Pertiwi Nusantara": "BPN",
+        "PT Kaia Pilar Indonesia": "KPI",
+        "PT Empat Pilar Adidaya": "EPA"
+    }[company];
+
+    if (!companyCode) {
+        return "";
+    }
+
+    const prefix =
+        `HZR-${companyCode}-${monthRoman}-${year}-`;
+
+    let max = 0;
 
     reports.forEach(report => {
 
-        const match =
-            report.number.match(
-                /(\d+)$/
-            );
+        if (
+            typeof report.number === "string" &&
+            report.number.startsWith(prefix)
+        ) {
 
+            const match =
+                report.number.match(/(\d+)$/);
 
-        if (match) {
+            if (match) {
 
-            const number =
-                parseInt(
-                    match[1],
-                    10
-                );
+                const number =
+                    parseInt(match[1], 10);
 
-
-            if (number > max) {
-
-                max = number;
+                if (number > max) {
+                    max = number;
+                }
 
             }
 
@@ -2846,13 +3346,9 @@ function generateReportNumber() {
 
     });
 
-
     return (
-        "HR-" +
-        year +
-        "-" +
-        String(max + 1)
-            .padStart(5, "0")
+        prefix +
+        String(max + 1).padStart(4, "0")
     );
 
 }
