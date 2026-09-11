@@ -3572,13 +3572,6 @@ function stopCamera() {
     clearCameraError();
 }
 
-document.getElementById("trendMonthlyBtn").addEventListener("click",function(){
-    dashboardTrendMode="monthly";
-    this.classList.add("active");
-    document.getElementById("trendWeeklyBtn").classList.remove("active");
-    renderHazardTrend(getReports());
-});
-
 /* WAKTU: mulai 00:00 dan berhenti di 23:59 */
 const reportTimeInput = document.getElementById("reportTime");
 if (reportTimeInput) {
