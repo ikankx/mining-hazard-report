@@ -1447,15 +1447,15 @@ textarea.form-control{min-height:115px}
                             <div class="card-box">
 
                                 <h5 class="mb-4">
-                                    Informasi Hazard
+                                    <strong>INFORMASI HAZARD</strong>
                                 </h5>
 
                                 <div class="mb-4">
                                     <div class="fw-bold mb-3">Dilaporkan Oleh:</div>
                                     <div class="row g-3">
                                         <div class="col-md-6">
-                                            <label class="form-label">Perusahaan</label>
-                                            <select class="form-select" id="reporterCompany">
+                                            <label class="form-label">Perusahaan <span class="required">*</span></label>
+                                            <select class="form-select" id="reporterCompany" required>
                                                 <option value="">Pilih Perusahaan</option>
                                                 <option>PT Bakti Pertiwi Nusantara</option>
                                                 <option>PT Kaia Pilar Indonesia</option>
@@ -1464,12 +1464,12 @@ textarea.form-control{min-height:115px}
                                         </div>
 
                                         <div class="col-md-6">
-                                            <label class="form-label">Nama</label>
-                                            <input type="text" class="form-control" id="reporterName" placeholder="Masukkan nama">
+                                            <label class="form-label">Nama <span class="required">*</span></label>
+                                            <input type="text" class="form-control" id="reporterName" placeholder="Masukkan nama" required>
                                         </div>
                                         <div class="col-md-6">
-                                            <label class="form-label">Jabatan</label>
-                                            <select class="form-select" id="reporterPosition">
+                                            <label class="form-label">Jabatan <span class="required">*</span></label>
+                                            <select class="form-select" id="reporterPosition" required>
                                                 <option value="">Pilih jabatan</option>
                                                 <option>Crew</option>
                                                 <option>Admin</option>
@@ -1481,17 +1481,150 @@ textarea.form-control{min-height:115px}
                                                 <option>PJO</option>
                                             </select>
                                         </div>
-                                        <div class="col-md-6">
-                                            <label class="form-label">Tanggal</label>
-                                            <input type="date" class="form-control" id="reportDate">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="form-label">Waktu</label>
-                                            <input type="time" class="form-control" id="reportTime" min="00:00" max="23:59" step="60">
-                                        </div>
+                                    <div class="col-md-6" id="mainDepartmentField">
+
+                                        <label class="form-label">
+                                            Department
+                                            <span class="required">*</span>
+                                        </label>
+
+                                        <select
+                                            class="form-select"
+                                            id="reportDepartment"
+                                            required
+                                        >
+
+                                            <option value="">
+                                                Pilih department
+                                            </option>
+
+                                            <option>Engineering</option>
+                                            <option>Environment</option>
+                                            <option>Finance Accounting</option>
+                                            <option>Geology</option>
+                                            <option>HRGA</option>
+                                            <option>IT</option>
+                                            <option>Mechanical &amp; Electrical</option>
+                                            <option>OHS - Divisi Technical Operation</option>
+                                            <option>Operation</option>
+                                            <option>Procurement &amp; Logistic</option>
+                                            <option>QAQC</option>
+
+                                        </select>
+
                                     </div>
+
+                                        <div class="col-md-6">
+                                            <label class="form-label">Tanggal <span class="required">*</span></label>
+                                            <input type="date" class="form-control" id="reportDate" required>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Waktu <span class="required">*</span></label>
+                                            <div class="d-flex gap-2">
+                                                <select class="form-select" id="reportTimeHour" aria-label="Jam" required>
+                                                    <option value="">Jam</option>
+                                                    <option value="00">00</option>
+                                                    <option value="01">01</option>
+                                                    <option value="02">02</option>
+                                                    <option value="03">03</option>
+                                                    <option value="04">04</option>
+                                                    <option value="05">05</option>
+                                                    <option value="06">06</option>
+                                                    <option value="07">07</option>
+                                                    <option value="08">08</option>
+                                                    <option value="09">09</option>
+                                                    <option value="10">10</option>
+                                                    <option value="11">11</option>
+                                                    <option value="12">12</option>
+                                                    <option value="13">13</option>
+                                                    <option value="14">14</option>
+                                                    <option value="15">15</option>
+                                                    <option value="16">16</option>
+                                                    <option value="17">17</option>
+                                                    <option value="18">18</option>
+                                                    <option value="19">19</option>
+                                                    <option value="20">20</option>
+                                                    <option value="21">21</option>
+                                                    <option value="22">22</option>
+                                                    <option value="23">23</option>
+                                                </select>
+                                                <select class="form-select" id="reportTimeMinute" aria-label="Menit" required>
+                                                    <option value="">Menit</option>
+                                                    <option value="00">00</option>
+                                                    <option value="01">01</option>
+                                                    <option value="02">02</option>
+                                                    <option value="03">03</option>
+                                                    <option value="04">04</option>
+                                                    <option value="05">05</option>
+                                                    <option value="06">06</option>
+                                                    <option value="07">07</option>
+                                                    <option value="08">08</option>
+                                                    <option value="09">09</option>
+                                                    <option value="10">10</option>
+                                                    <option value="11">11</option>
+                                                    <option value="12">12</option>
+                                                    <option value="13">13</option>
+                                                    <option value="14">14</option>
+                                                    <option value="15">15</option>
+                                                    <option value="16">16</option>
+                                                    <option value="17">17</option>
+                                                    <option value="18">18</option>
+                                                    <option value="19">19</option>
+                                                    <option value="20">20</option>
+                                                    <option value="21">21</option>
+                                                    <option value="22">22</option>
+                                                    <option value="23">23</option>
+                                                    <option value="24">24</option>
+                                                    <option value="25">25</option>
+                                                    <option value="26">26</option>
+                                                    <option value="27">27</option>
+                                                    <option value="28">28</option>
+                                                    <option value="29">29</option>
+                                                    <option value="30">30</option>
+                                                    <option value="31">31</option>
+                                                    <option value="32">32</option>
+                                                    <option value="33">33</option>
+                                                    <option value="34">34</option>
+                                                    <option value="35">35</option>
+                                                    <option value="36">36</option>
+                                                    <option value="37">37</option>
+                                                    <option value="38">38</option>
+                                                    <option value="39">39</option>
+                                                    <option value="40">40</option>
+                                                    <option value="41">41</option>
+                                                    <option value="42">42</option>
+                                                    <option value="43">43</option>
+                                                    <option value="44">44</option>
+                                                    <option value="45">45</option>
+                                                    <option value="46">46</option>
+                                                    <option value="47">47</option>
+                                                    <option value="48">48</option>
+                                                    <option value="49">49</option>
+                                                    <option value="50">50</option>
+                                                    <option value="51">51</option>
+                                                    <option value="52">52</option>
+                                                    <option value="53">53</option>
+                                                    <option value="54">54</option>
+                                                    <option value="55">55</option>
+                                                    <option value="56">56</option>
+                                                    <option value="57">57</option>
+                                                    <option value="58">58</option>
+                                                    <option value="59">59</option>
+                                                </select>
+                                                <input type="hidden" id="reportTime" value="">
+                                            </div>
+                                        </div>
+
+
+
+
+                                    </div>
+
+
                                 </div>
 
+
+                                <div class="fw-bold mb-3 mt-2">LOKASI &amp; KLASIFIKASI</div>
 
                                 <div class="row g-3">
 
@@ -1528,39 +1661,17 @@ textarea.form-control{min-height:115px}
 
                                     </div>
 
-
                                     <div class="col-md-6">
-
-                                        <label class="form-label">
-                                            Department
-                                            <span class="required">*</span>
-                                        </label>
-
-                                        <select
-                                            class="form-select"
-                                            id="reportDepartment"
-                                            required
-                                        >
-
-                                            <option value="">
-                                                Pilih department
-                                            </option>
-
-                                            <option>Engineering</option>
-                                            <option>Environment</option>
-                                            <option>Finance Accounting</option>
-                                            <option>Geology</option>
-                                            <option>HRGA</option>
-                                            <option>IT</option>
-                                            <option>Mechanical &amp; Electrical</option>
-                                            <option>OHS - Divisi Technical Operation</option>
-                                            <option>Operation</option>
-                                            <option>Procurement &amp; Logistic</option>
-                                            <option>QAQC</option>
-
-                                        </select>
-
+                                        <label class="form-label">Detail Lokasi <span class="required">*</span></label>
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            id="reportDetailLocation"
+                                            placeholder="Masukkan detail lokasi"
+                                         required>
                                     </div>
+
+                                    <span id="reportDepartmentOriginalAnchor" style="display:none;"></span>
 
 
                                     <div class="col-md-6">
@@ -1657,7 +1768,7 @@ textarea.form-control{min-height:115px}
                                     <div class="col-12">
 
                                         <label class="form-label">
-                                            Judul Hazard
+                                            Temuan
                                             <span class="required">*</span>
                                         </label>
 
@@ -1675,7 +1786,7 @@ textarea.form-control{min-height:115px}
                                     <div class="col-12">
 
                                         <label class="form-label">
-                                            Deskripsi Hazard
+                                            Bahaya dan Resiko
                                             <span class="required">*</span>
                                         </label>
 
@@ -1692,15 +1803,56 @@ textarea.form-control{min-height:115px}
                                     <div class="col-12">
 
                                         <label class="form-label">
-                                            Tindakan Sementara
-                                        </label>
+                                            Perbaikan
+                                         <span class="required">*</span></label>
 
                                         <textarea
                                             class="form-control"
                                             id="reportAction"
                                             placeholder="Tindakan yang sudah dilakukan untuk mengurangi risiko..."
-                                        ></textarea>
+                                         required></textarea>
 
+                                    </div>
+
+                                    <div class="col-12">
+                                        <div class="fw-bold mb-3">Ditujukan kepada:</div>
+                                        <div class="row g-3" id="targetDepartmentOriginalRow">
+                                            <div class="col-md-4">
+                                                <label class="form-label">Nama <span class="required">*</span></label>
+                                                <input type="text" class="form-control" id="targetName" placeholder="Masukkan nama" required>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label">Jabatan <span class="required">*</span></label>
+                                                <select class="form-select" id="targetPosition" required>
+                                                    <option value="">Pilih jabatan</option>
+                                                    <option>Crew</option>
+                                                    <option>Admin</option>
+                                                    <option>Foreman</option>
+                                                    <option>Supervisor</option>
+                                                    <option>Superintendent</option>
+                                                    <option>Manager</option>
+                                                    <option>General Manager</option>
+                                                    <option>PJO</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-4" id="targetDepartmentField">
+                                                <label class="form-label">Departemen <span class="required">*</span></label>
+                                                <select class="form-select" id="targetDepartment" required>
+                                                    <option value="">Pilih departemen</option>
+                                                    <option>Engineering</option>
+                                                    <option>Environment</option>
+                                                    <option>Finance Accounting</option>
+                                                    <option>Geology</option>
+                                                    <option>HRGA</option>
+                                                    <option>IT</option>
+                                                    <option>Mechanical &amp; Electrical</option>
+                                                    <option>OHS - Divisi Technical Operation</option>
+                                                    <option>Operation</option>
+                                                    <option>Procurement &amp; Logistic</option>
+                                                    <option>QAQC</option>
+                                                </select>
+                                            </div>
+                                        </div>
                                     </div>
 
                                 </div>
@@ -1715,7 +1867,7 @@ textarea.form-control{min-height:115px}
                             <div class="card-box mb-4">
 
                                 <h5 class="mb-4">
-                                    Foto Hazard
+                                    Foto Hazard <span class="required">*</span>
                                 </h5>
 
                                 <input
@@ -1723,7 +1875,7 @@ textarea.form-control{min-height:115px}
                                     class="form-control"
                                     id="reportPhoto"
                                     accept="image/*"
-                                >
+                                 required>
 
                                 <button
                                     type="button"
@@ -1951,8 +2103,13 @@ textarea.form-control{min-height:115px}
                 id="page-users"
             >
 
-                <div class="page-title">
-                    Users
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="page-title">
+                        Users
+                    </div>
+                    <button type="button" class="btn btn-warning" id="addUserButton">
+                        <i class="bi bi-person-plus"></i> Tambah User
+                    </button>
                 </div>
 
                 <div class="page-subtitle">
@@ -1969,10 +2126,9 @@ textarea.form-control{min-height:115px}
                             <thead>
 
                                 <tr>
-                                    <th>Employee ID</th>
                                     <th>Nama</th>
-                                    <th>Department</th>
-                                    <th>Position</th>
+                                    <th>User ID</th>
+                                    <th>Password</th>
                                     <th>Role</th>
                                     <th>Status</th>
                                 </tr>
@@ -1981,56 +2137,7 @@ textarea.form-control{min-height:115px}
 
                             <tbody>
 
-                                <tr>
-                                    <td>EMP-001</td>
-                                    <td>Administrator</td>
-                                    <td>IT</td>
-                                    <td>IT Administrator</td>
-                                    <td>
-                                        <span class="badge bg-dark">
-                                            Admin
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <span class="badge bg-success">
-                                            Active
-                                        </span>
-                                    </td>
-                                </tr>
 
-                                <tr>
-                                    <td>EMP-002</td>
-                                    <td>HSE Officer</td>
-                                    <td>HSE</td>
-                                    <td>HSE Officer</td>
-                                    <td>
-                                        <span class="badge bg-warning text-dark">
-                                            HSE
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <span class="badge bg-success">
-                                            Active
-                                        </span>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>EMP-003</td>
-                                    <td>Supervisor Mining</td>
-                                    <td>Mining Operation</td>
-                                    <td>Supervisor</td>
-                                    <td>
-                                        <span class="badge bg-primary">
-                                            Supervisor
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <span class="badge bg-success">
-                                            Active
-                                        </span>
-                                    </td>
-                                </tr>
 
                             </tbody>
 
@@ -2269,6 +2376,259 @@ function saveReports(reports) {
 }
 
 
+
+/* =========================================================
+   DYNAMIC USERS
+========================================================= */
+
+const DYNAMIC_USERS_KEY = "mining_hazard_dynamic_users";
+
+function getDynamicUsers() {
+
+    try {
+        return JSON.parse(
+            localStorage.getItem(DYNAMIC_USERS_KEY) || "[]"
+        );
+
+    } catch (error) {
+
+        return [];
+
+    }
+
+}
+
+function saveDynamicUsers(list) {
+
+    localStorage.setItem(
+        DYNAMIC_USERS_KEY,
+        JSON.stringify(list)
+    );
+
+}
+
+function escapeUserHtml(value) {
+
+    return String(value ?? "").replace(
+        /[&<>"']/g,
+        function(character) {
+
+            return {
+                "&": "&amp;",
+                "<": "&lt;",
+                ">": "&gt;",
+                '"': "&quot;",
+                "'": "&#039;"
+            }[character];
+
+        }
+    );
+
+}
+
+function renderDynamicUsers() {
+
+    const tbody =
+        document.querySelector("#page-users tbody");
+
+    if (!tbody) return;
+
+    tbody
+        .querySelectorAll(".dynamic-user-row")
+        .forEach(row => row.remove());
+
+    getDynamicUsers().forEach(user => {
+
+        const row =
+            document.createElement("tr");
+
+        row.className = "dynamic-user-row";
+
+        const roleClass =
+            user.role === "Administrator"
+                ? "bg-dark"
+                : user.role === "HSE"
+                    ? "bg-warning text-dark"
+                    : user.role === "Supervisor"
+                        ? "bg-primary"
+                        : "bg-secondary";
+
+        const statusClass =
+            user.status === "Active"
+                ? "bg-success"
+                : "bg-secondary";
+
+        row.innerHTML = `
+            <td>${escapeUserHtml(user.name)}</td>
+            <td>${escapeUserHtml(user.userId)}</td>
+            <td>${escapeUserHtml(user.password)}</td>
+            <td>
+                <span class="badge ${roleClass}">
+                    ${escapeUserHtml(user.role)}
+                </span>
+            </td>
+            <td>
+                <span class="badge ${statusClass}">
+                    ${escapeUserHtml(user.status)}
+                </span>
+            </td>
+        `;
+
+        tbody.appendChild(row);
+
+    });
+
+}
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function() {
+
+        renderDynamicUsers();
+
+        const addButton =
+            document.getElementById("addUserButton");
+
+        const modalElement =
+            document.getElementById("addUserModal");
+
+        const form =
+            document.getElementById("addUserForm");
+
+        if (addButton && modalElement) {
+
+            addButton.addEventListener(
+                "click",
+                function() {
+
+                    new bootstrap.Modal(
+                        modalElement
+                    ).show();
+
+                }
+            );
+
+        }
+
+        if (form) {
+
+            form.addEventListener(
+                "submit",
+                function(event) {
+
+                    event.preventDefault();
+
+                    const user = {
+
+                        name:
+                            document
+                                .getElementById("newUserName")
+                                .value
+                                .trim(),
+
+                        userId:
+                            document
+                                .getElementById("newUserId")
+                                .value
+                                .trim(),
+
+                        password:
+                            document
+                                .getElementById("newUserPassword")
+                                .value,
+
+                        department:
+                            document
+                                .getElementById("newUserDepartment")
+                                .value,
+
+                        role:
+                            document
+                                .getElementById("newUserRole")
+                                .value,
+
+                        status:
+                            document
+                                .getElementById("newUserStatus")
+                                .value
+
+                    };
+
+                    if (
+                        !user.name ||
+                        !user.userId ||
+                        !user.password ||
+                        !user.department ||
+                        !user.role ||
+                        !user.status
+                    ) {
+
+                        alert(
+                            "Semua data user wajib diisi."
+                        );
+
+                        return;
+
+                    }
+
+                    const dynamicUsers =
+                        getDynamicUsers();
+
+                    const duplicate =
+                        users.some(
+                            item =>
+                                item.username.toLowerCase() ===
+                                user.userId.toLowerCase()
+                        ) ||
+                        dynamicUsers.some(
+                            item =>
+                                item.userId.toLowerCase() ===
+                                user.userId.toLowerCase()
+                        );
+
+                    if (duplicate) {
+
+                        alert(
+                            "User ID sudah digunakan."
+                        );
+
+                        return;
+
+                    }
+
+                    dynamicUsers.push(user);
+
+                    saveDynamicUsers(
+                        dynamicUsers
+                    );
+
+                    renderDynamicUsers();
+
+                    form.reset();
+
+                    document.getElementById(
+                        "newUserStatus"
+                    ).value = "Active";
+
+                    const modalInstance =
+                        bootstrap.Modal.getInstance(modalElement) ||
+                        new bootstrap.Modal(modalElement);
+
+                    modalInstance.hide();
+
+                    alert(
+                        "User berhasil ditambahkan dan dapat digunakan untuk login."
+                    );
+
+                }
+            );
+
+        }
+
+    }
+);
+
+
 /* =========================================================
    LOGIN
 ========================================================= */
@@ -2290,10 +2650,29 @@ document
                 .getElementById("loginPassword")
                 .value;
 
-        const user = users.find(
+        const defaultUser = users.find(
             item =>
                 item.username === username &&
                 item.password === password
+        );
+
+        const dynamicUser = getDynamicUsers().find(
+            item =>
+                item.userId === username &&
+                item.password === password &&
+                item.status === "Active"
+        );
+
+        const user = defaultUser || (
+            dynamicUser
+                ? {
+                    username: dynamicUser.userId,
+                    password: dynamicUser.password,
+                    name: dynamicUser.name,
+                    role: dynamicUser.role,
+                    department: dynamicUser.department || ""
+                }
+                : null
         );
 
 
@@ -3572,15 +3951,30 @@ function stopCamera() {
     clearCameraError();
 }
 
-/* WAKTU: mulai 00:00 dan berhenti di 23:59 */
+/* WAKTU: pilihan jam dan menit agar lebih mudah */
+const reportTimeHour = document.getElementById("reportTimeHour");
+const reportTimeMinute = document.getElementById("reportTimeMinute");
 const reportTimeInput = document.getElementById("reportTime");
-if (reportTimeInput) {
-    reportTimeInput.addEventListener("pointerdown", function() {
-        if (!this.value) {
-            this.value = "00:00";
-        }
-    });
+
+function syncReportTime() {
+    if (!reportTimeHour || !reportTimeMinute || !reportTimeInput) return;
+
+    if (reportTimeHour.value !== "" && reportTimeMinute.value !== "") {
+        reportTimeInput.value =
+            reportTimeHour.value + ":" + reportTimeMinute.value;
+    } else {
+        reportTimeInput.value = "";
+    }
 }
+
+if (reportTimeHour) {
+    reportTimeHour.addEventListener("change", syncReportTime);
+}
+
+if (reportTimeMinute) {
+    reportTimeMinute.addEventListener("change", syncReportTime);
+}
+
 
 /* =========================================================
    CREATE REPORT
@@ -3676,6 +4070,12 @@ document
                         .getElementById("reportLocation")
                         .value,
 
+                detailLocation:
+                    document
+                        .getElementById("reportDetailLocation")
+                        .value
+                        .trim(),
+
                 department:
                     document
                         .getElementById("reportDepartment")
@@ -3708,6 +4108,22 @@ document
                         .getElementById("reportAction")
                         .value
                         .trim(),
+
+                targetName:
+                    document
+                        .getElementById("targetName")
+                        .value
+                        .trim(),
+
+                targetPosition:
+                    document
+                        .getElementById("targetPosition")
+                        .value,
+
+                targetDepartment:
+                    document
+                        .getElementById("targetDepartment")
+                        .value,
 
                 status:
                     "Open",
@@ -3973,6 +4389,19 @@ function viewReport(id) {
             <div class="col-md-6">
 
                 <div class="detail-label">
+                    Detail Lokasi
+                </div>
+
+                <div class="detail-value">
+                    ${report.detailLocation ? escapeHTML(report.detailLocation) : "-"}
+                </div>
+
+            </div>
+
+
+            <div class="col-md-6">
+
+                <div class="detail-label">
                     Department
                 </div>
 
@@ -3999,7 +4428,7 @@ function viewReport(id) {
 
 
         <div class="detail-label">
-            Deskripsi Hazard
+            Bahaya dan Resiko
         </div>
 
         <div class="detail-value">
@@ -4008,7 +4437,7 @@ function viewReport(id) {
 
 
         <div class="detail-label">
-            Tindakan Sementara
+            Perbaikan
         </div>
 
         <div class="detail-value">
@@ -4246,7 +4675,110 @@ function escapeHTML(value) {
 
 }
 
+
+
+/* =========================================================
+   RESPONSIVE MAIN DEPARTMENT
+   Desktop: Department di samping Waktu, tepat di bawah Tanggal.
+   Chrome HP/mobile: Department tetap di posisi semula.
+========================================================= */
+function arrangeMainDepartment() {
+    const field = document.getElementById("mainDepartmentField");
+    const anchor = document.getElementById("reportDepartmentOriginalAnchor");
+    const timeField = document.getElementById("reportTimeHour")?.closest(".col-md-6");
+    if (!field || !anchor || !timeField) return;
+
+    const isMobileDevice = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    const desktop = window.innerWidth >= 992 && !isMobileDevice;
+
+    if (desktop) {
+        timeField.insertAdjacentElement("afterend", field);
+    } else {
+        anchor.parentNode.insertBefore(field, anchor);
+    }
+}
+
+window.addEventListener("load", arrangeMainDepartment);
+window.addEventListener("resize", arrangeMainDepartment);
 </script>
+
+
+<div class="modal fade" id="addUserModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Tambah User</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+            </div>
+
+            <form id="addUserForm">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Nama Perusahaan <span class="required">*</span></label>
+                        <select class="form-select" id="newUserName" required>
+                            <option value="">Pilih perusahaan</option>
+                            <option>PT Bakti Pertiwi Nusantara</option>
+                            <option>PT Kaia Pilar Indonesia</option>
+                            <option>PT Empat Pilar Adidaya</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">User ID <span class="required">*</span></label>
+                        <input type="text" class="form-control" id="newUserId" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Password <span class="required">*</span></label>
+                        <input type="text" class="form-control" id="newUserPassword" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Departemen <span class="required">*</span></label>
+                        <select class="form-select" id="newUserDepartment" required>
+                            <option value="">Pilih departemen</option>
+                            <option>Engineering</option>
+                            <option>Environment</option>
+                            <option>Finance Accounting</option>
+                            <option>Geology</option>
+                            <option>HRGA</option>
+                            <option>IT</option>
+                            <option>Mechanical &amp; Electrical</option>
+                            <option>OHS - Divisi Technical Operation</option>
+                            <option>Operation</option>
+                            <option>Procurement &amp; Logistic</option>
+                            <option>QAQC</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Role <span class="required">*</span></label>
+                        <select class="form-select" id="newUserRole" required>
+                            <option value="">Pilih role</option>
+                            <option value="Administrator">Administrator</option>
+                            <option value="HSE">HSE</option>
+                            <option value="Supervisor">Supervisor</option>
+                            <option value="Employee">Employee</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-0">
+                        <label class="form-label">Status <span class="required">*</span></label>
+                        <select class="form-select" id="newUserStatus" required>
+                            <option value="Active">Active</option>
+                            <option value="Inactive">Inactive</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-warning">Simpan User</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 </body>
 </html>
