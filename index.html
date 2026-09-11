@@ -1688,20 +1688,35 @@ textarea.form-control{min-height:115px}
                                     type="button"
                                     class="btn btn-outline-warning w-100 mt-2"
                                     id="openCameraButton"
+                                    style="display:block !important;"
                                 >
                                     <i class="bi bi-camera-fill"></i>
                                     Ambil Foto dari Kamera
                                 </button>
 
+                                <input
+                                    type="file"
+                                    id="cameraPhotoInput"
+                                    accept="image/*"
+                                    capture="environment"
+                                    style="display:none;"
+                                >
+
                                 <div
                                     id="cameraPanel"
                                     style="display:none;margin-top:12px;padding:12px;border:1px solid #e5e7eb;border-radius:12px;background:#f8fafc;"
                                 >
+                                    <div
+                                        id="cameraError"
+                                        style="display:none;margin-bottom:10px;padding:10px;border-radius:8px;background:#fee2e2;color:#991b1b;font-size:13px;"
+                                    ></div>
+
                                     <video
                                         id="cameraVideo"
                                         autoplay
                                         playsinline
-                                        style="width:100%;max-height:320px;border-radius:10px;background:#000;"
+                                        muted
+                                        style="display:block;width:100%;max-height:320px;min-height:180px;object-fit:cover;border-radius:10px;background:#000;"
                                     ></video>
 
                                     <div class="d-grid gap-2 mt-2">
@@ -3161,42 +3176,178 @@ document
 
 let cameraStream = null;
 
+function showCameraError(message) {
+    const errorBox =
+        document.getElementById("cameraError");
+
+    if (errorBox) {
+        errorBox.textContent = message;
+        errorBox.style.display = "block";
+    }
+}
+
+function clearCameraError() {
+    const errorBox =
+        document.getElementById("cameraError");
+
+    if (errorBox) {
+        errorBox.textContent = "";
+        errorBox.style.display = "none";
+    }
+}
+
+async function openWebcam() {
+
+    const panel =
+        document.getElementById("cameraPanel");
+
+    const video =
+        document.getElementById("cameraVideo");
+
+    clearCameraError();
+
+    // Tampilkan panel terlebih dahulu supaya pengguna
+    // langsung melihat apakah webcam berhasil diakses.
+    panel.style.display = "block";
+
+    if (!window.isSecureContext) {
+        showCameraError(
+            "Webcam membutuhkan HTTPS. Buka website melalui alamat https://."
+        );
+        return;
+    }
+
+    if (
+        !navigator.mediaDevices ||
+        typeof navigator.mediaDevices.getUserMedia !== "function"
+    ) {
+        showCameraError(
+            "Browser ini tidak menyediakan akses webcam. Gunakan Chrome/Edge terbaru."
+        );
+        return;
+    }
+
+    // Hentikan kamera sebelumnya bila ada.
+    if (cameraStream) {
+        cameraStream.getTracks().forEach(track => track.stop());
+        cameraStream = null;
+    }
+
+    try {
+
+        // Gunakan konfigurasi paling kompatibel untuk laptop.
+        cameraStream =
+            await navigator.mediaDevices.getUserMedia({
+                video: true,
+                audio: false
+            });
+
+        video.srcObject = cameraStream;
+        video.setAttribute("autoplay", "");
+        video.setAttribute("playsinline", "");
+        video.muted = true;
+
+        try {
+            await video.play();
+        } catch (playError) {
+            console.warn("video.play() gagal:", playError);
+        }
+
+    } catch (error) {
+
+        console.error("Webcam error:", error);
+
+        let message =
+            "Webcam tidak dapat dibuka.";
+
+        switch (error.name) {
+
+            case "NotAllowedError":
+                message =
+                    "Izin webcam ditolak. Klik ikon kamera di address bar browser lalu pilih Allow/Izinkan.";
+                break;
+
+            case "PermissionDeniedError":
+                message =
+                    "Izin webcam ditolak. Izinkan akses kamera pada browser.";
+                break;
+
+            case "NotFoundError":
+            case "DevicesNotFoundError":
+                message =
+                    "Webcam laptop tidak ditemukan. Pastikan webcam terpasang dan tidak dinonaktifkan.";
+                break;
+
+            case "NotReadableError":
+            case "TrackStartError":
+                message =
+                    "Webcam sedang digunakan aplikasi lain. Tutup Zoom, Teams, Camera, WhatsApp Desktop, atau aplikasi lain yang memakai kamera.";
+                break;
+
+            case "OverconstrainedError":
+                message =
+                    "Konfigurasi webcam tidak didukung. Coba pilih webcam lain atau restart browser.";
+                break;
+
+            case "SecurityError":
+                message =
+                    "Browser memblokir akses webcam.";
+                break;
+
+            default:
+                message =
+                    "Webcam gagal dibuka. Pastikan kamera terhubung dan izin kamera di browser sudah Allow.";
+        }
+
+        showCameraError(message);
+    }
+}
+
 document
     .getElementById("openCameraButton")
     .addEventListener("click", async function() {
 
-        const panel = document.getElementById("cameraPanel");
-        const video = document.getElementById("cameraVideo");
+        const cameraInput =
+            document.getElementById("cameraPhotoInput");
 
-        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-            alert("Kamera langsung tidak didukung oleh browser ini. Gunakan Pilih File untuk mengambil foto dari galeri.");
+        const isMobile =
+            /Android|iPhone|iPad|iPod/i.test(
+                navigator.userAgent
+            );
+
+        /*
+         * HP: tetap gunakan kamera native.
+         * Laptop/Desktop: buka webcam di dalam halaman.
+         */
+        if (isMobile) {
+            cameraInput.click();
             return;
         }
 
+        await openWebcam();
+    });
+
+document
+    .getElementById("cameraPhotoInput")
+    .addEventListener("change", function() {
+
+        const file = this.files[0];
+
+        if (!file) return;
+
+        const originalInput =
+            document.getElementById("reportPhoto");
+
         try {
-
-            cameraStream =
-                await navigator.mediaDevices.getUserMedia({
-                    video: {
-                        facingMode: {
-                            ideal: "environment"
-                        }
-                    },
-                    audio: false
-                });
-
-            video.srcObject = cameraStream;
-            panel.style.display = "block";
-
+            const dataTransfer = new DataTransfer();
+            dataTransfer.items.add(file);
+            originalInput.files =
+                dataTransfer.files;
         } catch (error) {
-
-            console.error(error);
-            alert(
-                "Kamera tidak dapat dibuka. Pastikan izin kamera diberikan pada browser."
-            );
-
+            console.warn("DataTransfer tidak tersedia:", error);
         }
 
+        validateAndPreviewPhoto(file);
     });
 
 document
@@ -3209,15 +3360,24 @@ document
         const canvas =
             document.getElementById("cameraCanvas");
 
-        if (!video.videoWidth || !video.videoHeight) {
-            alert("Kamera belum siap. Tunggu beberapa detik lalu coba lagi.");
+        if (
+            !video.videoWidth ||
+            !video.videoHeight
+        ) {
+            showCameraError(
+                "Webcam belum siap. Tunggu sampai gambar kamera muncul."
+            );
             return;
         }
 
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
+        canvas.width =
+            video.videoWidth;
 
-        const ctx = canvas.getContext("2d");
+        canvas.height =
+            video.videoHeight;
+
+        const ctx =
+            canvas.getContext("2d");
 
         ctx.drawImage(
             video,
@@ -3227,35 +3387,51 @@ document
             canvas.height
         );
 
-        canvas.toBlob(function(blob) {
+        canvas.toBlob(
+            function(blob) {
 
-            if (!blob) {
-                alert("Foto gagal diambil.");
-                return;
-            }
+                if (!blob) {
+                    showCameraError(
+                        "Foto gagal diambil."
+                    );
+                    return;
+                }
 
-            const file =
-                new File(
-                    [blob],
-                    "hazard-camera-" + Date.now() + ".jpg",
-                    {
-                        type:"image/jpeg"
-                    }
-                );
+                const file =
+                    new File(
+                        [blob],
+                        "hazard-camera-" +
+                        Date.now() +
+                        ".jpg",
+                        {
+                            type:"image/jpeg"
+                        }
+                    );
 
-            const dataTransfer = new DataTransfer();
-            dataTransfer.items.add(file);
+                try {
+                    const dataTransfer =
+                        new DataTransfer();
 
-            const input =
-                document.getElementById("reportPhoto");
+                    dataTransfer.items.add(file);
 
-            input.files = dataTransfer.files;
+                    document
+                        .getElementById("reportPhoto")
+                        .files =
+                        dataTransfer.files;
+                } catch (error) {
+                    console.warn(
+                        "DataTransfer tidak tersedia:",
+                        error
+                    );
+                }
 
-            validateAndPreviewPhoto(file);
+                validateAndPreviewPhoto(file);
+                stopCamera();
 
-            stopCamera();
-
-        }, "image/jpeg", 0.9);
+            },
+            "image/jpeg",
+            0.9
+        );
 
     });
 
@@ -3280,11 +3456,17 @@ function stopCamera() {
             .forEach(track => track.stop());
 
         cameraStream = null;
-
     }
 
-    video.srcObject = null;
-    panel.style.display = "none";
+    if (video) {
+        video.srcObject = null;
+    }
+
+    if (panel) {
+        panel.style.display = "none";
+    }
+
+    clearCameraError();
 }
 
 /* =========================================================
