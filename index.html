@@ -253,7 +253,14 @@ body{
 /* Hazard Reports filter layout */
 .filter-row{
     display:grid;
-    grid-template-columns:2fr 1.1fr 1.1fr 1.35fr 1.25fr 1.7fr 1fr 1.1fr;
+    grid-template-columns:
+        minmax(0,2fr)
+        minmax(0,1.1fr)
+        minmax(0,1.1fr)
+        minmax(0,1.35fr)
+        minmax(0,1.25fr)
+        minmax(0,1.7fr)
+        minmax(0,1.1fr);
     gap:.5rem;
     align-items:center;
 }
@@ -959,6 +966,49 @@ textarea.form-control{min-height:115px}
     --bs-btn-hover-border-color:#2563eb;
 }
 </style>
+
+<style>
+/* Hazard Reports: Reset remains on the main filter row;
+   Search is placed directly below it without shifting Reset. */
+@media (min-width:1101px){
+    #page-reports .filter-row .reset-filter-item{
+        grid-column:7;
+        grid-row:1;
+    }
+
+    #page-reports .filter-row .search-filter-item{
+        grid-column:7;
+        grid-row:2;
+        width:100%;
+    }
+
+    #page-reports .filter-row .reset-filter-item .btn,
+    #page-reports .filter-row .search-filter-item .form-control{
+        width:100%;
+    }
+}
+
+@media (max-width:1100px){
+    #page-reports .filter-row .reset-filter-item,
+    #page-reports .filter-row .search-filter-item{
+        grid-column:auto;
+        grid-row:auto;
+    }
+}
+</style>
+
+
+<style>
+/* Adjust table column proportions only */
+.reports-table th:nth-child(1), .reports-table td:nth-child(1){width:11%}
+.reports-table th:nth-child(2), .reports-table td:nth-child(2){width:16%}
+.reports-table th:nth-child(3), .reports-table td:nth-child(3){width:10%}
+.reports-table th:nth-child(4), .reports-table td:nth-child(4){width:18%}
+.reports-table th:nth-child(5), .reports-table td:nth-child(5){width:30%}
+.reports-table th:nth-child(6), .reports-table td:nth-child(6){width:7.5%}
+.reports-table th:nth-child(7), .reports-table td:nth-child(7){width:7.5%}
+</style>
+
 </head>
 
 <body>
@@ -1461,7 +1511,7 @@ textarea.form-control{min-height:115px}
                                 </h5>
 
                                 <div class="mb-4">
-                                    <div class="fw-bold mb-3">Dilaporkan Oleh:</div>
+                                    
                                     <div class="row g-3">
                                         <input
                                             type="hidden"
@@ -1470,7 +1520,7 @@ textarea.form-control{min-height:115px}
                                         >
 
                                         <div class="col-md-6">
-                                            <label class="form-label">Nama <span class="required">*</span></label>
+                                            <label class="form-label">Nama Pelapor <span class="required">*</span></label>
                                             <input type="text" class="form-control" id="reporterName" placeholder="Masukkan nama" required>
                                         </div>
                                         <div class="col-md-6">
@@ -1494,11 +1544,67 @@ textarea.form-control{min-height:115px}
                                     >
 
                                         <div class="col-md-6">
-                                            <label class="form-label">Tanggal <span class="required">*</span></label>
-                                            <input type="date" class="form-control" id="reportDate" required>
+                                            <label class="form-label">Tanggal Identifikasi <span class="required">*</span></label>
+
+                                            <div
+                                                class="report-date-wrap"
+                                                style="
+                                                    position:relative;
+                                                    width:100%;
+                                                "
+                                            >
+                                                <input
+                                                    type="text"
+                                                    class="form-control"
+                                                    id="reportDateDisplay"
+                                                    placeholder="Isi Tanggal"
+                                                    readonly
+                                                    autocomplete="off"
+                                                    aria-label="Isi Tanggal"
+                                                    style="
+                                                        width:100%;
+                                                        padding-right:46px;
+                                                        background:#fff;
+                                                        cursor:pointer;
+                                                    "
+                                                >
+
+                                                <span
+                                                    aria-hidden="true"
+                                                    style="
+                                                        position:absolute;
+                                                        right:15px;
+                                                        top:50%;
+                                                        transform:translateY(-50%);
+                                                        color:#111827;
+                                                        pointer-events:none;
+                                                        font-size:17px;
+                                                        z-index:1;
+                                                    "
+                                                >
+                                                    <i class="bi bi-calendar3"></i>
+                                                </span>
+
+                                                <input
+                                                    type="date"
+                                                    class="report-date-picker"
+                                                    id="reportDate"
+                                                    required
+                                                    aria-label="Pilih tanggal"
+                                                    style="
+                                                        position:absolute;
+                                                        inset:0;
+                                                        width:100%;
+                                                        height:100%;
+                                                        opacity:0;
+                                                        cursor:pointer;
+                                                        z-index:2;
+                                                    "
+                                                >
+                                            </div>
                                         </div>
                                         <div class="col-md-6">
-                                            <label class="form-label">Waktu <span class="required">*</span></label>
+                                            <label class="form-label">Waktu Identifikasi <span class="required">*</span></label>
                                             <div class="d-flex gap-2">
                                                 <select class="form-select" id="reportTimeHour" aria-label="Jam" required>
                                                     <option value="">Jam</option>
@@ -1603,7 +1709,7 @@ textarea.form-control{min-height:115px}
                                 </div>
 
 
-                                <div class="fw-bold mb-3 mt-2">LOKASI &amp; KLASIFIKASI</div>
+                                
 
                                 <div class="row g-3">
 
@@ -1765,14 +1871,14 @@ textarea.form-control{min-height:115px}
                                     <div class="col-12">
 
                                         <label class="form-label">
-                                            Bahaya dan Resiko
+                                            Bahaya
                                             <span class="required">*</span>
                                         </label>
 
                                         <textarea
                                             class="form-control"
                                             id="reportDescription"
-                                            placeholder="Jelaskan kondisi hazard secara detail..."
+                                            placeholder="Jelaskan bahaya yang ditemukan..."
                                             required
                                         ></textarea>
 
@@ -1782,22 +1888,39 @@ textarea.form-control{min-height:115px}
                                     <div class="col-12">
 
                                         <label class="form-label">
-                                            Perbaikan
+                                            Risiko
+                                            <span class="required">*</span>
+                                        </label>
+
+                                        <textarea
+                                            class="form-control"
+                                            id="reportRiskDescription"
+                                            placeholder="Jelaskan risiko yang dapat ditimbulkan..."
+                                            required
+                                        ></textarea>
+
+                                    </div>
+
+
+                                    <div class="col-12">
+
+                                        <label class="form-label">
+                                            Tindakan Perbaikan
                                          <span class="required">*</span></label>
 
                                         <textarea
                                             class="form-control"
                                             id="reportAction"
-                                            placeholder="Tindakan yang sudah dilakukan untuk mengurangi risiko..."
+                                            placeholder="Jelaskan tindakan perbaikan yang sudah dilakukan..."
                                          required></textarea>
 
                                     </div>
 
                                     <div class="col-12">
-                                        <div class="fw-bold mb-3">Ditujukan kepada:</div>
+                                        
                                         <div class="row g-3" id="targetDepartmentOriginalRow">
                                             <div class="col-md-4">
-                                                <label class="form-label">Nama <span class="required">*</span></label>
+                                                <label class="form-label">Nama PIC <span class="required">*</span></label>
                                                 <input type="text" class="form-control" id="targetName" placeholder="Masukkan nama" required>
                                             </div>
                                             <div class="col-md-4">
@@ -1825,7 +1948,7 @@ textarea.form-control{min-height:115px}
                                                     <option>HRGA</option>
                                                     <option>IT</option>
                                                     <option>Mechanical &amp; Electrical</option>
-                                                    <option>OHS - Divisi Technical Operation</option>
+                                                    <option>OHS</option>
                                                     <option>Operation</option>
                                                     <option>Procurement &amp; Logistic</option>
                                                     <option>QAQC</option>
@@ -1976,7 +2099,7 @@ textarea.form-control{min-height:115px}
                 <div class="card-box">
 
                     <div class="filter-row mb-4">
-                        <div class="filter-item date-filter-wrap">
+    <div class="filter-item date-filter-wrap">
                             <button type="button" class="form-select text-start date-filter-button" id="filterDateButton">Tanggal</button>
                             <div class="date-filter-panel" id="dateFilterPanel">
                                 <div class="date-filter-option">
@@ -1989,40 +2112,7 @@ textarea.form-control{min-height:115px}
                                 </div>
                             </div>
                         </div>
-                        
-                        <div class="filter-item">
-                            <select class="form-select" id="filterStatus">
-                                <option value="" disabled selected>Status</option>
-                                <option value="Open">Open</option>
-                                <option value="In Progress">In Progress</option>
-                                <option value="Closed">Closed</option>
-                            </select>
-                        </div>
-                        <div class="filter-item">
-                            <select class="form-select" id="filterRisk">
-                                <option value="" disabled selected>Risiko</option>
-                                <option value="High">High</option>
-                                <option value="Medium">Medium</option>
-                                <option value="Low">Low</option>
-                            </select>
-                        </div>
-                        <div class="filter-item">
-                            <select class="form-select" id="filterDepartment">
-                                <option value="" disabled selected>Department</option>
-                                <option>Engineering</option>
-                                <option>Environment</option>
-                                <option>Finance Accounting</option>
-                                <option>Geology</option>
-                                <option>HRGA</option>
-                                <option>IT</option>
-                                <option>Mechanical & Electrical</option>
-                                <option>OHS - Divisi Technical Operation</option>
-                                <option>Operation</option>
-                                <option>Procurement & Logistic</option>
-                                <option>QAQC</option>
-                            </select>
-                        </div>
-                        <div class="filter-item">
+    <div class="filter-item">
                             <select class="form-select" id="filterLocation">
                                 <option value="" disabled selected>Lokasi</option>
                                 <option>PIT</option>
@@ -2037,9 +2127,25 @@ textarea.form-control{min-height:115px}
                                 <option>Stockpile</option>
                             </select>
                         </div>
-                        <div class="filter-item">
+    <div class="filter-item">
+                            <select class="form-select" id="filterDepartment">
+                                <option value="" disabled selected>Departemen</option>
+                                <option>Engineering</option>
+                                <option>Environment</option>
+                                <option>Finance Accounting</option>
+                                <option>Geology</option>
+                                <option>HRGA</option>
+                                <option>IT</option>
+                                <option>Mechanical & Electrical</option>
+                                <option>OHS</option>
+                                <option>Operation</option>
+                                <option>Procurement & Logistic</option>
+                                <option>QAQC</option>
+                            </select>
+                        </div>
+    <div class="filter-item">
                             <select class="form-select" id="filterCategory">
-                                <option value="" disabled selected>Category</option>
+                                <option value="" disabled selected>Kategori</option>
                                 <option>Unsafe Condition</option><option>Unsafe Act</option><option>Environmental</option>
                                 <option>Equipment / Machinery</option><option>Road & Traffic</option><option>Electrical</option>
                                 <option>Fire & Explosion</option><option>PPE</option><option>Housekeeping</option>
@@ -2053,15 +2159,31 @@ textarea.form-control{min-height:115px}
                                 <option>Contractor / Subcontractor</option><option>Procedure / SOP</option><option>Signage / Barricade</option><option>Other</option>
                             </select>
                         </div>
-<div class="filter-item">
-                            <input type="search" id="searchReport" class="form-control" placeholder="Cari report...">
+    <div class="filter-item">
+                            <select class="form-select" id="filterRisk">
+                                <option value="" disabled selected>Risiko</option>
+                                <option value="High">High</option>
+                                <option value="Medium">Medium</option>
+                                <option value="Low">Low</option>
+                            </select>
                         </div>
-                        <div class="filter-item">
+    <div class="filter-item">
+                            <select class="form-select" id="filterStatus">
+                                <option value="" disabled selected>Status</option>
+                                <option value="Open">Open</option>
+                                <option value="In Progress">In Progress</option>
+                                <option value="Closed">Closed</option>
+                            </select>
+                        </div>
+    <div class="filter-item reset-filter-item">
                             <button class="btn btn-outline-secondary w-100" id="resetFilter">
                                 <i class="bi bi-arrow-counterclockwise"></i> Reset
                             </button>
                         </div>
-                    </div>
+    <div class="filter-item search-filter-item">
+                            <input type="search" id="searchReport" class="form-control" placeholder="Cari report...">
+                        </div>
+</div>
 
                     <div
                         class="table-responsive"
@@ -2108,7 +2230,7 @@ textarea.form-control{min-height:115px}
                                     <th>Nama Perusahaan</th>
                                     <th>User ID</th>
                                     <th>Password</th>
-                                    <th>Department</th>
+                                    <th>Departemen</th>
                                     <th>Role</th>
                                     <th>Status</th>
                                     <th>Aksi</th>
@@ -2224,7 +2346,7 @@ textarea.form-control{min-height:115px}
                             <option>HRGA</option>
                             <option>IT</option>
                             <option>Mechanical &amp; Electrical</option>
-                            <option>OHS - Divisi Technical Operation</option>
+                            <option>OHS</option>
                             <option>Operation</option>
                             <option>Procurement &amp; Logistic</option>
                             <option>QAQC</option>
@@ -2328,6 +2450,8 @@ function initializeData() {
                 title: "Jalan hauling berlubang",
                 description:
                     "Terdapat lubang cukup dalam pada jalur hauling yang berpotensi menyebabkan unit kehilangan kendali.",
+                riskDescription:
+                    "Unit dapat kehilangan kendali dan berpotensi menyebabkan kecelakaan atau kerusakan kendaraan.",
                 action:
                     "Area diberi barricade sementara dan dilaporkan kepada supervisor.",
                 status: "Open",
@@ -2349,6 +2473,8 @@ function initializeData() {
                 title: "Oli tumpah di lantai workshop",
                 description:
                     "Ditemukan tumpahan oli di area kerja workshop.",
+                riskDescription:
+                    "Lantai menjadi licin sehingga dapat menyebabkan pekerja terpeleset dan jatuh.",
                 action:
                     "Area dibersihkan menggunakan oil absorbent.",
                 status: "In Progress",
@@ -2370,6 +2496,8 @@ function initializeData() {
                 title: "Kabel jaringan tidak tertata",
                 description:
                     "Beberapa kabel jaringan terlihat tidak tertata dan berpotensi menjadi trip hazard.",
+                riskDescription:
+                    "Pekerja dapat tersandung dan mengalami cedera.",
                 action:
                     "Kabel dirapikan menggunakan cable management.",
                 status: "Closed",
@@ -3572,7 +3700,7 @@ function renderRecentReports() {
             <thead>
 
                 <tr>
-                    <th>Report</th>
+                    <th>NOMOR REPORT</th>
                     <th>Location</th>
                     <th>Risk</th>
                     <th>Status</th>
@@ -3813,10 +3941,10 @@ function renderReports() {
                 <tr>
 
                     <th>Tanggal</th>
-                    <th>Report</th>
+                    <th>NOMOR REPORT</th>
                     <th>Lokasi</th>
-                    <th>Department</th>
-                    <th>Category</th>
+                    <th>Departemen</th>
+                    <th>Kategori</th>
                     <th>Risk</th>
                     <th>Status</th>
                     <th></th>
@@ -4479,6 +4607,73 @@ if (reportTimeMinute) {
 }
 
 
+/* TANGGAL: tampil dd/mm/yy + kalender native */
+const reportDatePicker =
+    document.getElementById("reportDate");
+
+const reportDateDisplay =
+    document.getElementById("reportDateDisplay");
+
+function formatReportDateDisplay(value) {
+
+    if (!value || value.length !== 10) {
+        return "";
+    }
+
+    const parts = value.split("-");
+
+    if (parts.length !== 3) {
+        return "";
+    }
+
+    return (
+        parts[2] + "/" +
+        parts[1] + "/" +
+        parts[0].slice(2)
+    );
+}
+
+function syncReportDateDisplay() {
+
+    if (!reportDatePicker || !reportDateDisplay) {
+        return;
+    }
+
+    reportDateDisplay.value =
+        formatReportDateDisplay(
+            reportDatePicker.value
+        );
+}
+
+if (reportDatePicker && reportDateDisplay) {
+
+    reportDatePicker.addEventListener(
+        "change",
+        syncReportDateDisplay
+    );
+
+    reportDateDisplay.addEventListener(
+        "click",
+        function() {
+
+            if (
+                typeof reportDatePicker.showPicker ===
+                "function"
+            ) {
+                reportDatePicker.showPicker();
+            } else {
+                reportDatePicker.focus();
+                reportDatePicker.click();
+            }
+
+        }
+    );
+
+    syncReportDateDisplay();
+
+}
+
+
 /* =========================================================
    CREATE REPORT
 ========================================================= */
@@ -4603,6 +4798,12 @@ document
                 description:
                     document
                         .getElementById("reportDescription")
+                        .value
+                        .trim(),
+
+                riskDescription:
+                    document
+                        .getElementById("reportRiskDescription")
                         .value
                         .trim(),
 
@@ -5247,7 +5448,7 @@ window.addEventListener("resize", arrangeMainDepartment);
                             <option>HRGA</option>
                             <option>IT</option>
                             <option>Mechanical &amp; Electrical</option>
-                            <option>OHS - Divisi Technical Operation</option>
+                            <option>OHS</option>
                             <option>Operation</option>
                             <option>Procurement &amp; Logistic</option>
                             <option>QAQC</option>
