@@ -950,6 +950,15 @@ textarea.form-control{min-height:115px}
 }
 
 </style>
+<style>
+#page-users .btn-outline-primary{
+    --bs-btn-color:#2563eb;
+    --bs-btn-border-color:#93c5fd;
+    --bs-btn-hover-color:#fff;
+    --bs-btn-hover-bg:#2563eb;
+    --bs-btn-hover-border-color:#2563eb;
+}
+</style>
 </head>
 
 <body>
@@ -1085,13 +1094,14 @@ textarea.form-control{min-height:115px}
             </button>
 
 
-            <div class="menu-label mt-3">
+            <div class="menu-label mt-3" id="managementMenuLabel">
                 Management
             </div>
 
             <button
                 class="menu-item"
                 data-page="users"
+                id="usersMenuButton"
             >
                 <i class="bi bi-people"></i>
                 Users
@@ -1141,7 +1151,7 @@ textarea.form-control{min-height:115px}
                         class="fw-bold small"
                         id="topUserName"
                     >
-                        Administrator
+                        PT Nama Perusahaan
                     </div>
 
                     <div
@@ -1149,7 +1159,7 @@ textarea.form-control{min-height:115px}
                         style="font-size:11px"
                         id="topUserRole"
                     >
-                        Administrator
+                        Semangat Pagi, admin
                     </div>
                 </div>
 
@@ -1453,15 +1463,11 @@ textarea.form-control{min-height:115px}
                                 <div class="mb-4">
                                     <div class="fw-bold mb-3">Dilaporkan Oleh:</div>
                                     <div class="row g-3">
-                                        <div class="col-md-6">
-                                            <label class="form-label">Perusahaan <span class="required">*</span></label>
-                                            <select class="form-select" id="reporterCompany" required>
-                                                <option value="">Pilih Perusahaan</option>
-                                                <option>PT Bakti Pertiwi Nusantara</option>
-                                                <option>PT Kaia Pilar Indonesia</option>
-                                                <option>PT Empat Pilar Adidaya</option>
-                                            </select>
-                                        </div>
+                                        <input
+                                            type="hidden"
+                                            id="reporterCompany"
+                                            value=""
+                                        >
 
                                         <div class="col-md-6">
                                             <label class="form-label">Nama <span class="required">*</span></label>
@@ -1481,38 +1487,11 @@ textarea.form-control{min-height:115px}
                                                 <option>PJO</option>
                                             </select>
                                         </div>
-                                    <div class="col-md-6" id="mainDepartmentField">
-
-                                        <label class="form-label">
-                                            Department
-                                            <span class="required">*</span>
-                                        </label>
-
-                                        <select
-                                            class="form-select"
-                                            id="reportDepartment"
-                                            required
-                                        >
-
-                                            <option value="">
-                                                Pilih department
-                                            </option>
-
-                                            <option>Engineering</option>
-                                            <option>Environment</option>
-                                            <option>Finance Accounting</option>
-                                            <option>Geology</option>
-                                            <option>HRGA</option>
-                                            <option>IT</option>
-                                            <option>Mechanical &amp; Electrical</option>
-                                            <option>OHS - Divisi Technical Operation</option>
-                                            <option>Operation</option>
-                                            <option>Procurement &amp; Logistic</option>
-                                            <option>QAQC</option>
-
-                                        </select>
-
-                                    </div>
+                                    <input
+                                        type="hidden"
+                                        id="reportDepartment"
+                                        value=""
+                                    >
 
                                         <div class="col-md-6">
                                             <label class="form-label">Tanggal <span class="required">*</span></label>
@@ -2126,11 +2105,13 @@ textarea.form-control{min-height:115px}
                             <thead>
 
                                 <tr>
-                                    <th>Nama</th>
+                                    <th>Nama Perusahaan</th>
                                     <th>User ID</th>
                                     <th>Password</th>
+                                    <th>Department</th>
                                     <th>Role</th>
                                     <th>Status</th>
+                                    <th>Aksi</th>
                                 </tr>
 
                             </thead>
@@ -2197,6 +2178,89 @@ textarea.form-control{min-height:115px}
 
 <!-- Bootstrap JS -->
 
+<!-- EDIT USER MODAL -->
+<div class="modal fade" id="editUserModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title">Edit User</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+            </div>
+
+            <form id="editUserForm">
+                <div class="modal-body">
+
+                    <input type="hidden" id="editOriginalUserId">
+
+                    <div class="mb-3">
+                        <label class="form-label">Nama Perusahaan <span class="required">*</span></label>
+                        <select class="form-select" id="editUserName" required>
+                            <option value="">Pilih perusahaan</option>
+                            <option>PT Bakti Pertiwi Nusantara</option>
+                            <option>PT Kaia Pilar Indonesia</option>
+                            <option>PT Empat Pilar Adidaya</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">User ID <span class="required">*</span></label>
+                        <input type="text" class="form-control" id="editUserId" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Password <span class="required">*</span></label>
+                        <input type="text" class="form-control" id="editUserPassword" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Departemen <span class="required">*</span></label>
+                        <select class="form-select" id="editUserDepartment" required>
+                            <option value="">Pilih departemen</option>
+                            <option>Engineering</option>
+                            <option>Environment</option>
+                            <option>Finance Accounting</option>
+                            <option>Geology</option>
+                            <option>HRGA</option>
+                            <option>IT</option>
+                            <option>Mechanical &amp; Electrical</option>
+                            <option>OHS - Divisi Technical Operation</option>
+                            <option>Operation</option>
+                            <option>Procurement &amp; Logistic</option>
+                            <option>QAQC</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Role <span class="required">*</span></label>
+                        <select class="form-select" id="editUserRole" required>
+                            <option value="">Pilih role</option>
+                            <option>Administrator</option>
+                            <option>Supervisor</option>
+                            <option>Reporter</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Status <span class="required">*</span></label>
+                        <select class="form-select" id="editUserStatus" required>
+                            <option>Active</option>
+                            <option>Inactive</option>
+                        </select>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-warning">Simpan Perubahan</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
 <script
     src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
 ></script>
@@ -2223,31 +2287,17 @@ const users = [
         username: "admin",
         password: "admin123",
         name: "Administrator",
-        role: "Admin",
+        company: "PT Empat Pilar Adidaya",
+        role: "Administrator",
         department: "IT"
     },
 
     {
-        username: "hse",
-        password: "hse123",
-        name: "HSE Officer",
-        role: "HSE",
-        department: "HSE"
-    },
-
-    {
-        username: "supervisor",
-        password: "super123",
-        name: "Supervisor Mining",
-        role: "Supervisor",
-        department: "Mining Operation"
-    },
-
-    {
-        username: "employee",
-        password: "employee123",
-        name: "Mining Employee",
-        role: "Employee",
+        username: "reporter",
+        password: "reporter123",
+        name: "Reporter",
+        company: "PT Empat Pilar Adidaya",
+        role: "Reporter",
         department: "Mining Operation"
     }
 
@@ -2375,6 +2425,50 @@ function saveReports(reports) {
 
 }
 
+function deleteReport(reportId) {
+
+    const currentUser =
+        JSON.parse(localStorage.getItem(USER_KEY) || "null");
+
+    if (
+        !currentUser ||
+        (
+            currentUser.role !== "Administrator" &&
+            currentUser.role !== "Supervisor"
+        )
+    ) {
+        alert("Hanya Administrator atau Supervisor yang dapat menghapus hazard report.");
+        return;
+    }
+
+    const reports = getReports();
+    const report = reports.find(item => item.id === reportId);
+
+    if (!report) {
+        alert("Hazard report tidak ditemukan.");
+        return;
+    }
+
+    if (
+        !confirm(
+            `Yakin ingin menghapus hazard report "${report.number || reportId}"?`
+        )
+    ) {
+        return;
+    }
+
+    const updatedReports =
+        reports.filter(item => item.id !== reportId);
+
+    saveReports(updatedReports);
+
+    renderReports();
+    updateDashboard();
+
+    alert("Hazard report berhasil dihapus.");
+}
+
+
 
 
 /* =========================================================
@@ -2437,6 +2531,17 @@ function renderDynamicUsers() {
         .querySelectorAll(".dynamic-user-row")
         .forEach(row => row.remove());
 
+    const currentUser =
+        JSON.parse(
+            localStorage.getItem(USER_KEY) || "null"
+        );
+
+    const canDelete =
+        currentUser &&
+        (
+            currentUser.role === "Administrator"
+        );
+
     getDynamicUsers().forEach(user => {
 
         const row =
@@ -2447,11 +2552,9 @@ function renderDynamicUsers() {
         const roleClass =
             user.role === "Administrator"
                 ? "bg-dark"
-                : user.role === "HSE"
+                : user.role === "Supervisor"
                     ? "bg-warning text-dark"
-                    : user.role === "Supervisor"
-                        ? "bg-primary"
-                        : "bg-secondary";
+                    : "bg-primary";
 
         const statusClass =
             user.status === "Active"
@@ -2461,7 +2564,19 @@ function renderDynamicUsers() {
         row.innerHTML = `
             <td>${escapeUserHtml(user.name)}</td>
             <td>${escapeUserHtml(user.userId)}</td>
-            <td>${escapeUserHtml(user.password)}</td>
+            <td>
+                <span class="user-password-mask" data-password="${escapeUserHtml(user.password)}">******</span>
+                <button
+                    type="button"
+                    class="btn btn-sm btn-link p-0 ms-1"
+                    onclick="toggleUserPassword(this)"
+                    title="Tampilkan password"
+                    aria-label="Tampilkan password"
+                >
+                    <i class="bi bi-eye"></i>
+                </button>
+            </td>
+            <td>${escapeUserHtml(user.department)}</td>
             <td>
                 <span class="badge ${roleClass}">
                     ${escapeUserHtml(user.role)}
@@ -2472,6 +2587,32 @@ function renderDynamicUsers() {
                     ${escapeUserHtml(user.status)}
                 </span>
             </td>
+            <td>
+                ${
+                    canDelete
+                        ? `
+                            <button
+                                type="button"
+                                class="btn btn-sm btn-outline-primary me-1"
+                                onclick="editDynamicUser('${escapeUserHtml(user.userId)}')"
+                                title="Edit user"
+                            >
+                                <i class="bi bi-pencil"></i>
+                            </button>
+                            <button
+                                type="button"
+                                class="btn btn-sm btn-outline-danger"
+                                onclick="deleteDynamicUser('${escapeUserHtml(user.userId)}')"
+                                title="Hapus user"
+                            >
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        `
+                        : `
+                            <span class="text-muted small">-</span>
+                        `
+                }
+            </td>
         `;
 
         tbody.appendChild(row);
@@ -2479,6 +2620,277 @@ function renderDynamicUsers() {
     });
 
 }
+
+function toggleUserPassword(button) {
+
+    const span =
+        button
+            .closest("td")
+            .querySelector(".user-password-mask");
+
+    const icon =
+        button.querySelector("i");
+
+    if (!span) return;
+
+    const hidden =
+        span.textContent === "******";
+
+    span.textContent =
+        hidden
+            ? span.dataset.password
+            : "******";
+
+    if (icon) {
+        icon.className =
+            hidden
+                ? "bi bi-eye-slash"
+                : "bi bi-eye";
+    }
+
+    button.title =
+        hidden
+            ? "Sembunyikan password"
+            : "Tampilkan password";
+
+    button.setAttribute(
+        "aria-label",
+        button.title
+    );
+}
+
+
+function editDynamicUser(userId) {
+
+    const currentUser =
+        JSON.parse(
+            localStorage.getItem(USER_KEY) || "null"
+        );
+
+    if (
+        !currentUser ||
+        currentUser.role !== "Administrator"
+    ) {
+        alert("Hanya Administrator yang dapat mengedit user.");
+        return;
+    }
+
+    const dynamicUsers = getDynamicUsers();
+
+    const user = dynamicUsers.find(
+        item => item.userId === userId
+    );
+
+    if (!user) {
+        alert("User tidak ditemukan.");
+        return;
+    }
+
+    document.getElementById("editOriginalUserId").value =
+        user.userId;
+
+    document.getElementById("editUserName").value =
+        user.name || "";
+
+    document.getElementById("editUserId").value =
+        user.userId || "";
+
+    document.getElementById("editUserPassword").value =
+        user.password || "";
+
+    document.getElementById("editUserDepartment").value =
+        user.department || "";
+
+    document.getElementById("editUserRole").value =
+        user.role || "";
+
+    document.getElementById("editUserStatus").value =
+        user.status || "Active";
+
+    new bootstrap.Modal(
+        document.getElementById("editUserModal")
+    ).show();
+}
+
+
+document
+    .getElementById("editUserForm")
+    .addEventListener("submit", function(event) {
+
+        event.preventDefault();
+
+        const currentUser =
+            JSON.parse(
+                localStorage.getItem(USER_KEY) || "null"
+            );
+
+        if (
+            !currentUser ||
+            currentUser.role !== "Administrator"
+        ) {
+            alert("Hanya Administrator yang dapat mengedit user.");
+            return;
+        }
+
+        const originalUserId =
+            document.getElementById(
+                "editOriginalUserId"
+            ).value;
+
+        const updatedUser = {
+            name:
+                document
+                    .getElementById("editUserName")
+                    .value
+                    .trim(),
+
+            userId:
+                document
+                    .getElementById("editUserId")
+                    .value
+                    .trim(),
+
+            password:
+                document
+                    .getElementById("editUserPassword")
+                    .value,
+
+            department:
+                document
+                    .getElementById("editUserDepartment")
+                    .value,
+
+            role:
+                document
+                    .getElementById("editUserRole")
+                    .value,
+
+            status:
+                document
+                    .getElementById("editUserStatus")
+                    .value
+        };
+
+        if (
+            !updatedUser.name ||
+            !updatedUser.userId ||
+            !updatedUser.password ||
+            !updatedUser.department ||
+            !updatedUser.role ||
+            !updatedUser.status
+        ) {
+            alert("Semua data user wajib diisi.");
+            return;
+        }
+
+        const dynamicUsers =
+            getDynamicUsers();
+
+        const duplicate =
+            updatedUser.userId.toLowerCase() !==
+                originalUserId.toLowerCase() &&
+            (
+                users.some(
+                    item =>
+                        item.username.toLowerCase() ===
+                        updatedUser.userId.toLowerCase()
+                ) ||
+                dynamicUsers.some(
+                    item =>
+                        item.userId.toLowerCase() ===
+                        updatedUser.userId.toLowerCase()
+                )
+            );
+
+        if (duplicate) {
+            alert("User ID sudah digunakan.");
+            return;
+        }
+
+        const index =
+            dynamicUsers.findIndex(
+                item => item.userId === originalUserId
+            );
+
+        if (index === -1) {
+            alert("User tidak ditemukan.");
+            return;
+        }
+
+        dynamicUsers[index] = updatedUser;
+
+        saveDynamicUsers(
+            dynamicUsers
+        );
+
+        renderDynamicUsers();
+
+        const modalElement =
+            document.getElementById(
+                "editUserModal"
+            );
+
+        const modalInstance =
+            bootstrap.Modal.getInstance(
+                modalElement
+            );
+
+        if (modalInstance) {
+            modalInstance.hide();
+        }
+
+        alert("User berhasil diperbarui.");
+
+    });
+
+
+function deleteDynamicUser(userId) {
+
+    const currentUser =
+        JSON.parse(
+            localStorage.getItem(USER_KEY) || "null"
+        );
+
+    if (
+        !currentUser ||
+        (
+            currentUser.role !== "Administrator"
+        )
+    ) {
+        alert("Hanya Administrator yang dapat menghapus user.");
+        return;
+    }
+
+    const dynamicUsers = getDynamicUsers();
+
+    const user = dynamicUsers.find(
+        item => item.userId === userId
+    );
+
+    if (!user) {
+        alert("User tidak ditemukan.");
+        return;
+    }
+
+    if (
+        !confirm(
+            `Yakin ingin menghapus user "${user.userId}"?`
+        )
+    ) {
+        return;
+    }
+
+    const updatedUsers =
+        dynamicUsers.filter(
+            item => item.userId !== userId
+        );
+
+    saveDynamicUsers(updatedUsers);
+    renderDynamicUsers();
+
+    alert("User berhasil dihapus.");
+}
+
 
 document.addEventListener(
     "DOMContentLoaded",
@@ -2660,7 +3072,12 @@ document
             item =>
                 item.userId === username &&
                 item.password === password &&
-                item.status === "Active"
+                item.status === "Active" &&
+                (
+                    item.role === "Administrator" ||
+                    item.role === "Reporter" ||
+                    item.role === "Supervisor"
+                )
         );
 
         const user = defaultUser || (
@@ -2669,6 +3086,7 @@ document
                     username: dynamicUser.userId,
                     password: dynamicUser.password,
                     name: dynamicUser.name,
+                    company: dynamicUser.name,
                     role: dynamicUser.role,
                     department: dynamicUser.department || ""
                 }
@@ -2704,20 +3122,60 @@ document
    SHOW APP
 ========================================================= */
 
+function applyRoleVisibility(user) {
+
+    const isAdministrator =
+        user &&
+        user.role === "Administrator";
+
+    const managementLabel =
+        document.getElementById("managementMenuLabel");
+
+    const usersMenu =
+        document.getElementById("usersMenuButton");
+
+    if (managementLabel) {
+        managementLabel.style.display =
+            isAdministrator ? "" : "none";
+    }
+
+    if (usersMenu) {
+        usersMenu.style.display =
+            isAdministrator ? "" : "none";
+    }
+}
+
 function showApplication(user) {
+
+    applyRoleVisibility(user);
+
+    const reporterCompany =
+        document.getElementById("reporterCompany");
+
+    const reportDepartment =
+        document.getElementById("reportDepartment");
+
+    if (reporterCompany) {
+        reporterCompany.value =
+            user.company || user.name || "";
+    }
+
+    if (reportDepartment) {
+        reportDepartment.value =
+            user.department || "";
+    }
 
     document.getElementById("loginPage").style.display =
         "none";
-
-    document.getElementById("app").style.display =
+document.getElementById("app").style.display =
         "block";
 
 
     document.getElementById("topUserName").textContent =
-        user.name;
+        user.company || user.name;
 
     document.getElementById("topUserRole").textContent =
-        user.role;
+        "Semangat Pagi, " + user.username;
 
     document.getElementById("topAvatar").textContent =
         user.name.charAt(0).toUpperCase();
@@ -2729,6 +3187,10 @@ function showApplication(user) {
     updateDashboard();
 
     renderReports();
+
+    if (user.role === "Administrator") {
+        renderDynamicUsers();
+    }
 
 }
 
@@ -2806,6 +3268,16 @@ document
 
 function showPage(pageName) {
 
+    if (pageName === "users") {
+        const currentUser =
+            JSON.parse(localStorage.getItem(USER_KEY) || "null");
+
+        if (!currentUser || currentUser.role !== "Administrator") {
+            return;
+        }
+    }
+
+
     document
         .querySelectorAll(".page")
         .forEach(page => {
@@ -2858,6 +3330,12 @@ function showPage(pageName) {
     if (pageName === "reports") {
 
         renderReports();
+
+    }
+
+    if (pageName === "users") {
+
+        renderDynamicUsers();
 
     }
 
@@ -3180,6 +3658,16 @@ function updateDateFilterButton() {
 
 
 function renderReports() {
+    const currentUser =
+        JSON.parse(localStorage.getItem(USER_KEY) || "null");
+
+    const canDeleteReports =
+        currentUser &&
+        (
+            currentUser.role === "Administrator" ||
+            currentUser.role === "Supervisor"
+        );
+
 
     const search =
         document
@@ -3349,6 +3837,21 @@ function renderReports() {
 
                 <td>
                     ${formatDate(report.date)}
+                
+                    ${
+                        canDeleteReports
+                            ? `
+                                <button
+                                    type="button"
+                                    class="btn btn-sm btn-outline-danger ms-1"
+                                    onclick="deleteReport('${report.id}')"
+                                    title="Hapus hazard report"
+                                >
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            `
+                            : ""
+                    }
                 </td>
 
                 <td>
@@ -4756,9 +5259,8 @@ window.addEventListener("resize", arrangeMainDepartment);
                         <select class="form-select" id="newUserRole" required>
                             <option value="">Pilih role</option>
                             <option value="Administrator">Administrator</option>
-                            <option value="HSE">HSE</option>
+                            <option value="Reporter">Reporter</option>
                             <option value="Supervisor">Supervisor</option>
-                            <option value="Employee">Employee</option>
                         </select>
                     </div>
 
@@ -4779,6 +5281,9 @@ window.addEventListener("resize", arrangeMainDepartment);
         </div>
     </div>
 </div>
+
+
+
 
 </body>
 </html>
