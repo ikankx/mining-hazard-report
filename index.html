@@ -1009,6 +1009,40 @@ textarea.form-control{min-height:115px}
 .reports-table th:nth-child(7), .reports-table td:nth-child(7){width:7.5%}
 </style>
 
+
+<style>
+#page-reports .hazard-reports-table{
+    min-width:1500px;
+}
+#page-reports .hazard-reports-table th,
+#page-reports .hazard-reports-table td{
+    white-space:nowrap;
+}
+#page-reports .hazard-reports-table th:nth-child(3),
+#page-reports .hazard-reports-table td:nth-child(3){
+    min-width:150px;
+}
+#page-reports .hazard-reports-table th:nth-child(8),
+#page-reports .hazard-reports-table td:nth-child(8){
+    min-width:220px;
+    max-width:280px;
+}
+#page-reports .hazard-reports-table th:nth-child(9),
+#page-reports .hazard-reports-table td:nth-child(9){
+    min-width:140px;
+}
+#page-reports .hazard-reports-table th:nth-child(10),
+#page-reports .hazard-reports-table td:nth-child(10){
+    min-width:130px;
+}
+#page-reports .report-table-truncated{
+    max-width:280px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+}
+</style>
+
 </head>
 
 <body>
@@ -3934,20 +3968,24 @@ function renderReports() {
 
     let html = `
 
-        <table class="table table-hover align-middle">
+        <table class="table table-hover align-middle hazard-reports-table">
 
             <thead>
 
                 <tr>
 
-                    <th>Tanggal</th>
-                    <th>NOMOR REPORT</th>
-                    <th>Lokasi</th>
+                    <th>Tanggal Identifikasi</th>
+                    <th>Nomor Report</th>
+                    <th>Nama Pelapor</th>
                     <th>Departemen</th>
+                    <th>Lokasi</th>
                     <th>Kategori</th>
-                    <th>Risk</th>
+                    <th>Risk Level</th>
+                    <th>Temuan</th>
+                    <th>PIC</th>
+                    <th>Target Selesai</th>
                     <th>Status</th>
-                    <th></th>
+                    <th>Aksi</th>
 
                 </tr>
 
@@ -3965,21 +4003,6 @@ function renderReports() {
 
                 <td>
                     ${formatDate(report.date)}
-                
-                    ${
-                        canDeleteReports
-                            ? `
-                                <button
-                                    type="button"
-                                    class="btn btn-sm btn-outline-danger ms-1"
-                                    onclick="deleteReport('${report.id}')"
-                                    title="Hapus hazard report"
-                                >
-                                    <i class="bi bi-trash"></i>
-                                </button>
-                            `
-                            : ""
-                    }
                 </td>
 
                 <td>
@@ -3989,11 +4012,15 @@ function renderReports() {
                 </td>
 
                 <td>
-                    ${escapeHTML(report.location)}
+                    ${escapeHTML(report.reporter)}
                 </td>
 
                 <td>
                     ${escapeHTML(report.department)}
+                </td>
+
+                <td>
+                    ${escapeHTML(report.location)}
                 </td>
 
                 <td>
@@ -4005,18 +4032,57 @@ function renderReports() {
                 </td>
 
                 <td>
+                    <div
+                        class="report-table-truncated"
+                        title="${escapeHTML(report.title)}"
+                    >
+                        ${escapeHTML(report.title)}
+                    </div>
+                </td>
+
+                <td>
+                    ${escapeHTML(report.targetName || "-")}
+                </td>
+
+                <td>
+                    ${
+                        report.dueDate
+                            ? formatDate(report.dueDate)
+                            : "-"
+                    }
+                </td>
+
+                <td>
                     ${statusBadge(report.status)}
                 </td>
 
                 <td>
+                    <div class="d-flex gap-1">
 
-                    <button
-                        class="btn btn-sm btn-light"
-                        onclick="viewReport('${report.id}')"
-                    >
-                        <i class="bi bi-eye"></i>
-                    </button>
+                        <button
+                            class="btn btn-sm btn-light"
+                            onclick="viewReport('${report.id}')"
+                            title="Lihat report"
+                        >
+                            <i class="bi bi-eye"></i>
+                        </button>
 
+                        ${
+                            canDeleteReports
+                                ? `
+                                    <button
+                                        type="button"
+                                        class="btn btn-sm btn-outline-danger"
+                                        onclick="deleteReport('${report.id}')"
+                                        title="Hapus hazard report"
+                                    >
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                `
+                                : ""
+                        }
+
+                    </div>
                 </td>
 
             </tr>
