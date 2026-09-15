@@ -444,6 +444,120 @@ body.light .login-form-panel{background:rgba(255,255,255,.74)}
 .nav-logout:hover{color:var(--red);background:rgba(255,100,112,.06);border-color:rgba(255,100,112,.12)}
 .nav-logout:hover .nav-icon{color:var(--red)}
 
+
+/* =========================================================
+   MOBILE LOGIN - 1 SCREEN / PRECISION
+========================================================= */
+html,body{min-height:100%;overscroll-behavior:none}
+@media(max-width:600px){
+  body:has(#loginPage.show){overflow:hidden}
+  #loginPage{
+    min-height:100dvh;
+    height:100dvh;
+    padding:10px;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+  }
+  .login-shell{
+    width:100%;
+    max-width:430px;
+    max-height:calc(100dvh - 20px);
+    min-height:0;
+    grid-template-columns:1fr;
+    border-radius:22px;
+    overflow:hidden;
+  }
+  .login-brand-panel{
+    padding:20px 20px 16px;
+    min-height:0;
+  }
+  .login-logo-row{gap:9px}
+  .login-hz{
+    width:40px;height:40px;border-radius:12px;font-size:14px
+  }
+  .login-brand-name{font-size:19px}
+  .login-eyebrow{
+    margin-top:18px;
+    font-size:8px;
+    letter-spacing:1.3px;
+  }
+  .login-heading{
+    margin-top:6px;
+    font-size:27px;
+    line-height:1.02;
+    letter-spacing:-1px;
+  }
+  .login-copy{
+    margin-top:9px;
+    font-size:9px;
+    line-height:1.5;
+  }
+  .login-pill-row{
+    display:none;
+  }
+  .login-form-panel{
+    padding:18px 20px 20px;
+  }
+  .login-form{max-width:none}
+  .login-form h2{font-size:18px}
+  .login-form .sub{
+    margin:4px 0 14px;
+    font-size:9px;
+  }
+  .login-field{margin-bottom:10px}
+  .login-field label{font-size:8px;margin-bottom:4px}
+  .login-input-wrap input,
+  .login-field>input{
+    height:42px;
+    padding:9px 38px 9px 11px;
+    font-size:10px;
+  }
+  .login-password-toggle{
+    right:6px;
+    padding:5px 7px;
+    font-size:7px;
+  }
+  .login-btn{
+    height:42px;
+    margin-top:3px;
+    font-size:10px;
+  }
+  .login-demo{
+    margin-top:10px;
+    padding:9px 10px;
+  }
+  .login-demo b{font-size:8px}
+  .login-demo p{
+    margin-top:4px;
+    font-size:7px;
+    line-height:1.45;
+  }
+  .login-footer{
+    margin-top:10px;
+    font-size:7px;
+    line-height:1.3;
+  }
+}
+@media(max-width:390px){
+  #loginPage{padding:8px}
+  .login-shell{
+    max-height:calc(100dvh - 16px);
+    border-radius:19px;
+  }
+  .login-brand-panel{padding:17px 17px 13px}
+  .login-form-panel{padding:15px 17px 16px}
+  .login-hz{width:36px;height:36px;border-radius:11px}
+  .login-brand-name{font-size:17px}
+  .login-eyebrow{margin-top:14px;font-size:7px}
+  .login-heading{font-size:24px}
+  .login-copy{font-size:8px}
+  .login-form h2{font-size:17px}
+  .login-form .sub{font-size:8px;margin-bottom:11px}
+  .login-demo{margin-top:8px;padding:8px 9px}
+  .login-footer{margin-top:8px;font-size:6.5px}
+}
+
 </style>
 </head>
 <body>
