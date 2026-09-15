@@ -558,6 +558,29 @@ html,body{min-height:100%;overscroll-behavior:none}
   .login-footer{margin-top:8px;font-size:6.5px}
 }
 
+
+/* MOBILE ONLY — ALIGN SPOT / REPORT / FIX */
+@media (max-width:600px){
+  .login-heading{
+    display:block;
+    white-space:nowrap;
+    font-size:clamp(20px,7.2vw,27px);
+    line-height:1.08;
+    letter-spacing:-.8px;
+    width:100%;
+    max-width:100%;
+    overflow:visible;
+  }
+  .login-heading br{display:none}
+  .login-heading span{display:inline;color:var(--lime)}
+}
+@media (max-width:390px){
+  .login-heading{
+    font-size:clamp(18px,6.7vw,23px);
+    letter-spacing:-.65px;
+  }
+}
+
 </style>
 </head>
 <body>
