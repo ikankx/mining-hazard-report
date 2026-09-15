@@ -581,6 +581,18 @@ html,body{min-height:100%;overscroll-behavior:none}
   }
 }
 
+
+.icon-delete{
+  width:32px;
+  min-width:32px;
+  padding:8px 0;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  line-height:1;
+  font-size:12px;
+}
+
 </style>
 </head>
 <body>
@@ -804,7 +816,7 @@ Kalau dark/light bermasalah             -> cek bagian 13 / 15 / 33
 
 <section class="page" id="report">
 <div class="card">
- <div class="section-title"><h3>Informasi Pelapor</h3><span>Informasi pelapor terisi otomatis</span></div>
+ <div class="section-title"><h3>Informasi Pelapor</h3><span>Terhubung realtime dengan akun user yang login</span></div>
   <div class="reporter-identity-grid">
    <div><label>Nama Pelapor</label><input id="reporterName" readonly value="Ikang Zulfikar"></div>
    <div><label>Jabatan</label><input id="reporterPosition" readonly value="Foreman IT"></div>
@@ -841,7 +853,7 @@ Kalau dark/light bermasalah             -> cek bagian 13 / 15 / 33
 </section>
 
 <section class="page" id="followup">
-<div class="card"><div class="section-title"><h3>Assign & Follow Up</h3><span>HSE / Supervisor</span></div>
+<div class="card"><div class="section-title"><h3>Assign & Follow Up</h3><span>Admin &amp; Supervisor: semua PIC / semua perusahaan</span></div>
 <div class="notice"><b>Flow:</b> Open → Assign PIC → On Progress → PIC upload corrective action + evidence → Closed.</div>
 <div id="followTable"></div></div>
 </section>
@@ -1017,6 +1029,7 @@ Kalau dark/light bermasalah             -> cek bagian 13 / 15 / 33
   <option>Admin</option>
   <option>Foreman</option>
   <option>Supervisor</option>
+  <option>Section Head</option>
   <option>Superintendent</option>
   <option>Manager</option>
   <option>General Manager</option>
@@ -1208,6 +1221,8 @@ function takeCameraPhoto(){
 /* =========================================================
    21. HAZARD NUMBERING
 ========================================================= */
+const SEQ_KEY='hazardly_hzr_sequence_2026';
+
 function companyPrefix(company){
  const map={
    'PT Bakti Pertiwi Nusantara':'BPN',
@@ -1217,19 +1232,85 @@ function companyPrefix(company){
  return map[company] || 'EPA';
 }
 
+function sequenceBase(company,dateObj=new Date()){
+ const y=dateObj.getFullYear();
+ const month=romanMonth(dateObj.getMonth()+1);
+ return `HZR/${companyPrefix(company)}/${month}/${y}/`;
+}
+
 function nextNumber(){
  const d=new Date();
- const y=d.getFullYear();
- const month=romanMonth(d.getMonth()+1);
- const prefix=companyPrefix(CURRENT_USER.company);
- const base=`HZR/${prefix}/${month}/${y}/`;
+ const base=sequenceBase(CURRENT_USER.company,d);
+ const seq=JSON.parse(localStorage.getItem(SEQ_KEY)||'{}');
+
  const nums=reports
-   .filter(r=>r.company===CURRENT_USER.company && String(r.id||'').startsWith(base))
+   .filter(r=>r.company===CURRENT_USER.company &&
+              String(r.id||'').startsWith(base))
    .map(r=>parseInt(String(r.id).slice(base.length),10))
    .filter(Number.isFinite);
- const n=nums.length ? Math.max(...nums)+1 : 1;
+
+ let n=Math.max(Number(seq[base]||0),nums.length?Math.max(...nums):0)+1;
+
+ /* Never return an ID that already exists. */
+ while(reports.some(r=>String(r.id||'')===`${base}${String(n).padStart(5,'0')}`)){
+   n++;
+ }
+
+ seq[base]=n;
+ localStorage.setItem(SEQ_KEY,JSON.stringify(seq));
+
  return `${base}${String(n).padStart(5,'0')}`;
 }
+
+/* Repair duplicate/legacy HZR numbers once, without touching login or roles. */
+function repairDuplicateHazardNumbers(){
+ const seen=new Set();
+ const counters={};
+ let changed=false;
+
+ /* Preserve the first occurrence and only re-number later duplicates. */
+ reports.slice().reverse().forEach(r=>{
+   const d=new Date(`${r.date||''}T00:00:00`);
+   if(Number.isNaN(d.getTime()))return;
+
+   const base=sequenceBase(r.company,d);
+   const id=String(r.id||'');
+
+   if(!id.startsWith(base)){
+     let n=1;
+     while(seen.has(`${base}${String(n).padStart(5,'0')}`))n++;
+     r.id=`${base}${String(n).padStart(5,'0')}`;
+     seen.add(r.id);
+     counters[base]=Math.max(counters[base]||0,n);
+     changed=true;
+     return;
+   }
+
+   if(!seen.has(id)){
+     seen.add(id);
+     const n=parseInt(id.slice(base.length),10);
+     if(Number.isFinite(n))counters[base]=Math.max(counters[base]||0,n);
+   }else{
+     let n=(counters[base]||0)+1;
+     while(seen.has(`${base}${String(n).padStart(5,'0')}`))n++;
+     r.id=`${base}${String(n).padStart(5,'0')}`;
+     seen.add(r.id);
+     counters[base]=n;
+     changed=true;
+   }
+ });
+
+ if(changed){
+   const seq=JSON.parse(localStorage.getItem(SEQ_KEY)||'{}');
+   Object.keys(counters).forEach(k=>{
+     seq[k]=Math.max(Number(seq[k]||0),counters[k]);
+   });
+   localStorage.setItem(SEQ_KEY,JSON.stringify(seq));
+   save();
+ }
+}
+
+repairDuplicateHazardNumbers();
 
 /* =========================================================
    22. SUBMIT HAZARD REPORT
@@ -1308,33 +1389,50 @@ function riskBadge(s){return `<span class="badge ${s.toLowerCase()}">${s}</span>
 function table(data,mode='normal'){
  if(!data.length)return '<div class="empty">Belum ada hazard report.</div>';
  return `<table class="table"><thead><tr><th>No. Hazard Report</th><th>Date</th><th>Location</th><th>Finding</th><th>Risk</th><th>PIC</th><th>Status</th><th>Action</th></tr></thead><tbody>${
- data.map(r=>`<tr><td><b>${r.id}</b></td><td>${r.date}<br>${r.time}</td><td>${r.area}<br>${r.detail}</td><td>${r.finding}</td><td>${riskBadge(r.risk)}</td><td>${r.pic||'<span class="muted">Unassigned</span>'}</td><td>${statusBadge(r.status)}</td><td><button class="btn secondary mini" onclick="showDetail('${r.id}')">Detail</button>${mode==='follow'&&r.status!=='Closed'?` <button class="btn blue mini" onclick="openAssign('${r.id}')">${r.pic?'Edit PIC':'Assign PIC'}</button>`:''}</td></tr>`).join('')
+ data.map(r=>`<tr><td><b>${r.id}</b></td><td>${r.date}<br>${r.time}</td><td>${r.area}<br>${r.detail}</td><td>${r.finding}</td><td>${riskBadge(r.risk)}</td><td>${r.pic||'<span class="muted">Unassigned</span>'}</td><td>${statusBadge(r.status)}</td><td><button class="btn secondary mini" onclick="showDetail('${r.id}')">Detail</button>${can('deleteHazard')?`<button class="btn danger mini icon-delete" title="Hapus Hazard Report" aria-label="Hapus Hazard Report" onclick="deleteHazard('${r.id}')">🗑</button>`:''}${mode==='follow'&&r.status!=='Closed'?` <button class="btn blue mini" onclick="openAssign('${r.id}')">${r.pic?'Edit PIC':'Assign PIC'}</button>`:''}</td></tr>`).join('')
  }</tbody></table>`;
 }
 /* =========================================================
    26. PIC - MY CORRECTIVE ACTION
 ========================================================= */
 function myActionTable(){
-  const list = reports.filter(r => isCurrentUserPIC(r) && r.status !== 'Closed');
+  let list;
 
-  if(!list.length){
-    return '<div class="empty">Tidak ada corrective action yang ditugaskan kepada Anda.</div>';
+  if(CURRENT_USER.role==='Administrator' || CURRENT_USER.role==='HSE / Supervisor'){
+    /* Admin & Supervisor dapat melihat seluruh corrective action,
+       seluruh PIC, dan seluruh perusahaan. */
+    list = reports.filter(r=>r.pic && r.status!=='Closed');
+  }else{
+    /* Reporter tetap hanya melihat corrective action yang ditugaskan
+       kepadanya sebagai PIC. */
+    list = reports.filter(r=>isCurrentUserPIC(r) && r.status!=='Closed');
   }
 
-  return `<table class="table"><thead><tr><th>No</th><th>Finding</th><th>Target</th><th>PIC</th><th>Status</th><th>Action</th></tr></thead><tbody>${
-    list.map(r=>`<tr>
+  if(!list.length){
+    return '<div class="empty">Tidak ada corrective action yang perlu ditindaklanjuti.</div>';
+  }
+
+  return `<table class="table"><thead><tr>
+    <th>No. Hazard Report</th><th>Perusahaan</th><th>Reporter</th><th>PIC</th>
+    <th>Risk</th><th>Target</th><th>Status</th><th>Action</th>
+  </tr></thead><tbody>
+  ${list.map(r=>`
+    <tr>
       <td><b>${r.id}</b></td>
-      <td>${r.finding}</td>
+      <td>${r.company||'-'}</td>
+      <td>${r.reporter||'-'}</td>
+      <td>${r.pic||'-'}</td>
+      <td>${riskBadge(r.risk)}</td>
       <td>${r.target||'-'}</td>
-      <td>${r.pic}</td>
       <td>${statusBadge(r.status)}</td>
       <td>
         <button class="btn secondary mini" onclick="showDetail('${r.id}')">Detail</button>
         <button class="btn green mini" onclick="openClose('${r.id}')">Close Hazard</button>
       </td>
-    </tr>`).join('')
-  }</tbody></table>`;
+    </tr>`).join('')}
+  </tbody></table>`;
 }
+
 /* =========================================================
    27. DETAIL HAZARD MODAL
 ========================================================= */
@@ -1360,6 +1458,44 @@ function closeModal(){$('detailModal').classList.remove('show')}
 /* =========================================================
    28. ASSIGN PIC MODAL
 ========================================================= */
+
+function deleteHazard(id){
+  if(!can('deleteHazard')){
+    if(typeof logActivity==='function'){
+      logActivity('ACCESS_DENIED','Hazard Reports','Mencoba menghapus Hazard Report tanpa hak akses',id,'DENIED');
+    }
+    alert('Akses ditolak. Hanya Administrator yang dapat menghapus Hazard Report.');
+    return;
+  }
+
+  const r=reports.find(x=>x.id===id);
+  if(!r)return;
+
+  const ok=confirm(
+    `Hapus Hazard Report ${r.id}?\n\n` +
+    `Data report, corrective action, evidence, dan riwayat aktivitas akan dihapus dari prototype lokal.`
+  );
+  if(!ok)return;
+
+  reports=reports.filter(x=>x.id!==id);
+  save();
+
+  if(typeof logActivity==='function'){
+    logActivity('DELETE_HAZARD','Hazard Reports',`Menghapus Hazard Report ${r.id}`,r.id,'SUCCESS');
+  }
+  if(typeof pushNotification==='function'){
+    pushNotification('delete','Hazard dihapus',r.id,r.id);
+  }
+
+  /* Tutup modal/detail bila sedang terbuka. */
+  if(typeof closeModal==='function')closeModal();
+
+  render();
+  if(typeof toast==='function'){
+    toast('Hazard dihapus',`${r.id} berhasil dihapus.`);
+  }
+}
+
 function openAssign(id){
  if(!can('assignPIC')){alert('Akses ditolak: Anda tidak memiliki hak untuk assign PIC.');return}
  const r=reports.find(x=>x.id===id);if(!r)return;
@@ -1406,23 +1542,51 @@ function saveAssign(id){
    30. CLOSE HAZARD MODAL
 ========================================================= */
 function openClose(id){
- if(!can('closeAssigned')){
-   alert('Akses ditolak: Anda tidak memiliki hak closing.');
-   return;
- }
- const r=reports.find(x=>x.id===id);
- if(!r)return;
- if(!canCloseReport(r)){
-   alert('Akses ditolak: hanya user yang ditunjuk sebagai PIC yang dapat melakukan closing.');
-   return;
- }
- $('closeBody').innerHTML=`<div class="notice"><b>${r.id}</b> — ${r.finding}<br>PIC: <b>${r.pic}</b></div>
- <label>Corrective Action <span class="req">*</span></label><textarea id="closeAction" placeholder="Apa yang sudah diperbaiki?">${r.corrective||''}</textarea>
- <div style="height:11px"></div><label>Evidence Perbaikan <span class="req">*</span></label><input id="evidence" type="file" accept="image/png,image/jpeg"><div class="hint">Foto kondisi setelah perbaikan • maksimal 5 MB</div><img id="evidencePreview" class="preview">
- <div style="height:11px"></div><label>Catatan Closing</label><textarea id="closeNote" placeholder="Opsional...">${r.closeNote||''}</textarea>
- <div class="actions"><button class="btn secondary" onclick="closeCloseModal()">Batal</button><button class="btn green" onclick="saveClose('${id}')">✓ Close Hazard</button></div>`;
- $('closeModalBox').classList.add('show');
- $('evidence').onchange=e=>{const f=e.target.files[0];if(!f)return;if(f.size>5*1024*1024){alert('Evidence maksimal 5 MB');e.target.value='';return}const rr=new FileReader();rr.onload=()=>{$('evidencePreview').src=rr.result;$('evidencePreview').style.display='block'};rr.readAsDataURL(f)}
+  if(!can('closeAssigned')){
+    alert('Akses ditolak: Anda tidak memiliki hak untuk melakukan closing.');
+    return;
+  }
+
+  const r=reports.find(x=>x.id===id);
+  if(!r)return;
+
+  if(!canCloseReport(r)){
+    alert('Akses ditolak: Reporter hanya dapat menutup hazard yang ditugaskan kepadanya sebagai PIC.');
+    return;
+  }
+
+  $('closeBody').innerHTML=`<div class="notice"><b>${r.id}</b> — ${r.finding}<br>PIC: <b>${r.pic}</b></div>
+  <label>Corrective Action <span class="req">*</span></label><textarea id="closeAction" placeholder="Apa yang sudah diperbaiki?">${r.corrective||''}</textarea>
+  <div style="height:11px"></div>
+  <label>Evidence Perbaikan <span class="req">*</span></label>
+  <input id="evidence" type="file" accept="image/png,image/jpeg">
+  <div class="hint">Foto kondisi setelah perbaikan • maksimal 5 MB</div>
+  <img id="evidencePreview" class="preview">
+  <div style="height:11px"></div>
+  <label>Catatan Closing</label>
+  <textarea id="closeNote" placeholder="Opsional...">${r.closeNote||''}</textarea>
+  <div class="actions">
+    <button class="btn secondary" onclick="closeCloseModal()">Batal</button>
+    <button class="btn green" onclick="saveClose('${id}')">✓ Close Hazard</button>
+  </div>`;
+
+  $('closeModalBox').classList.add('show');
+
+  $('evidence').onchange=e=>{
+    const f=e.target.files[0];
+    if(!f)return;
+    if(f.size>5*1024*1024){
+      alert('Evidence maksimal 5 MB');
+      e.target.value='';
+      return;
+    }
+    const rr=new FileReader();
+    rr.onload=()=>{
+      $('evidencePreview').src=rr.result;
+      $('evidencePreview').style.display='block';
+    };
+    rr.readAsDataURL(f);
+  };
 }
 function closeCloseModal(){$('closeModalBox').classList.remove('show')}
 /* =========================================================
@@ -1547,19 +1711,32 @@ function openAddUser(){
   $('userPassword').type='password';
   const p=document.querySelector('.password-toggle'); if(p)p.textContent='SHOW';
   $('userModal').classList.add('show');
+  updateUserPasswordRequirement();
   setTimeout(()=>$('userUsername').focus(),50);
 }
 
-function closeUserModal(){$('userModal').classList.remove('show');editingUserIndex=null}
+function closeUserModal(){
+  const modal=$('userModal');
+  if(modal)modal.classList.remove('show');
 
-function toggleUserPassword(){
-  const input=$('userPassword'),btn=document.querySelector('.password-toggle');
-  if(input.type==='password'){input.type='text';btn.textContent='HIDE'}
-  else{input.type='password';btn.textContent='SHOW'}
+  editingUserIndex=null;
+
+  const pwd=$('userPassword');
+  if(pwd){
+    pwd.value='';
+    pwd.type='password';
+    pwd.placeholder='Minimal 6 karakter';
+  }
+
+  const btn=document.querySelector('.password-toggle');
+  if(btn)btn.textContent='SHOW';
+
+  updateUserPasswordRequirement();
 }
 
 function saveUserForm(){
   if(!can('manageUsers')){alert('Akses ditolak.');return}
+
   const username=$('userUsername').value.trim();
   const name=$('userName').value.trim();
   const position=$('userPosition').value.trim();
@@ -1569,25 +1746,99 @@ function saveUserForm(){
   const status=$('userStatus').value;
   const password=$('userPassword').value;
 
-  if(!username||!name||!position||!company||!department||!role){alert('Lengkapi semua field wajib (*).');return}
-  if(editingUserIndex===null&&!password){alert('Password wajib diisi.');return}
-  if(password&&password.length<6){alert('Password minimal 6 karakter.');return}
+  if(!username||!name||!position||!company||!department||!role){
+    alert('Lengkapi semua field wajib (*).');
+    return;
+  }
 
-  const duplicate=DEMO_USERS.findIndex((u,i)=>u.username.toLowerCase()===username.toLowerCase()&&i!==editingUserIndex);
-  if(duplicate!==-1){alert('Username sudah digunakan.');return}
+  /* Saat tambah user, password wajib.
+     Saat edit user, password boleh kosong = password lama tetap. */
+  if(editingUserIndex===null && !password){
+    alert('Password wajib diisi.');
+    $('userPassword').focus();
+    return;
+  }
+
+  if(password && password.length<6){
+    alert('Password minimal 6 karakter.');
+    $('userPassword').focus();
+    return;
+  }
+
+  const duplicate=DEMO_USERS.findIndex(
+    (u,i)=>u.username.toLowerCase()===username.toLowerCase() && i!==editingUserIndex
+  );
+  if(duplicate!==-1){
+    alert('Username sudah digunakan.');
+    $('userUsername').focus();
+    return;
+  }
+
+  const wasEditingCurrentUser =
+    editingUserIndex!==null &&
+    DEMO_USERS[editingUserIndex] &&
+    DEMO_USERS[editingUserIndex].username.toLowerCase()===CURRENT_USER.username.toLowerCase();
 
   if(editingUserIndex===null){
-    DEMO_USERS.push({username,name,position,company,department,role,status,password});
-    logActivity('CREATE_USER','Users & Roles',`Membuat user ${username} dengan role ${role}`,username,'SUCCESS');
-    toast('User berhasil dibuat',`${username} berhasil ditambahkan.`);
+    DEMO_USERS.push({
+      username,name,position,company,department,role,status,password
+    });
+    if(typeof logActivity==='function'){
+      logActivity('CREATE_USER','Users & Roles',
+        `Membuat user ${username} dengan role ${role}`,username,'SUCCESS');
+    }
+    if(typeof toast==='function'){
+      toast('User berhasil dibuat',`${username} berhasil ditambahkan.`);
+    }
   }else{
     const u=DEMO_USERS[editingUserIndex];
-    u.username=username;u.name=name;u.position=position;u.company=company;u.department=department;u.role=role;u.status=status;
+    u.username=username;
+    u.name=name;
+    u.position=position;
+    u.company=company;
+    u.department=department;
+    u.role=role;
+    u.status=status;
     if(password)u.password=password;
-    logActivity('UPDATE_USER','Users & Roles',`Memperbarui user ${username} dengan role ${role}`,username,'SUCCESS');
-    toast('User diperbarui',`${username} berhasil diperbarui.`);
+
+    if(typeof logActivity==='function'){
+      logActivity('UPDATE_USER','Users & Roles',
+        `Memperbarui user ${username} dengan role ${role}`,username,'SUCCESS');
+    }
+    if(typeof toast==='function'){
+      toast('User diperbarui',`${username} berhasil diperbarui.`);
+    }
   }
-  saveUsers();renderUsers();closeUserModal();
+
+  /* Persist dulu. */
+  saveUsers();
+
+  /* Realtime: jika yang diedit adalah akun yang sedang login,
+     langsung sinkronkan Informasi Pelapor dan header. */
+  if(wasEditingCurrentUser || CURRENT_USER.username.toLowerCase()===username.toLowerCase()){
+    CURRENT_USER.username=username;
+    CURRENT_USER.name=name;
+    CURRENT_USER.position=position;
+    CURRENT_USER.department=department;
+    CURRENT_USER.company=company;
+    CURRENT_USER.role=role;
+
+    updateUserUI();
+    applyRoleAccess();
+  }
+
+  /* Refresh daftar user, lalu TUTUP MODAL setelah save berhasil. */
+  renderUsers();
+  closeUserModal();
+  return false;
+}
+
+
+function updateUserPasswordRequirement(){
+  const lbl = document.querySelector('#userPassword')?.closest('div')?.querySelector('label');
+  if(!lbl)return;
+  const editing = typeof editingUserIndex!=='undefined' && editingUserIndex!==null;
+  lbl.innerHTML = editing ? 'Password' : 'Password <span class="req">*</span>';
 }
 
 function editUser(index){
@@ -1608,6 +1859,7 @@ function editUser(index){
   $('userPassword').type='password';
   const p=document.querySelector('.password-toggle');if(p)p.textContent='SHOW';
   $('userModal').classList.add('show');
+  updateUserPasswordRequirement();
 }
 
 function deleteUser(index){
@@ -1918,15 +2170,15 @@ function applyLoggedInUser(u){
 const ROLE_PERMISSIONS = {
   'Administrator': {
     createHazard:true, assignPIC:true, correctiveOwn:true, correctiveAssigned:true,
-    closeOwn:false, closeAssigned:true, manageUsers:true, viewAll:true
+    closeOwn:false, closeAssigned:true, deleteHazard:true, manageUsers:true, viewAll:true
   },
   'Reporter': {
     createHazard:true, assignPIC:true, correctiveOwn:true, correctiveAssigned:true,
-    closeOwn:true, closeAssigned:true, manageUsers:false, viewAll:true
+    closeOwn:true, closeAssigned:true, deleteHazard:false, manageUsers:false, viewAll:true
   },
   'HSE / Supervisor': {
     createHazard:true, assignPIC:true, correctiveOwn:true, correctiveAssigned:true,
-    closeOwn:false, closeAssigned:true, manageUsers:false, viewAll:true
+    closeOwn:false, closeAssigned:true, deleteHazard:true, manageUsers:false, viewAll:true
   }
 };
 
@@ -1937,7 +2189,10 @@ function isCurrentUserPIC(r){
   );
 }
 function canCloseReport(r){
-  return !!r && isCurrentUserPIC(r) && ['Reporter','HSE / Supervisor','Administrator'].includes(CURRENT_USER.role);
+  if(!r || !r.pic)return false;
+  if(CURRENT_USER.role==='Administrator' || CURRENT_USER.role==='HSE / Supervisor') return true;
+  if(CURRENT_USER.role==='Reporter') return isCurrentUserPIC(r);
+  return false;
 }
 
 function can(action){
@@ -1988,6 +2243,12 @@ function updateUserUI(){
   if(a)a.textContent=(CURRENT_USER.name||CURRENT_USER.username||'U').trim().charAt(0).toUpperCase();
   const roleBadge=$('roleBadge');if(roleBadge)roleBadge.textContent=CURRENT_USER.role||'';
   const roleDemo=$('roleDemo');if(roleDemo)roleDemo.value=CURRENT_USER.role||'Reporter';
+
+  /* Informasi Pelapor selalu mengikuti profil user aktif */
+  if($('reporterName'))$('reporterName').value=CURRENT_USER.name||'';
+  if($('reporterPosition'))$('reporterPosition').value=CURRENT_USER.position||'';
+  if($('reporterDepartment'))$('reporterDepartment').value=CURRENT_USER.department||'';
+  if($('reporterCompany'))$('reporterCompany').value=CURRENT_USER.company||'';
 }
 
 const NOTIF_KEY='hazardly_notifications_2026';
