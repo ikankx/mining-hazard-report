@@ -378,7 +378,7 @@ Kalau dark/light bermasalah             -> cek bagian 13 / 15 / 33
  </div>
  <div class="nav" data-page="myaction">
    <i class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="7" r="3"/><path d="M5 21c.8-4 3.1-6 7-6s6.2 2 7 6"/><path d="m16.5 11.5 2 2 3-3"/></svg></i>
-   <span>My Corrective Action</span>
+   <span>Corrective Action</span>
  </div>
  <div class="nav" data-page="analytics">
    <i class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 19V5"/><path d="M4 19h17"/><path d="m7 15 4-4 3 2 5-6"/></svg></i>
@@ -390,7 +390,7 @@ Kalau dark/light bermasalah             -> cek bagian 13 / 15 / 33
 
 <main class="main">
 <div class="topbar">
- <div class="title"><div class="eyebrow">Mining Safety • 2026</div><h1 id="pageTitle">Dashboard</h1><p>Simple. Fast. Built for people on site.</p></div>
+ <div class="title"><div class="eyebrow">Mining Safety Management System</div><h1 id="pageTitle">Dashboard</h1><p>One Team. One Goal. Zero Harm.</p></div>
  <div class="topbar-user">
   <div class="notification-wrap">
    <button class="top-icon-btn notification-bell" id="notificationBell" type="button" aria-label="Notifikasi"><span class="notification-count" id="notificationCount">0</span></button>
@@ -417,9 +417,9 @@ Kalau dark/light bermasalah             -> cek bagian 13 / 15 / 33
 <section class="page active" id="dashboard">
  <div class="hero">
   <div class="hero-card">
-   <div class="pulse"><i></i> SAFETY IS EVERYONE'S BUSINESS</div>
-   <h2 style="margin-top:12px">Spot it. Report it.<br><span class="accent">Fix it.</span></h2>
-   <p>Satu tempat untuk report hazard, assign PIC, upload evidence, dan close pekerjaan tanpa alur yang ribet.</p>
+   <div class="pulse"><i></i> SAFETY FIRST</div>
+   <h2 style="margin-top:12px">Spot it. Report it. <span class="accent">Fix it.</span></h2>
+   <p>Temukan potensi bahaya, laporkan kondisi tidak aman, dan lakukan tindakan perbaikan untuk menjaga site tetap aman.</p>
    <button class="btn primary" onclick="openPage('report')">＋ Report Hazard</button>
   </div>
   <div class="card quick">
@@ -453,20 +453,23 @@ Kalau dark/light bermasalah             -> cek bagian 13 / 15 / 33
 
   <div class="section-title" style="margin-top:22px"><h3>Hazard Details</h3><span>Keep it clear & specific</span></div>
  <div class="grid">
-  <div><label>Tanggal <span class="req">*</span></label><input id="date" type="date"></div>
-  <div><label>Waktu <span class="req">*</span></label><input id="time" type="time"></div>
+  <div><label>Tanggal Identifikasi <span class="req">*</span></label><input id="date" type="date"></div>
+  <div><label>Waktu Identifikasi <span class="req">*</span></label><input id="time" type="time"></div>
   <div><label>Area / Lokasi <span class="req">*</span></label><select id="area"><option value="">Pilih lokasi</option><option>Hauling Road</option><option>PIT</option><option>Jetty</option><option>Office</option><option>Mess</option><option>Workshop</option><option>Warehouse</option><option>Camp</option></select></div>
   <div><label>Detail Lokasi <span class="req">*</span></label><input id="detail" placeholder="Contoh: Hauling Road KM 9"></div>
-  <div><label>Hazard Category <span class="req">*</span></label><select id="category"><option value="">Pilih kategori</option><option>Unsafe Condition</option><option>Unsafe Act</option><option>Environmental</option><option>Equipment / Vehicle</option><option>Electrical</option><option>Fire</option><option>Working at Height</option><option>Other</option></select></div>
-  <div><label>Risk Level <span class="req">*</span></label><select id="risk"><option value="">Pilih risk level</option><option>Low</option><option>Medium</option><option>High</option><option>Extreme</option></select></div>
+  <div><label>Kategori Hazard <span class="req">*</span></label><select id="category"><option value="">Pilih kategori</option><option>Unsafe Condition</option><option>Unsafe Act</option><option>Environmental</option><option>Equipment / Vehicle</option><option>Electrical</option><option>Fire</option><option>Working at Height</option><option>Other</option></select></div>
+  <div><label>Level Resiko <span class="req">*</span></label><select id="risk"><option value="">Pilih risk level</option><option>Low</option><option>Medium</option><option>High</option><option>Extreme</option></select></div>
   <div class="full"><label>Temuan Hazard <span class="req">*</span></label><input id="finding" placeholder="Contoh: Tiang IoT rebah di KM 9"></div>
-  <div><label>Bahaya <span class="req">*</span></label><textarea id="hazard" placeholder="Apa kondisi berbahayanya?"></textarea></div>
-  <div><label>Risiko <span class="req">*</span></label><textarea id="riskText" placeholder="Apa yang bisa terjadi?"></textarea></div>
+  <div><label>Bahaya Yang Ditimbulkan <span class="req">*</span></label><textarea id="hazard" placeholder="Apa kondisi berbahayanya?"></textarea></div>
+  <div><label>Resiko Yang Ditimbulkan <span class="req">*</span></label><textarea id="riskText" placeholder="Apa yang bisa terjadi?"></textarea></div>
  </div>
+<img id="preview" class="preview"></div>
+ <div class="section-title" style="margin-top:22px"><h3>Tindakan Perbaikan</h3><span>optional, tapi direkomendasikan</span></div>
+ <textarea id="action" placeholder="Contoh: Area dipasang barricade dan warning sign sebagai tindakan perbaikan sementara."></textarea>
+
  <div class="section-title" style="margin-top:22px"><h3>Evidence</h3><span>Foto kondisi saat ditemukan</span></div>
- <div class="photo"><label>Foto Hazard <span class="req">*</span></label><input id="photo" type="file" accept="image/png,image/jpeg"><div class="photo-tools"><button class="btn secondary" type="button" onclick="$('photo').click()">＋ Pilih Foto</button><button class="btn secondary" type="button" onclick="capturePhoto()">◉ Kamera</button></div><img id="preview" class="preview"><div class="hint">JPG/PNG • maks. 5 MB</div></div>
- <div class="section-title" style="margin-top:22px"><h3>Pengendalian Sementara</h3><span>optional, tapi direkomendasikan</span></div>
- <textarea id="action" placeholder="Contoh: Area dipasang barricade dan warning sign sementara."></textarea>
+ <div class="photo"><label>Foto Hazard <span class="req">*</span></label><input id="photo" type="file" accept="image/png,image/jpeg"><div class="photo-tools"><button class="btn secondary" type="button" onclick="$('photo').click()">＋ Pilih Foto</button><button class="btn secondary" type="button" onclick="capturePhoto()">◉ Kamera</button></div><div class="hint">JPG/PNG • maks. 5 MB</div>
+
  <div class="actions"><button class="btn secondary" onclick="resetReport()">Reset</button><button class="btn primary" onclick="submitReport()">Submit Hazard →</button></div>
 </div>
 </section>
@@ -482,7 +485,7 @@ Kalau dark/light bermasalah             -> cek bagian 13 / 15 / 33
 </section>
 
 <section class="page" id="myaction">
-<div class="card"><div class="section-title"><h3>My Corrective Action</h3><span>PIC workspace</span></div>
+<div class="card"><div class="section-title"><h3>Corrective Action</h3><span>PIC workspace</span></div>
 <div class="notice">Tidak ada verification step. PIC melakukan perbaikan, upload evidence, lalu <b>Close Hazard</b>. Evidence + waktu + nama PIC tersimpan sebagai audit trail.</div>
 <div id="myTable"></div></div>
 </section>
