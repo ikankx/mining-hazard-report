@@ -59,11 +59,11 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}
 .company-meta{text-align:right;min-width:180px}
 .company-meta b{display:block;font-size:16px;line-height:1.15;letter-spacing:-.35px}
 .company-meta small{display:block;color:var(--muted);font-size:12px;margin-top:3px}
-.avatar-top{width:54px;height:54px;border-radius:15px;background:#ffe58b;color:#9b4d12;border:1px solid #f6d56c;font-size:22px;font-weight:950;box-shadow:0 5px 18px rgba(0,0,0,.06)}
+.avatar-top{width:54px;height:54px;border-radius:15px;background:var(--lime);color:#0a0f16;border:1px solid rgba(198,255,61,.45);font-size:22px;font-weight:950;box-shadow:0 0 24px rgba(198,255,61,.18);transition:.2s}
+.avatar-top:hover{transform:translateY(-1px);box-shadow:0 0 28px rgba(198,255,61,.24)}
 .role-demo-hidden{position:absolute!important;width:1px!important;height:1px!important;opacity:0!important;pointer-events:none!important;overflow:hidden!important}
 .topbar-user .role-badge{display:none}
 body.light .top-icon-btn{background:rgba(255,255,255,.88);border-color:rgba(21,36,57,.09)}
-body.light .avatar-top{background:#ffe58b;color:#9b4d12;border-color:#f6d56c}
 @media(max-width:650px){.topbar-user{gap:5px}.top-icon-btn{width:42px;height:42px;flex-basis:42px;border-radius:12px}.theme-icon-btn{font-size:19px}.theme-spark{right:7px;top:6px;font-size:8px}.company-meta{min-width:0}.company-meta b{font-size:11px}.company-meta small{font-size:8px}.avatar-top{width:42px;height:42px;border-radius:12px;font-size:17px}.company-user{gap:7px;padding-left:2px}}
 
 /* =========================================================
@@ -287,6 +287,163 @@ body.light .toast{background:rgba(255,255,255,.96);color:#182538;box-shadow:0 20
   .camera-actions .btn{width:100%}
 }
 
+
+/* REQUIRED FIELD MARKER */
+.section-title h3 .req{color:var(--red);font-weight:900;margin-left:2px}
+
+
+/* REPORT HAZARD - SEPARATE SECTIONS */
+#report > .card + .card{margin-top:15px}
+#report > .card .section-title{margin-bottom:13px}
+
+
+/* RAISE DETAIL HAZARD SECTION */
+#report > .card + .card{margin-top:10px !important}
+#report > .card + .card > .section-title{margin-top:0 !important}
+
+
+/* DATE/TIME PICKER ICONS - DARK/LIGHT */
+input[type="date"],input[type="time"]{color-scheme:dark}
+input[type="date"]::-webkit-calendar-picker-indicator,
+input[type="time"]::-webkit-calendar-picker-indicator{
+  opacity:1;
+  cursor:pointer;
+  filter:invert(1) brightness(1.15);
+}
+body.light input[type="date"],body.light input[type="time"]{color-scheme:light}
+body.light input[type="date"]::-webkit-calendar-picker-indicator,
+body.light input[type="time"]::-webkit-calendar-picker-indicator{
+  opacity:.85;
+  filter:none;
+}
+
+
+/* =========================================================
+   40. ADVANCED ANALYTICS
+========================================================= */
+.analytics-toolbar{display:flex;justify-content:space-between;gap:20px;align-items:flex-end}
+.analytics-main-title{margin:3px 0 2px;font-size:18px}
+.analytics-subtitle{font-size:10px;color:var(--muted);line-height:1.5}
+.analytics-filters{display:grid;grid-template-columns:repeat(4,minmax(125px,1fr));gap:8px;min-width:min(700px,100%)}
+.analytics-filters label{font-size:8px;margin-bottom:4px;color:#7e8ca0}
+.analytics-filters select{height:38px;padding:8px 10px;font-size:10px}
+.analytics-kpis{grid-template-columns:repeat(6,1fr);margin-top:15px}
+.analytics-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px;margin-top:15px}
+.chart-card{min-height:260px}
+.chart-wide{grid-column:1/-1}
+.chart-wrap{position:relative;min-height:190px}
+.chart-wrap canvas{width:100%;display:block}
+.small-chart{min-height:205px}
+.chart-empty{position:absolute;inset:0;display:none;align-items:center;justify-content:center;color:#68788d;font-size:10px}
+.bar-list{display:flex;flex-direction:column;gap:11px}
+.bar-row{display:grid;grid-template-columns:150px 1fr 42px;align-items:center;gap:9px}
+.bar-label{font-size:9px;color:#bdc8d7;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar-track{height:9px;background:#121b27;border-radius:999px;overflow:hidden;border:1px solid var(--line)}
+.bar-fill{height:100%;width:0;border-radius:999px;background:linear-gradient(90deg,var(--lime),var(--cyan));transition:width .35s ease}
+.bar-value{text-align:right;font-weight:900;font-size:10px}
+.insight-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.insight-item{padding:12px;border:1px solid var(--line);background:rgba(255,255,255,.02);border-radius:12px}
+.insight-item small{display:block;color:#68788d;font-size:8px;text-transform:uppercase;letter-spacing:.7px;margin-bottom:5px}
+.insight-item b{font-size:11px;line-height:1.45}
+body.light .bar-track{background:#edf2f7}
+body.light .insight-item{background:#f8fafc}
+@media(max-width:1100px){
+  .analytics-toolbar{display:block}
+  .analytics-filters{margin-top:14px;min-width:0}
+  .analytics-kpis{grid-template-columns:repeat(3,1fr)}
+}
+@media(max-width:700px){
+  .analytics-filters{grid-template-columns:1fr 1fr}
+  .analytics-grid{grid-template-columns:1fr}
+  .chart-wide{grid-column:auto}
+  .analytics-kpis{grid-template-columns:1fr 1fr}
+  .insight-grid{grid-template-columns:1fr 1fr}
+  .bar-row{grid-template-columns:100px 1fr 35px}
+}
+
+
+/* USER ACTIVITY LOG */
+.activity-head{display:flex;justify-content:space-between;align-items:flex-end;gap:18px}
+.activity-title{margin:3px 0;font-size:18px}.activity-subtitle{font-size:10px;color:var(--muted);line-height:1.55}.activity-actions{display:flex;gap:8px}
+.activity-kpis{grid-template-columns:repeat(6,1fr);margin-top:15px}.activity-filter-card,.activity-table-card,.activity-detail-card{margin-top:15px}
+.activity-filters{display:grid;grid-template-columns:2fr repeat(5,1fr);gap:10px}.activity-filters label{font-size:8px;margin-bottom:4px;color:#7f8da1}.activity-filters input,.activity-filters select{height:38px;padding:8px 10px;font-size:10px}
+.activity-table tbody tr{cursor:pointer}.activity-table tbody tr:hover td{background:rgba(198,255,61,.035)}
+.activity-status{display:inline-flex;align-items:center;padding:5px 8px;border-radius:999px;font-size:8px;font-weight:900}.activity-status.success{background:rgba(80,227,164,.12);color:var(--green)}.activity-status.failed{background:rgba(255,100,112,.11);color:var(--red)}.activity-status.denied{background:rgba(255,184,77,.12);color:var(--orange)}
+.activity-type{font-weight:900;font-size:9px}.activity-detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.activity-detail-item{border:1px solid var(--line);background:#0c131e;border-radius:11px;padding:11px}.activity-detail-item small{display:block;color:#68788d;font-size:8px;margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px}.activity-detail-item b{font-size:10px;line-height:1.5}.activity-detail-empty{padding:30px;text-align:center;color:#68788d;font-size:10px}
+body.light .activity-detail-item{background:#f7fafc}
+@media(max-width:1100px){.activity-kpis{grid-template-columns:repeat(3,1fr)}.activity-filters{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:650px){.activity-head{display:block}.activity-actions{justify-content:flex-end;margin-top:12px}.activity-kpis{grid-template-columns:1fr 1fr}.activity-filters{grid-template-columns:1fr}.activity-detail-grid{grid-template-columns:1fr}}
+
+
+/* ADD USER - RESTORED */
+#users .user-head-actions .btn.primary{display:inline-flex;align-items:center;justify-content:center;white-space:nowrap}
+#userModal .actions{display:flex;justify-content:flex-end;gap:8px;margin-top:17px}
+
+
+/* =========================================================
+   50. LOGIN PAGE
+========================================================= */
+#loginPage{
+  position:fixed;inset:0;z-index:9999;display:none;
+  background:
+    radial-gradient(circle at 18% 12%,rgba(198,255,61,.12),transparent 27%),
+    radial-gradient(circle at 82% 18%,rgba(82,231,255,.08),transparent 28%),
+    var(--bg);
+  align-items:center;justify-content:center;padding:22px;
+}
+#loginPage.show{display:flex}
+.login-shell{width:min(1040px,100%);display:grid;grid-template-columns:1.08fr .92fr;border:1px solid var(--line);border-radius:28px;overflow:hidden;background:rgba(13,19,29,.82);backdrop-filter:blur(24px);box-shadow:0 30px 100px rgba(0,0,0,.35)}
+.login-brand-panel{padding:46px;position:relative;overflow:hidden;background:linear-gradient(145deg,rgba(18,27,40,.98),rgba(8,13,21,.96))}
+.login-brand-panel:after{content:"";position:absolute;width:320px;height:320px;right:-110px;top:-120px;border-radius:50%;background:radial-gradient(circle,rgba(198,255,61,.18),transparent 68%)}
+.login-logo-row{display:flex;align-items:center;gap:12px;position:relative;z-index:1}
+.login-hz{width:48px;height:48px;border-radius:15px;background:var(--lime);color:#0a0f16;display:grid;place-items:center;font-weight:1000;font-size:16px;box-shadow:0 0 34px rgba(198,255,61,.22)}
+.login-brand-name{font-size:23px;font-weight:950;letter-spacing:-.6px}
+.login-eyebrow{margin-top:52px;color:var(--lime);font-size:11px;font-weight:900;letter-spacing:1.8px;text-transform:uppercase}
+.login-heading{margin:8px 0 0;font-size:42px;line-height:1.05;letter-spacing:-1.5px}
+.login-heading span{color:var(--lime)}
+.login-copy{margin-top:15px;max-width:500px;color:#aab6c7;font-size:12px;line-height:1.8}
+.login-pill-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:24px}
+.login-pill{border:1px solid rgba(198,255,61,.18);background:rgba(198,255,61,.05);padding:7px 10px;border-radius:999px;color:#b9c5d6;font-size:9px;font-weight:800}
+.login-form-panel{padding:42px;background:rgba(8,13,21,.72);display:flex;align-items:center}
+.login-form{width:100%;max-width:430px;margin:0 auto}
+.login-form h2{margin:0;font-size:22px}
+.login-form .sub{margin:5px 0 22px;color:var(--muted);font-size:10px}
+.login-field{margin-bottom:13px}
+.login-field label{font-size:9px}
+.login-input-wrap{position:relative}
+.login-input-wrap input{height:46px;padding:11px 40px 11px 12px;border-radius:12px}
+.login-password-toggle{position:absolute;right:7px;top:50%;transform:translateY(-50%);border:1px solid var(--line);background:var(--panel2);color:var(--muted);border-radius:8px;padding:6px 8px;font-size:8px;font-weight:900}
+.login-btn{width:100%;height:46px;margin-top:5px}
+.login-error{display:none;margin:0 0 12px;padding:10px 11px;border-radius:11px;border:1px solid rgba(255,100,112,.18);background:rgba(255,100,112,.08);color:#ff9aa2;font-size:9px;line-height:1.5}
+.login-error.show{display:block}
+.login-demo{margin-top:16px;padding:12px;border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.02)}
+.login-demo b{font-size:9px}.login-demo p{margin:6px 0 0;color:var(--muted);font-size:8px;line-height:1.7}
+.login-footer{margin-top:18px;color:#637188;font-size:8px;display:flex;justify-content:space-between;gap:10px}
+body.light #loginPage{background:radial-gradient(circle at 18% 12%,rgba(132,185,25,.10),transparent 27%),radial-gradient(circle at 82% 18%,rgba(0,136,170,.06),transparent 28%),var(--bg)}
+body.light .login-shell{background:rgba(255,255,255,.84);box-shadow:0 30px 90px rgba(32,48,69,.12)}
+body.light .login-brand-panel{background:linear-gradient(145deg,#ffffff,#edf3f8)}
+body.light .login-copy{color:#63738a}
+body.light .login-form-panel{background:rgba(255,255,255,.74)}
+@media(max-width:800px){
+  .login-shell{grid-template-columns:1fr}
+  .login-brand-panel{padding:28px}
+  .login-eyebrow{margin-top:34px}
+  .login-heading{font-size:33px}
+  .login-form-panel{padding:28px}
+}
+@media(max-width:520px){
+  #loginPage{padding:12px}
+  .login-brand-panel{padding:22px}
+  .login-heading{font-size:29px}
+  .login-pill-row{margin-top:18px}
+  .login-form-panel{padding:22px}
+}
+
+/* LOGOUT MENU */
+.nav-logout{color:#9aa7b8}
+.nav-logout:hover{color:var(--red);background:rgba(255,100,112,.06);border-color:rgba(255,100,112,.12)}
+.nav-logout:hover .nav-icon{color:var(--red)}
+
 </style>
 </head>
 <body>
@@ -322,7 +479,7 @@ JAVASCRIPT:
   23  Reset Form
   24  Badges
   25  Hazard Tables
-  26  PIC - My Corrective Action
+  26  PIC - Corrective Action
   27  Detail Hazard
   28  Assign PIC
   29  Save Assignment
@@ -356,6 +513,63 @@ Kalau close + evidence bermasalah      -> cek bagian 30-31
 Kalau dark/light bermasalah             -> cek bagian 13 / 15 / 33
 ============================================================
 -->
+
+<div id="loginPage" class="show">
+  <div class="login-shell">
+    <div class="login-brand-panel">
+      <div class="login-logo-row">
+        <div class="login-hz">HZ</div>
+        <div class="login-brand-name">Hazardly</div>
+      </div>
+      <div class="login-eyebrow">Mining Safety Management System</div>
+      <h1 class="login-heading">Spot it. <span>Report it.</span><br>Fix it.</h1>
+      <div class="login-copy">Temukan potensi bahaya, laporkan kondisi tidak aman, dan lakukan tindakan perbaikan untuk menjaga site tetap aman.</div>
+      <div class="login-pill-row">
+        <span class="login-pill">Safety First</span>
+        <span class="login-pill">Live Data</span>
+        <span class="login-pill">Audit Trail</span>
+        <span class="login-pill">Role Based Access</span>
+      </div>
+    </div>
+
+    <div class="login-form-panel">
+      <form class="login-form" id="loginForm" onsubmit="return handleLogin(event)">
+        <h2>Welcome Back</h2>
+        <p class="sub">Masuk menggunakan akun Hazardly Anda.</p>
+        <div id="loginError" class="login-error"></div>
+
+        <div class="login-field">
+          <label>Username</label>
+          <input id="loginUsername" autocomplete="username" placeholder="Masukkan username" required>
+        </div>
+
+        <div class="login-field">
+          <label>Password</label>
+          <div class="login-input-wrap">
+            <input id="loginPassword" type="password" autocomplete="current-password" placeholder="Masukkan password" required>
+            <button class="login-password-toggle" type="button" onclick="toggleLoginPassword()">SHOW</button>
+          </div>
+        </div>
+
+        <button class="btn primary login-btn" type="submit">Login →</button>
+
+        <div class="login-demo">
+          <b>Akun Prototype</b>
+          <p>Administrator: <strong>admin</strong> / <strong>admin123</strong><br>
+          Reporter: <strong>reporter01</strong> / <strong>reporter123</strong><br>
+          HSE: <strong>hse01</strong> / <strong>hse123</strong><br>
+          PIC: <strong>pic01</strong> / <strong>pic123</strong></p>
+        </div>
+
+        <div class="login-footer">
+          <span>Hazardly © 2026</span>
+          <span>One Team. One Goal. Zero Harm.</span>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
 <div class="app">
 <aside class="sidebar">
  <div class="brand"><div class="logo">HZ</div><span>Hazardly</span></div>
@@ -377,7 +591,7 @@ Kalau dark/light bermasalah             -> cek bagian 13 / 15 / 33
    <span>Assign &amp; Follow Up</span>
  </div>
  <div class="nav" data-page="myaction">
-   <i class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="7" r="3"/><path d="M5 21c.8-4 3.1-6 7-6s6.2 2 7 6"/><path d="m16.5 11.5 2 2 3-3"/></svg></i>
+   <i class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 3h6"/><path d="m8 13 2.2 2.2L16 9.5"/></svg></i>
    <span>Corrective Action</span>
  </div>
  <div class="nav" data-page="analytics">
@@ -385,7 +599,18 @@ Kalau dark/light bermasalah             -> cek bagian 13 / 15 / 33
    <span>Analytics</span>
  </div>
  <div class="section">SYSTEM</div>
- <div class="nav" data-page="users"><i class="dot"></i><span>Users & Roles</span></div>
+ <div class="nav" data-page="users">
+   <i class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path d="M3 20c.7-3.6 2.7-5.5 6-5.5s5.3 1.9 6 5.5"/><circle cx="17" cy="9" r="2.3"/><path d="M15.5 14.5c2.7.2 4.3 2 5 4.5"/></svg></i>
+   <span>Users &amp; Roles</span>
+ </div>
+ <div class="nav" data-page="activity">
+   <i class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h3"/><circle cx="17" cy="16" r="2.2"/></svg></i>
+   <span>Activity Log</span>
+ </div>
+ <div class="nav nav-logout" id="logoutNav" role="button" tabindex="0" onclick="logoutUser()" onkeydown="if(event.key==='Enter'||event.key===' ')logoutUser()">
+   <i class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M10 4H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h5"/><path d="M14 8l5 4-5 4"/><path d="M8 12h11"/></svg></i>
+   <span>Logout</span>
+ </div>
 </aside>
 
 <main class="main">
@@ -402,7 +627,7 @@ Kalau dark/light bermasalah             -> cek bagian 13 / 15 / 33
   <button class="top-icon-btn theme-icon-btn" id="themeIconBtn" type="button" aria-label="Ganti tema" title="Ganti tema"><span id="themeIcon" aria-hidden="true"></span></button>
   <div class="company-user">
    <div class="company-meta"><b>PT Empat Pilar Adidaya</b><small>Semangat Pagi, <span id="greetingUser">admin</span></small></div>
-   <button class="avatar avatar-top" id="avatarButton" type="button" aria-label="Profil pengguna">A</button>
+   <button class="avatar avatar-top" id="avatarButton" type="button" aria-label="Logout" title="Logout" onclick="logoutUser()">A</button>
    <select id="roleDemo" class="role role-demo-hidden" aria-hidden="true" tabindex="-1">
     <option value="Administrator">Administrator</option>
     <option value="Reporter">Reporter</option>
@@ -426,7 +651,7 @@ Kalau dark/light bermasalah             -> cek bagian 13 / 15 / 33
    <h3>Quick Actions</h3>
    <div class="quick-grid">
     <button class="quick-btn" onclick="openPage('report')"><b>⚡ New Hazard</b><span>Submit in seconds</span></button>
-    <button class="quick-btn" onclick="openPage('myaction')"><b>✓ My Action</b><span>Close with evidence</span></button>
+    <button class="quick-btn" onclick="openPage('myaction')"><b>✓ Corrective Action</b><span>Close with evidence</span></button>
     <button class="quick-btn" onclick="openPage('reports')"><b>◉ Browse Reports</b><span>See what's happening</span></button>
     <button class="quick-btn" onclick="openPage('analytics')"><b>↗ Analytics</b><span>See safety trends</span></button>
    </div>
@@ -438,20 +663,21 @@ Kalau dark/light bermasalah             -> cek bagian 13 / 15 / 33
   <div class="stat"><div class="top">ON PROGRESS <span class="cy">●</span></div><strong id="sProgress">0</strong><small>being fixed</small></div>
   <div class="stat"><div class="top">CLOSED <span class="gr">●</span></div><strong id="sClosed">0</strong><small>with evidence</small></div>
  </div>
- <div class="card"><div class="section-title"><h3>Latest Hazard</h3><span>Live prototype data</span></div><div id="dashTable"></div></div>
+ <div class="card"><div class="section-title"><h3>Latest Hazard</h3><span>Live data</span></div><div id="dashTable"></div></div>
 </section>
 
 <section class="page" id="report">
 <div class="card">
- <div class="section-title"><h3>Report Hazard</h3><span>Reporter • dapat menentukan PIC</span></div>
+ <div class="section-title"><h3>Informasi Pelapor</h3><span>Informasi pelapor terisi otomatis</span></div>
   <div class="reporter-identity-grid">
    <div><label>Nama Pelapor</label><input id="reporterName" readonly value="Ikang Zulfikar"></div>
    <div><label>Jabatan</label><input id="reporterPosition" readonly value="Foreman IT"></div>
    <div><label>Departemen</label><input id="reporterDepartment" readonly value="IT"></div>
    <div><label>Nama Perusahaan</label><input id="reporterCompany" readonly value="PT Empat Pilar Adidaya"></div>
   </div>
-
-  <div class="section-title" style="margin-top:22px"><h3>Hazard Details</h3><span>Keep it clear & specific</span></div>
+</div>
+<div class="card" style="margin-top:10px">
+  <div class="section-title"><h3>Detail Hazard</h3><span>Isi detail hazard</span></div>
  <div class="grid">
   <div><label>Tanggal Identifikasi <span class="req">*</span></label><input id="date" type="date"></div>
   <div><label>Waktu Identifikasi <span class="req">*</span></label><input id="time" type="time"></div>
@@ -459,16 +685,16 @@ Kalau dark/light bermasalah             -> cek bagian 13 / 15 / 33
   <div><label>Detail Lokasi <span class="req">*</span></label><input id="detail" placeholder="Contoh: Hauling Road KM 9"></div>
   <div><label>Kategori Hazard <span class="req">*</span></label><select id="category"><option value="">Pilih kategori</option><option>Unsafe Condition</option><option>Unsafe Act</option><option>Environmental</option><option>Equipment / Vehicle</option><option>Electrical</option><option>Fire</option><option>Working at Height</option><option>Other</option></select></div>
   <div><label>Level Resiko <span class="req">*</span></label><select id="risk"><option value="">Pilih risk level</option><option>Low</option><option>Medium</option><option>High</option><option>Extreme</option></select></div>
-  <div class="full"><label>Temuan Hazard <span class="req">*</span></label><input id="finding" placeholder="Contoh: Tiang IoT rebah di KM 9"></div>
-  <div><label>Bahaya Yang Ditimbulkan <span class="req">*</span></label><textarea id="hazard" placeholder="Apa kondisi berbahayanya?"></textarea></div>
-  <div><label>Resiko Yang Ditimbulkan <span class="req">*</span></label><textarea id="riskText" placeholder="Apa yang bisa terjadi?"></textarea></div>
+  <div class="full"><label>Temuan Hazard <span class="req">*</span></label><input id="finding" placeholder="Contoh: Jalan hauling berlubang..."></div>
+  <div><label>Bahaya Yang Ditimbulkan <span class="req">*</span></label><textarea id="hazard" placeholder="Jelaskan bahaya yang ditemukan..."></textarea></div>
+  <div><label>Resiko Yang Ditimbulkan <span class="req">*</span></label><textarea id="riskText" placeholder="Jelaskan resiko yang dapat ditimbulkan....."></textarea></div>
  </div>
 <img id="preview" class="preview"></div>
- <div class="section-title" style="margin-top:22px"><h3>Tindakan Perbaikan</h3><span>optional, tapi direkomendasikan</span></div>
- <textarea id="action" placeholder="Contoh: Area dipasang barricade dan warning sign sebagai tindakan perbaikan sementara."></textarea>
+ <div class="section-title" style="margin-top:22px"><h3>Tindakan Perbaikan <span class="req">*</span></h3><span>Isi dan jelaskan tindakan perbaikan</span></div>
+ <textarea id="action" placeholder="Contoh: Lubang pada jalan hauling diperbaiki menggunakan excavator dan grader." required></textarea>
 
- <div class="section-title" style="margin-top:22px"><h3>Evidence</h3><span>Foto kondisi saat ditemukan</span></div>
- <div class="photo"><label>Foto Hazard <span class="req">*</span></label><input id="photo" type="file" accept="image/png,image/jpeg"><div class="photo-tools"><button class="btn secondary" type="button" onclick="$('photo').click()">＋ Pilih Foto</button><button class="btn secondary" type="button" onclick="capturePhoto()">◉ Kamera</button></div><div class="hint">JPG/PNG • maks. 5 MB</div>
+ <div class="section-title" style="margin-top:22px"><h3>Foto Hazard <span class="req">*</span></h3><span>Foto kondisi saat ditemukan</span></div>
+ <div class="photo"><label>Upload Foto</label><input id="photo" type="file" accept="image/png,image/jpeg"><div class="photo-tools"><button class="btn secondary" type="button" onclick="$('photo').click()">＋ Pilih Foto</button><button class="btn secondary" type="button" onclick="capturePhoto()">◉ Kamera</button></div><div class="hint">JPG/PNG • maks. 5 MB</div>
 
  <div class="actions"><button class="btn secondary" onclick="resetReport()">Reset</button><button class="btn primary" onclick="submitReport()">Submit Hazard →</button></div>
 </div>
@@ -491,8 +717,70 @@ Kalau dark/light bermasalah             -> cek bagian 13 / 15 / 33
 </section>
 
 <section class="page" id="analytics">
-<div class="stats"><div class="stat"><div class="top">HIGH / EXTREME</div><strong id="aHigh">0</strong><small>priority hazards</small></div><div class="stat"><div class="top">UNSAFE CONDITION</div><strong id="aUnsafe">0</strong><small>category</small></div><div class="stat"><div class="top">IT REPORTS</div><strong id="aIT">0</strong><small>reporter department</small></div><div class="stat"><div class="top">OVERDUE</div><strong id="aOverdue">0</strong><small>past target date</small></div></div>
-<div class="card" style="margin-top:15px"><div class="section-title"><h3>Category Breakdown</h3><span>Quick overview</span></div><div id="categorySummary"></div></div>
+  <div class="card analytics-toolbar">
+    <div>
+      <div class="eyebrow">Safety Intelligence</div>
+      <h3 class="analytics-main-title">Hazard Analytics</h3>
+      <span class="analytics-subtitle">Analisis performa hazard berdasarkan waktu, perusahaan, departemen, kategori, risiko, dan status.</span>
+    </div>
+    <div class="analytics-filters">
+      <div><label>Periode</label><select id="analyticsPeriod"><option value="daily">Daily</option><option value="weekly">Weekly</option><option value="monthly" selected>Monthly</option><option value="yearly">Yearly</option></select></div>
+      <div><label>Perusahaan</label><select id="analyticsCompany"><option value="ALL">Semua Perusahaan</option><option>PT Bakti Pertiwi Nusantara</option><option>PT Kaia Pilar Indonesia</option><option>PT Empat Pilar Adidaya</option></select></div>
+      <div><label>Departemen</label><select id="analyticsDepartment"><option value="ALL">Semua Departemen</option><option>IT</option><option>Operation</option><option>HSE</option><option>Maintenance</option><option>Engineering</option><option>HRGA</option><option>Geology</option><option>Environment</option><option>Warehouse</option></select></div>
+      <div><label>Status</label><select id="analyticsStatus"><option value="ALL">Semua Status</option><option>Open</option><option>On Progress</option><option>Closed</option></select></div>
+    </div>
+  </div>
+
+  <div class="stats analytics-kpis">
+    <div class="stat"><div class="top">TOTAL HAZARD <span class="cy">●</span></div><strong id="aTotal">0</strong><small>sesuai filter</small></div>
+    <div class="stat"><div class="top">HIGH / EXTREME <span class="pk">●</span></div><strong id="aHigh">0</strong><small>priority hazards</small></div>
+    <div class="stat"><div class="top">OPEN / PROGRESS <span class="accent">●</span></div><strong id="aOpenProgress">0</strong><small>belum closed</small></div>
+    <div class="stat"><div class="top">CLOSED RATE <span class="gr">●</span></div><strong id="aClosedRate">0%</strong><small>completion rate</small></div>
+    <div class="stat"><div class="top">OVERDUE <span class="orange">●</span></div><strong id="aOverdue">0</strong><small>past target</small></div>
+    <div class="stat"><div class="top">AVG CLOSURE <span class="cy">●</span></div><strong id="aAvgClosure">—</strong><small>hari</small></div>
+  </div>
+
+  <div class="analytics-grid">
+    <div class="card chart-card chart-wide">
+      <div class="section-title"><h3>Hazard Trend</h3><span id="trendCaption">Monthly</span></div>
+      <div class="chart-wrap"><canvas id="hazardTrendChart" height="130"></canvas><div id="hazardTrendEmpty" class="chart-empty">Belum ada data.</div></div>
+    </div>
+
+    <div class="card chart-card">
+      <div class="section-title"><h3>Risk Level</h3><span>Severity distribution</span></div>
+      <div class="bar-list" id="riskChart"></div>
+    </div>
+
+    <div class="card chart-card">
+      <div class="section-title"><h3>By Department</h3><span>Jumlah hazard</span></div>
+      <div class="chart-wrap small-chart"><canvas id="departmentChart" height="170"></canvas><div id="departmentEmpty" class="chart-empty">Belum ada data.</div></div>
+    </div>
+
+    <div class="card chart-card">
+      <div class="section-title"><h3>By Company</h3><span>Perbandingan perusahaan</span></div>
+      <div class="chart-wrap small-chart"><canvas id="companyChart" height="170"></canvas><div id="companyEmpty" class="chart-empty">Belum ada data.</div></div>
+    </div>
+
+    <div class="card chart-card">
+      <div class="section-title"><h3>By Category</h3><span>Kategori hazard terbanyak</span></div>
+      <div class="bar-list" id="categoryChart"></div>
+    </div>
+
+    <div class="card chart-card">
+      <div class="section-title"><h3>Status Overview</h3><span>Open → Progress → Closed</span></div>
+      <div class="bar-list" id="statusChart"></div>
+    </div>
+
+    <div class="card chart-card chart-wide">
+      <div class="section-title"><h3>Top Hazard Locations</h3><span>Lokasi dengan laporan terbanyak</span></div>
+      <div class="bar-list" id="locationChart"></div>
+    </div>
+
+    <div class="card chart-card chart-wide">
+      <div class="section-title"><h3>Management Insights</h3><span>Ringkasan untuk pengambilan keputusan</span></div>
+      <div class="insight-grid" id="analyticsInsights"></div>
+    </div>
+  </div>
 </section>
 
 <section class="page" id="users">
@@ -524,6 +812,32 @@ Kalau dark/light bermasalah             -> cek bagian 13 / 15 / 33
   </div>
 </div>
 </section>
+<section class="page" id="activity">
+<div class="card activity-head"><div><div class="eyebrow">Audit & Security</div><h3 class="activity-title">User Activity Log</h3><span class="activity-subtitle">Riwayat aktivitas pengguna secara detail untuk audit, monitoring, troubleshooting, dan kontrol akses.</span></div><div class="activity-actions"><button class="btn secondary" type="button" onclick="exportActivityCSV()">⇩ Export CSV</button><button class="btn danger" type="button" onclick="clearActivityLog()">Hapus Log</button></div></div>
+<div class="stats activity-kpis">
+ <div class="stat"><div class="top">TOTAL ACTIVITY</div><strong id="activityTotal">0</strong><small>seluruh aktivitas</small></div>
+ <div class="stat"><div class="top">LOGIN TODAY</div><strong id="activityLoginToday">0</strong><small>login hari ini</small></div>
+ <div class="stat"><div class="top">REPORT CREATED</div><strong id="activityReports">0</strong><small>hazard dibuat</small></div>
+ <div class="stat"><div class="top">CORRECTIVE ACTION</div><strong id="activityCorrective">0</strong><small>perubahan / closing</small></div>
+ <div class="stat"><div class="top">USER MANAGEMENT</div><strong id="activityUserMgmt">0</strong><small>buat/edit/hapus user</small></div>
+ <div class="stat"><div class="top">SECURITY EVENTS</div><strong id="activitySecurity">0</strong><small>login/logout/access denied</small></div>
+</div>
+<div class="card activity-filter-card"><div class="section-title"><h3>Filter Activity</h3><span>Gunakan kombinasi filter untuk audit tertentu</span></div>
+ <div class="activity-filters">
+  <div><label>Search</label><input id="activitySearch" placeholder="Cari username, nama, aksi, HZR, IP..."></div>
+  <div><label>User</label><select id="activityUser"><option value="ALL">Semua User</option></select></div>
+  <div><label>Perusahaan</label><select id="activityCompany"><option value="ALL">Semua Perusahaan</option><option>PT Bakti Pertiwi Nusantara</option><option>PT Kaia Pilar Indonesia</option><option>PT Empat Pilar Adidaya</option></select></div>
+  <div><label>Role</label><select id="activityRole"><option value="ALL">Semua Role</option><option>Reporter</option><option>HSE / Supervisor</option><option>PIC</option><option>Administrator</option></select></div>
+  <div><label>Jenis Aktivitas</label><select id="activityType"><option value="ALL">Semua Aktivitas</option><option>LOGIN</option><option>LOGOUT</option><option>CREATE_HAZARD</option><option>VIEW_HAZARD</option><option>ASSIGN_PIC</option><option>UPDATE_HAZARD</option><option>CORRECTIVE_ACTION</option><option>CLOSE_HAZARD</option><option>CREATE_USER</option><option>UPDATE_USER</option><option>DELETE_USER</option><option>ACCESS_DENIED</option><option>THEME_CHANGE</option></select></div>
+  <div><label>Hasil</label><select id="activityResult"><option value="ALL">Semua Hasil</option><option>SUCCESS</option><option>FAILED</option><option>DENIED</option></select></div>
+  <div><label>Dari Tanggal</label><input id="activityFrom" type="date"></div>
+  <div><label>Sampai Tanggal</label><input id="activityTo" type="date"></div>
+ </div>
+</div>
+<div class="card activity-table-card"><div class="section-title"><h3>Activity Timeline</h3><span id="activityCountLabel">0 activity</span></div><div class="table-wrap"><table class="table activity-table"><thead><tr><th>Waktu</th><th>User</th><th>Perusahaan</th><th>Role</th><th>Aktivitas</th><th>Modul</th><th>Referensi</th><th>Hasil</th><th>Detail</th></tr></thead><tbody id="activityTableBody"></tbody></table></div></div>
+<div class="card activity-detail-card"><div class="section-title"><h3>Detail Aktivitas</h3><span>Klik baris untuk melihat detail lengkap</span></div><div id="activityDetail" class="activity-detail-empty">Pilih salah satu aktivitas.</div></div>
+</section>
+
 </main>
 </div>
 
@@ -631,6 +945,12 @@ function openPage(page){
 
 }
 now();
+const HAS_AUTH=restoreAuth();
+if(HAS_AUTH){
+  updateUserUI();
+}else{
+  $('loginPage').classList.add('show');
+}
 
 /* =========================================================
    19. SIDEBAR PAGE NAVIGATION
@@ -638,7 +958,7 @@ now();
 document.querySelectorAll('.nav[data-page]').forEach(n=>n.onclick=()=>{
  document.querySelectorAll('.nav').forEach(x=>x.classList.remove('active'));n.classList.add('active');
  document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));$(n.dataset.page).classList.add('active');
- const titles={dashboard:'Dashboard',report:'Report Hazard',reports:'Hazard Reports',followup:'Assign & Follow Up',myaction:'My Corrective Action',analytics:'Analytics',users:'Users & Roles'};
+ const titles={dashboard:'Dashboard',report:'Report Hazard',reports:'Hazard Reports',followup:'Assign & Follow Up',myaction:'Corrective Action',analytics:'Analytics',users:'Users & Roles',activity:'Activity Log'};
  $('pageTitle').textContent=titles[n.dataset.page];render();
 });
 /* =========================================================
@@ -779,12 +1099,54 @@ function nextNumber(){
 /* =========================================================
    22. SUBMIT HAZARD REPORT
 ========================================================= */
+
+/* USER ACTIVITY LOG ENGINE */
+const ACTIVITY_KEY='hazardly_activity_2026';
+let activityLogs=JSON.parse(localStorage.getItem(ACTIVITY_KEY)||'[]');
+function activityActor(){return {username:typeof CURRENT_USER!=='undefined'?CURRENT_USER.username:'system',name:typeof CURRENT_USER!=='undefined'?CURRENT_USER.name:'System',company:typeof CURRENT_USER!=='undefined'?CURRENT_USER.company:'',role:typeof CURRENT_USER!=='undefined'?CURRENT_USER.role:'',department:typeof CURRENT_USER!=='undefined'?CURRENT_USER.department:''}}
+function saveActivity(){localStorage.setItem(ACTIVITY_KEY,JSON.stringify(activityLogs.slice(0,5000)))}
+function logActivity(type,module,detail='',ref='',result='SUCCESS',meta={}){
+ const a=activityActor();
+ activityLogs.unshift({id:'ACT-'+Date.now()+'-'+Math.random().toString(36).slice(2,7),at:new Date().toISOString(),username:a.username,name:a.name,company:a.company,role:a.role,department:a.department,type,module,detail,ref,result,ip:meta.ip||'Local / Browser',userAgent:navigator.userAgent});
+ saveActivity();
+ if($('activity')?.classList.contains('active')) renderActivity();
+}
+function activityLabel(t){return ({LOGIN:'Login',LOGOUT:'Logout',CREATE_HAZARD:'Create Hazard',VIEW_HAZARD:'View Hazard',ASSIGN_PIC:'Assign PIC',UPDATE_HAZARD:'Update Hazard',CORRECTIVE_ACTION:'Corrective Action',CLOSE_HAZARD:'Close Hazard',CREATE_USER:'Create User',UPDATE_USER:'Update User',DELETE_USER:'Delete User',ACCESS_DENIED:'Access Denied',THEME_CHANGE:'Theme Change'})[t]||t}
+function activityBadge(r){const c=r==='SUCCESS'?'success':r==='DENIED'?'denied':'failed';return `<span class="activity-status ${c}">${r}</span>`}
+function renderActivityUsers(){const s=$('activityUser');if(!s)return;const users=[...new Map(activityLogs.map(a=>[a.username,a])).values()].sort((a,b)=>a.username.localeCompare(b.username));s.innerHTML='<option value="ALL">Semua User</option>'+users.map(a=>`<option value="${esc(a.username)}">${esc(a.name||a.username)} (${esc(a.username)})</option>`).join('')}
+function filteredActivity(){
+ const q=($('activitySearch')?.value||'').toLowerCase().trim(),u=$('activityUser')?.value||'ALL',c=$('activityCompany')?.value||'ALL',r=$('activityRole')?.value||'ALL',t=$('activityType')?.value||'ALL',res=$('activityResult')?.value||'ALL',f=$('activityFrom')?.value||'',to=$('activityTo')?.value||'';
+ return activityLogs.filter(a=>{const d=a.at.slice(0,10),hay=[a.username,a.name,a.company,a.role,a.department,a.type,a.module,a.ref,a.detail,a.ip].join(' ').toLowerCase();return(!q||hay.includes(q))&&(u==='ALL'||a.username===u)&&(c==='ALL'||a.company===c)&&(r==='ALL'||a.role===r)&&(t==='ALL'||a.type===t)&&(res==='ALL'||a.result===res)&&(!f||d>=f)&&(!to||d<=to)})
+}
+function showActivityDetail(a){$('activityDetail').innerHTML=!a?'<div class="activity-detail-empty">Pilih salah satu aktivitas.</div>':`<div class="activity-detail-grid">
+<div class="activity-detail-item"><small>Activity ID</small><b>${esc(a.id)}</b></div><div class="activity-detail-item"><small>Waktu</small><b>${esc(new Date(a.at).toLocaleString('id-ID'))}</b></div>
+<div class="activity-detail-item"><small>User</small><b>${esc(a.name)} (${esc(a.username)})</b></div><div class="activity-detail-item"><small>Perusahaan</small><b>${esc(a.company||'-')}</b></div>
+<div class="activity-detail-item"><small>Role / Department</small><b>${esc(a.role||'-')} / ${esc(a.department||'-')}</b></div><div class="activity-detail-item"><small>Aktivitas</small><b>${esc(activityLabel(a.type))}</b></div>
+<div class="activity-detail-item"><small>Modul</small><b>${esc(a.module||'-')}</b></div><div class="activity-detail-item"><small>Referensi</small><b>${esc(a.ref||'-')}</b></div>
+<div class="activity-detail-item"><small>Hasil</small><b>${activityBadge(a.result)}</b></div><div class="activity-detail-item"><small>IP / Source</small><b>${esc(a.ip||'-')}</b></div>
+<div class="activity-detail-item" style="grid-column:1/-1"><small>Detail</small><b>${esc(a.detail||'-')}</b></div>
+<div class="activity-detail-item" style="grid-column:1/-1"><small>User Agent</small><b style="word-break:break-all">${esc(a.userAgent||'-')}</b></div></div>`}
+function renderActivity(){
+ renderActivityUsers();const list=filteredActivity(),tb=$('activityTableBody');if(!tb)return;const today=new Date().toISOString().slice(0,10);
+ $('activityTotal').textContent=list.length;$('activityLoginToday').textContent=list.filter(a=>a.type==='LOGIN'&&a.at.slice(0,10)===today).length;
+ $('activityReports').textContent=list.filter(a=>a.type==='CREATE_HAZARD').length;$('activityCorrective').textContent=list.filter(a=>['CORRECTIVE_ACTION','CLOSE_HAZARD','ASSIGN_PIC','UPDATE_HAZARD'].includes(a.type)).length;
+ $('activityUserMgmt').textContent=list.filter(a=>['CREATE_USER','UPDATE_USER','DELETE_USER'].includes(a.type)).length;$('activitySecurity').textContent=list.filter(a=>['LOGIN','LOGOUT','ACCESS_DENIED'].includes(a.type)).length;
+ $('activityCountLabel').textContent=`${list.length} activity`;
+ tb.innerHTML=list.length?list.slice(0,500).map((a,i)=>`<tr onclick="showActivityDetail(filteredActivity()[${i}])"><td>${esc(new Date(a.at).toLocaleString('id-ID'))}</td><td><b>${esc(a.name||a.username)}</b><br><span class="muted">${esc(a.username)}</span></td><td>${esc(a.company||'-')}</td><td>${esc(a.role||'-')}</td><td><span class="activity-type">${esc(activityLabel(a.type))}</span></td><td>${esc(a.module||'-')}</td><td>${esc(a.ref||'-')}</td><td>${activityBadge(a.result)}</td><td>${esc(a.detail||'-')}</td></tr>`).join(''):'<tr><td colspan="9"><div class="empty">Tidak ada activity sesuai filter.</div></td></tr>';
+}
+function exportActivityCSV(){
+ const list=filteredActivity(),head=['Activity ID','Waktu','Username','Nama','Perusahaan','Role','Department','Activity','Module','Reference','Result','Detail','IP / Source'],rows=list.map(a=>[a.id,new Date(a.at).toLocaleString('id-ID'),a.username,a.name,a.company,a.role,a.department,a.type,a.module,a.ref,a.result,a.detail,a.ip]);
+ const csv=[head,...rows].map(r=>r.map(v=>`"${String(v??'').replace(/"/g,'""')}"`).join(',')).join('\n'),blob=new Blob([csv],{type:'text/csv;charset=utf-8;'}),url=URL.createObjectURL(blob),l=document.createElement('a');l.href=url;l.download=`hazardly-activity-log-${new Date().toISOString().slice(0,10)}.csv`;l.click();URL.revokeObjectURL(url);
+ logActivity('UPDATE_HAZARD','Activity Log','Export Activity Log',`rows=${list.length}`,'SUCCESS');
+}
+function clearActivityLog(){if(!can('manageUsers')){logActivity('ACCESS_DENIED','Activity Log','Mencoba menghapus log tanpa akses','','DENIED');alert('Akses ditolak.');return}if(!confirm('Hapus seluruh Activity Log?'))return;activityLogs=[];saveActivity();renderActivity();logActivity('UPDATE_HAZARD','Activity Log','Activity Log cleared','','SUCCESS')}
+
 function submitReport(){
   if(!can('createHazard')){
     alert('Akses ditolak: role ini tidak dapat membuat Hazard Report.');
     return;
   }
- const req=['date','time','area','detail','category','risk','finding','hazard','riskText'];
+ const req=['date','time','area','detail','category','risk','finding','hazard','riskText','action'];
  if(req.some(id=>!$(id).value.trim())){alert('Lengkapi semua field wajib (*)');return}
  if(!$('photo').files[0]){alert('Foto hazard wajib di-upload');return}
  const f=$('photo').files[0],reader=new FileReader();
@@ -793,7 +1155,7 @@ function submitReport(){
   area:$('area').value,detail:$('detail').value,category:$('category').value,risk:$('risk').value,finding:$('finding').value,hazard:$('hazard').value,pic:'',
   riskText:$('riskText').value,initialAction:$('action').value,photo:reader.result,pic:'',picDept:'',target:'',corrective:'',
   evidence:'',closeNote:'',status:'Open',closedBy:'',closedAt:'',history:[{type:'Report dibuat',by:'Ikang Zulfikar',at:new Date().toLocaleString('id-ID')}]};
-  reports.unshift(r);save();alert(`✓ Report berhasil dibuat\\n${r.id}`);resetReport();openPage('reports');
+  reports.unshift(r);save();logActivity('CREATE_HAZARD','Report Hazard','Membuat Hazard Report',r.id,'SUCCESS');alert(`✓ Report berhasil dibuat\\n${r.id}`);resetReport();openPage('reports');
  };reader.readAsDataURL(f)
 }
 /* =========================================================
@@ -861,7 +1223,7 @@ function showDetail(id){
  <div class="info" style="margin-top:10px"><b>Corrective Action:</b><br>${r.corrective||'Belum ada'}</div>
  ${r.closedAt?`<div class="info" style="margin-top:10px"><b>Closed By:</b> ${r.closedBy} • ${r.closedAt}<br>${r.closeNote||''}</div>`:''}
  <div style="margin-top:15px"><div class="section-title"><h3>Activity</h3></div><div class="timeline">${(r.history||[]).map(e=>`<div class="event"><strong>${e.type}</strong><p>${e.by} • ${e.at}</p></div>`).join('')}</div></div>`;
- $('detailModal').classList.add('show')
+ logActivity('VIEW_HAZARD','Hazard Reports','Membuka detail hazard',r.id,'SUCCESS');$('detailModal').classList.add('show')
 }
 function closeModal(){$('detailModal').classList.remove('show')}
 /* =========================================================
@@ -887,7 +1249,7 @@ function closeAssign(){$('assignModal').classList.remove('show')}
 function saveAssign(id){
  const r=reports.find(x=>x.id===id);if(!$('assignPic').value||!$('assignDept').value||!$('assignTarget').value){alert('Lengkapi PIC, departemen, dan target');return}
  r.pic=$('assignPic').value;r.picDept=$('assignDept').value;r.target=$('assignTarget').value;r.status='On Progress';
- r.history.push({type:'PIC ditugaskan',by:'HSE / Supervisor',at:new Date().toLocaleString('id-ID')});save();pushNotification('assign','PIC ditugaskan',`${r.id} → ${r.pic}`,r.id);toast('PIC assigned',`${r.pic} bertanggung jawab pada ${r.id}`);closeAssign();render();
+ r.history.push({type:'PIC ditugaskan',by:'HSE / Supervisor',at:new Date().toLocaleString('id-ID')});save();logActivity('ASSIGN_PIC','Assign & Follow Up',`PIC ${r.pic}, target ${r.target}`,r.id,'SUCCESS');pushNotification('assign','PIC ditugaskan',`${r.id} → ${r.pic}`,r.id);toast('PIC assigned',`${r.pic} bertanggung jawab pada ${r.id}`);closeAssign();render();
 }
 /* =========================================================
    30. CLOSE HAZARD MODAL
@@ -914,7 +1276,7 @@ function saveClose(id){
  const r=reports.find(x=>x.id===id),f=$('evidence').files[0];
  if(!$('closeAction').value.trim()){alert('Corrective Action wajib diisi');return}
  if(!r.evidence&&!f){alert('Evidence perbaikan wajib di-upload sebelum closing');return}
- const finish=ev=>{r.corrective=$('closeAction').value.trim();r.evidence=ev||r.evidence;r.closeNote=$('closeNote').value.trim();r.status='Closed';r.closedBy=r.pic;r.closedAt=new Date().toLocaleString('id-ID');r.history.push({type:'Hazard Closed',by:r.pic,at:r.closedAt});save();closeCloseModal();render();alert(`✓ ${r.id}\\nClosed by ${r.pic}`)}
+ const finish=ev=>{r.corrective=$('closeAction').value.trim();r.evidence=ev||r.evidence;r.closeNote=$('closeNote').value.trim();r.status='Closed';r.closedBy=r.pic;r.closedAt=new Date().toLocaleString('id-ID');logActivity('CLOSE_HAZARD','Corrective Action',`Hazard closed by ${r.pic}`,r.id,'SUCCESS');r.history.push({type:'Hazard Closed',by:r.pic,at:r.closedAt});save();closeCloseModal();render();alert(`✓ ${r.id}\\nClosed by ${r.pic}`)}
  if(f){const rr=new FileReader();rr.onload=()=>finish(rr.result);rr.readAsDataURL(f)}else finish()
 }
 /* =========================================================
@@ -939,6 +1301,60 @@ function defaultUsers(){
 let DEMO_USERS=JSON.parse(localStorage.getItem(USERS_KEY)||'null')||defaultUsers();
 DEMO_USERS=DEMO_USERS.map(u=>({...u,company:u.company||'PT Empat Pilar Adidaya'}));
 function saveUsers(){localStorage.setItem(USERS_KEY,JSON.stringify(DEMO_USERS))}
+
+
+function loginUsers(){
+  try{return JSON.parse(localStorage.getItem(USERS_KEY)||'null')||defaultUsers()}catch(e){return defaultUsers()}
+}
+function showLoginError(msg){
+  const el=$('loginError'); if(!el)return;
+  el.textContent=msg;el.classList.add('show');
+}
+function clearLoginError(){const el=$('loginError');if(el)el.classList.remove('show')}
+function toggleLoginPassword(){
+  const i=$('loginPassword'),b=document.querySelector('.login-password-toggle');
+  if(i.type==='password'){i.type='text';b.textContent='HIDE'}else{i.type='password';b.textContent='SHOW'}
+}
+function loginSuccess(user){
+  applyLoggedInUser(user);
+  localStorage.setItem(AUTH_KEY,JSON.stringify({username:user.username}));
+  $('loginPage').classList.remove('show');
+  updateUserUI();
+  applyRoleAccess();
+  now();
+  render();
+  try{if(typeof logActivity==='function')logActivity('LOGIN','Authentication','User berhasil login','AUTH','SUCCESS')}catch(e){}
+}
+function handleLogin(e){
+  e.preventDefault();clearLoginError();
+  const username=$('loginUsername').value.trim().toLowerCase();
+  const password=$('loginPassword').value;
+  const user=loginUsers().find(u=>u.username.toLowerCase()===username&&u.password===password&&u.status==='Active');
+  if(!user){
+    showLoginError('Username atau password salah, atau akun tidak aktif.');
+    try{if(typeof logActivity==='function')logActivity('LOGIN','Authentication',`Login gagal untuk ${username||'unknown'}`,'AUTH','FAILED')}catch(e){}
+    return false;
+  }
+  loginSuccess(user);
+  return false;
+}
+function logoutUser(){
+  try{if(typeof logActivity==='function')logActivity('LOGOUT','Authentication','User logout','AUTH','SUCCESS')}catch(e){}
+  localStorage.removeItem(AUTH_KEY);
+  location.reload();
+}
+function restoreAuth(){
+  try{
+    const a=JSON.parse(localStorage.getItem(AUTH_KEY)||'null');
+    if(!a||!a.username)return false;
+    const user=loginUsers().find(u=>u.username===a.username&&u.status==='Active');
+    if(!user)return false;
+    applyLoggedInUser(user);
+    $('loginPage').classList.remove('show');
+    return true;
+  }catch(e){return false}
+}
+
 
 function renderUsers(){
   const table=$('userTable');
@@ -1006,11 +1422,13 @@ function saveUserForm(){
 
   if(editingUserIndex===null){
     DEMO_USERS.push({username,name,position,company,department,role,status,password});
+    logActivity('CREATE_USER','Users & Roles',`Membuat user ${username} dengan role ${role}`,username,'SUCCESS');
     toast('User berhasil dibuat',`${username} berhasil ditambahkan.`);
   }else{
     const u=DEMO_USERS[editingUserIndex];
     u.username=username;u.name=name;u.position=position;u.company=company;u.department=department;u.role=role;u.status=status;
     if(password)u.password=password;
+    logActivity('UPDATE_USER','Users & Roles',`Memperbarui user ${username} dengan role ${role}`,username,'SUCCESS');
     toast('User diperbarui',`${username} berhasil diperbarui.`);
   }
   saveUsers();renderUsers();closeUserModal();
@@ -1041,7 +1459,7 @@ function deleteUser(index){
   const u=DEMO_USERS[index];if(!u)return;
   if(u.username===CURRENT_USER.username){alert('Akun yang sedang digunakan tidak dapat dihapus.');return}
   if(!confirm(`Hapus user ${u.username}?`))return;
-  DEMO_USERS.splice(index,1);saveUsers();renderUsers();
+  DEMO_USERS.splice(index,1);saveUsers();logActivity('DELETE_USER','Users & Roles',`Menghapus user ${u.username}`,u.username,'SUCCESS');renderUsers();
   toast('User dihapus',`${u.username} telah dihapus.`);
 }
 
@@ -1066,6 +1484,208 @@ function applyRoleAccess(){
   updateUserUI();
 }
 
+
+/* =========================================================
+   41. ADVANCED ANALYTICS ENGINE
+========================================================= */
+let analyticsTrendCanvas=null;
+let analyticsDepartmentCanvas=null;
+let analyticsCompanyCanvas=null;
+
+function destroyAnalyticsCharts(){
+  [analyticsTrendCanvas,analyticsDepartmentCanvas,analyticsCompanyCanvas].forEach(c=>{if(c)try{c.remove()}catch(e){}});
+  analyticsTrendCanvas=analyticsDepartmentCanvas=analyticsCompanyCanvas=null;
+}
+
+function esc(s){
+  return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
+}
+
+function parseDateSafe(v){
+  if(!v)return null;
+  const d=new Date(v+'T00:00:00');
+  return Number.isNaN(d.getTime())?null:d;
+}
+
+function periodKey(date,period){
+  if(!(date instanceof Date)||Number.isNaN(date.getTime()))return '';
+  if(period==='daily') return date.toISOString().slice(0,10);
+  if(period==='weekly'){
+    const d=new Date(date); const day=(d.getDay()+6)%7;
+    d.setDate(d.getDate()-day);
+    return d.toISOString().slice(0,10);
+  }
+  if(period==='yearly') return String(date.getFullYear());
+  return `${date.getFullYear()}-${pad(date.getMonth()+1)}`;
+}
+
+function periodLabel(key,period){
+  if(!key)return '';
+  if(period==='daily'){
+    const d=parseDateSafe(key); return d?`${pad(d.getDate())}/${pad(d.getMonth()+1)}`:key;
+  }
+  if(period==='weekly'){
+    const d=parseDateSafe(key); return d?`W ${pad(d.getDate())}/${pad(d.getMonth()+1)}`:key;
+  }
+  if(period==='yearly') return key;
+  const parts=key.split('-'); return `${parts[1]}/${parts[0]}`;
+}
+
+function analyticsFilteredReports(){
+  const company=$('analyticsCompany')?.value||'ALL';
+  const dept=$('analyticsDepartment')?.value||'ALL';
+  const status=$('analyticsStatus')?.value||'ALL';
+  return reports.filter(r=>
+    (company==='ALL'||r.company===company) &&
+    (dept==='ALL'||r.department===dept) &&
+    (status==='ALL'||r.status===status)
+  );
+}
+
+function drawBarChart(canvasId,data,labels,opts={}){
+  const canvas=$(canvasId); if(!canvas)return null;
+  const ctx=canvas.getContext('2d');
+  const parent=canvas.parentElement;
+  const width=Math.max(parent.clientWidth||500,320);
+  const height=opts.height||180;
+  const dpr=window.devicePixelRatio||1;
+  canvas.width=width*dpr; canvas.height=height*dpr;
+  canvas.style.width='100%'; canvas.style.height=height+'px';
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  ctx.clearRect(0,0,width,height);
+
+  if(!data.length)return null;
+  const max=Math.max(...data,1);
+  const left=34,right=12,top=16,bottom=34;
+  const chartW=width-left-right, chartH=height-top-bottom;
+  const step=chartW/data.length;
+  const barW=Math.max(10,step*.56);
+
+  ctx.strokeStyle=getComputedStyle(document.body).getPropertyValue('--line');
+  ctx.fillStyle=getComputedStyle(document.body).getPropertyValue('--muted');
+  ctx.font='9px Inter, Arial, sans-serif';
+  ctx.textAlign='right';
+  ctx.textBaseline='middle';
+
+  for(let i=0;i<=3;i++){
+    const y=top+chartH-(chartH*i/3);
+    ctx.beginPath();ctx.moveTo(left,y);ctx.lineTo(width-right,y);ctx.stroke();
+    ctx.fillText(String(Math.round(max*i/3)),left-6,y);
+  }
+
+  const lime=getComputedStyle(document.body).getPropertyValue('--lime').trim()||'#c6ff3d';
+  const muted=getComputedStyle(document.body).getPropertyValue('--muted').trim()||'#91a0b5';
+  data.forEach((v,i)=>{
+    const h=(v/max)*chartH;
+    const x=left+i*step+(step-barW)/2;
+    const y=top+chartH-h;
+    const grad=ctx.createLinearGradient(0,y,0,top+chartH);
+    grad.addColorStop(0,lime); grad.addColorStop(1,getComputedStyle(document.body).getPropertyValue('--cyan').trim()||'#52e7ff');
+    ctx.fillStyle=grad;
+    ctx.fillRect(x,y,barW,h);
+    ctx.fillStyle=getComputedStyle(document.body).getPropertyValue('--text').trim()||'#f7f9fc';
+    ctx.textAlign='center';ctx.textBaseline='bottom';ctx.fillText(v,x+barW/2,y-3);
+    ctx.fillStyle=muted;ctx.font='8px Inter, Arial, sans-serif';
+    const label=String(labels[i]).slice(0,11);
+    ctx.fillText(label,x+barW/2,top+chartH+18);
+  });
+  return canvas;
+}
+
+function renderMetricBars(targetId,entries,emptyText='Belum ada data.'){
+  const el=$(targetId); if(!el)return;
+  if(!entries.length){el.innerHTML=`<div class="empty">${emptyText}</div>`;return;}
+  const max=Math.max(...entries.map(x=>x[1]),1);
+  el.innerHTML=entries.map(([k,v])=>`<div class="bar-row">
+    <div class="bar-label" title="${esc(k)}">${esc(k)}</div>
+    <div class="bar-track"><div class="bar-fill" style="width:${(v/max)*100}%"></div></div>
+    <div class="bar-value">${v}</div>
+  </div>`).join('');
+}
+
+function averageClosureDays(list){
+  const vals=list.map(r=>{
+    if(!r.closedAt||!r.date)return null;
+    const start=new Date(r.date+'T'+(r.time||'00:00'));
+    const end=new Date(r.closedAt);
+    if(Number.isNaN(start.getTime())||Number.isNaN(end.getTime()))return null;
+    return Math.max(0,(end-start)/86400000);
+  }).filter(v=>Number.isFinite(v));
+  return vals.length?(vals.reduce((a,b)=>a+b,0)/vals.length):null;
+}
+
+function renderAnalytics(){
+  const list=analyticsFilteredReports();
+  const period=$('analyticsPeriod')?.value||'monthly';
+
+  $('aTotal').textContent=list.length;
+  $('aHigh').textContent=list.filter(r=>['High','Extreme'].includes(r.risk)).length;
+  $('aOpenProgress').textContent=list.filter(r=>r.status!=='Closed').length;
+  $('aClosedRate').textContent=list.length?Math.round(list.filter(r=>r.status==='Closed').length/list.length*100)+'%':'0%';
+  const today=new Date().toISOString().slice(0,10);
+  $('aOverdue').textContent=list.filter(r=>r.target&&r.target<today&&r.status!=='Closed').length;
+  const avg=averageClosureDays(list);
+  $('aAvgClosure').textContent=avg===null?'—':avg.toFixed(1);
+
+  $('trendCaption').textContent=period.charAt(0).toUpperCase()+period.slice(1);
+
+  const groups={};
+  list.forEach(r=>{
+    const d=parseDateSafe(r.date); const k=periodKey(d,period);
+    if(k)groups[k]=(groups[k]||0)+1;
+  });
+  const keys=Object.keys(groups).sort().slice(-12);
+  destroyAnalyticsCharts();
+  const trendEmpty=$('hazardTrendEmpty');
+  if(keys.length){
+    trendEmpty.style.display='none';
+    analyticsTrendCanvas=drawBarChart('hazardTrendChart',keys.map(k=>groups[k]),keys,{height:215});
+  }else trendEmpty.style.display='flex';
+
+  const risk={Extreme:0,High:0,Medium:0,Low:0};
+  list.forEach(r=>{if(risk[r.risk]!==undefined)risk[r.risk]++});
+  renderMetricBars('riskChart',Object.entries(risk).filter(x=>x[1]>0));
+
+  const dept={}; list.forEach(r=>dept[r.department]=(dept[r.department]||0)+1);
+  const deptEntries=Object.entries(dept).sort((a,b)=>b[1]-a[1]).slice(0,8);
+  const deptEmpty=$('departmentEmpty'); deptEmpty.style.display=deptEntries.length?'none':'flex';
+  if(deptEntries.length)analyticsDepartmentCanvas=drawBarChart('departmentChart',deptEntries.map(x=>x[1]),deptEntries.map(x=>x[0]),{height:205});
+
+  const companies={}; list.forEach(r=>companies[r.company||'Tidak diketahui']=(companies[r.company||'Tidak diketahui']||0)+1);
+  const compEntries=Object.entries(companies).sort((a,b)=>b[1]-a[1]);
+  const compEmpty=$('companyEmpty'); compEmpty.style.display=compEntries.length?'none':'flex';
+  if(compEntries.length)analyticsCompanyCanvas=drawBarChart('companyChart',compEntries.map(x=>x[1]),compEntries.map(x=>x[0].replace(/^PT /,'')),{height:205});
+
+  const cat={}; list.forEach(r=>cat[r.category]=(cat[r.category]||0)+1);
+  renderMetricBars('categoryChart',Object.entries(cat).sort((a,b)=>b[1]-a[1]).slice(0,8));
+
+  const st={Open:0,'On Progress':0,Closed:0}; list.forEach(r=>{if(st[r.status]!==undefined)st[r.status]++});
+  renderMetricBars('statusChart',Object.entries(st));
+
+  const loc={}; list.forEach(r=>{const k=r.area?(r.area+(r.detail?' — '+r.detail:'')):'Tidak diketahui';loc[k]=(loc[k]||0)+1});
+  renderMetricBars('locationChart',Object.entries(loc).sort((a,b)=>b[1]-a[1]).slice(0,8));
+
+  const topDept=deptEntries[0]?.[0]||'—';
+  const topCompany=compEntries[0]?.[0]||'—';
+  const topCat=Object.entries(cat).sort((a,b)=>b[1]-a[1])[0]?.[0]||'—';
+  const topRisk=['Extreme','High','Medium','Low'].sort((a,b)=>risk[b]-risk[a])[0]||'—';
+  $('analyticsInsights').innerHTML=[
+    ['Department Tertinggi',topDept],
+    ['Perusahaan Tertinggi',topCompany],
+    ['Kategori Dominan',topCat],
+    ['Risk Dominan',topRisk],
+    ['Total Closed',list.filter(r=>r.status==='Closed').length],
+    ['Total Open',list.filter(r=>r.status==='Open').length],
+    ['Total On Progress',list.filter(r=>r.status==='On Progress').length],
+    ['Overdue',list.filter(r=>r.target&&r.target<today&&r.status!=='Closed').length]
+  ].map(([a,b])=>`<div class="insight-item"><small>${esc(a)}</small><b>${esc(b)}</b></div>`).join('');
+}
+
+['analyticsPeriod','analyticsCompany','analyticsDepartment','analyticsStatus'].forEach(id=>{
+  document.addEventListener('change',e=>{if(e.target&&e.target.id===id&&$('analytics')?.classList.contains('active'))renderAnalytics()});
+});
+
+
 function render(){
   applyRoleAccess();
  const total=reports.length,open=reports.filter(r=>r.status==='Open').length,prog=reports.filter(r=>r.status==='On Progress').length,closed=reports.filter(r=>r.status==='Closed').length;
@@ -1074,9 +1694,13 @@ function render(){
  $('aHigh').textContent=reports.filter(r=>['High','Extreme'].includes(r.risk)).length;$('aUnsafe').textContent=reports.filter(r=>r.category==='Unsafe Condition').length;$('aIT').textContent=reports.filter(r=>r.department==='IT').length;
  const today=new Date().toISOString().slice(0,10);$('aOverdue').textContent=reports.filter(r=>r.target&&r.target<today&&r.status!=='Closed').length;
  const map={};reports.forEach(r=>map[r.category]=(map[r.category]||0)+1);
- $('categorySummary').innerHTML=Object.entries(map).length?Object.entries(map).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<div style="display:flex;justify-content:space-between;border-bottom:1px solid var(--line);padding:11px 0;font-size:11px"><span>${k}</span><b>${v}</b></div>`).join(''):'<div class="empty">Belum ada data.</div>';
+ $('categorySummary').innerHTML=Object.entries(map).length?Object.entries(map).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<div style="display:flex;justify-content:space-between;border-bottom:1px solid var(--line);padding:11px 0;font-size:11px"><span>${k}</span><b>${v}</b></div>`).join(''):'<div class="empty">Belum ada data.</div>';renderAnalytics();renderActivity();
+
+ renderUsers();
 }
 
+
+['activitySearch','activityUser','activityCompany','activityRole','activityType','activityResult','activityFrom','activityTo'].forEach(id=>{const el=$(id);if(el)el.addEventListener(id==='activitySearch'?'input':'change',renderActivity)});
 /* =========================================================
    33. THEME CONTROL - DARK / LIGHT
 ========================================================= */
@@ -1099,15 +1723,13 @@ function setTheme(theme){
 }
 document.querySelectorAll('.theme-btn').forEach(b=>b.addEventListener('click',()=>setTheme(b.dataset.theme)));
 setTheme(localStorage.getItem(THEME_KEY)||'dark');
-if($('themeIconBtn')) $('themeIconBtn').addEventListener('click',()=>setTheme(document.body.classList.contains('light')?'dark':'light'));
+if($('themeIconBtn')) $('themeIconBtn').addEventListener('click',()=>{const t=document.body.classList.contains('light')?'dark':'light';setTheme(t);logCurrentThemeChange(t);});
 if($('roleDemo')){
   $('roleDemo').addEventListener('change',function(){
     setRoleDemo(this.value);
   });
 }
-$('roleDemo').addEventListener('change',function(){
-  setRoleDemo(this.value);
-});
+$('roleDemo').addEventListener('change',function(){ if(HAS_AUTH)setRoleDemo(this.value); });
 
 
 
@@ -1126,6 +1748,16 @@ const CURRENT_USER = {
   department:'IT',
   role:'Administrator'
 };
+const AUTH_KEY='hazardly_auth_2026';
+function applyLoggedInUser(u){
+  CURRENT_USER.username=u.username;
+  CURRENT_USER.name=u.name;
+  CURRENT_USER.position=u.position||'';
+  CURRENT_USER.company=u.company||'';
+  CURRENT_USER.department=u.department||'';
+  CURRENT_USER.role=u.role||'Reporter';
+}
+
 
 const ROLE_PERMISSIONS = {
   'Reporter':{
@@ -1171,6 +1803,15 @@ function can(action){
   return !!p[action];
 }
 
+
+function logCurrentThemeChange(theme){
+  try{
+    if(typeof logActivity==='function' && typeof CURRENT_USER==='object'){
+      logActivity('THEME_CHANGE','System',`Tema diubah ke ${theme}`,'','SUCCESS');
+    }
+  }catch(e){}
+}
+
 function roleName(){
   return CURRENT_USER.role;
 }
@@ -1203,19 +1844,12 @@ function setRoleDemo(role){
 }
 
 function updateUserUI(){
-  const badge = $('roleBadge');
-  if(badge) badge.textContent = CURRENT_USER.role;
-  const greeting = $('greetingUser');
-  if(greeting) greeting.textContent = CURRENT_USER.username || 'admin';
-  const avatar = $('avatarButton');
-  if(avatar) avatar.textContent = (CURRENT_USER.username || 'admin').charAt(0).toUpperCase();
-
-  // Field identitas report otomatis mengikuti user yang aktif.
-  if($('reporterName')) $('reporterName').value = CURRENT_USER.name || '';
-  if($('reporterPosition')) $('reporterPosition').value = CURRENT_USER.position || '';
-  if($('reporterCompany')) $('reporterCompany').value = CURRENT_USER.company || '';
-  if($('reporterDepartment')) $('reporterDepartment').value = CURRENT_USER.department || '';
-  
+  const g=$('greetingUser'),c=$('topCompany'),a=$('avatarButton');
+  if(g)g.textContent=CURRENT_USER.username;
+  if(c)c.textContent=CURRENT_USER.company||'-';
+  if(a)a.textContent=(CURRENT_USER.name||CURRENT_USER.username||'U').trim().charAt(0).toUpperCase();
+  const roleBadge=$('roleBadge');if(roleBadge)roleBadge.textContent=CURRENT_USER.role||'';
+  const roleDemo=$('roleDemo');if(roleDemo)roleDemo.value=CURRENT_USER.role||'Reporter';
 }
 
 const NOTIF_KEY='hazardly_notifications_2026';
