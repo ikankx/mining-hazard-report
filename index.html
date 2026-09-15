@@ -769,7 +769,6 @@ Kalau dark/light bermasalah             -> cek bagian 13 / 15 / 33
     <option value="Administrator">Administrator</option>
     <option value="Reporter">Reporter</option>
     <option value="HSE / Supervisor">HSE / Supervisor</option>
-    <option value="PIC">PIC</option>
    </select>
    <span class="role-badge" id="roleBadge">Administrator</span>
   </div>
@@ -848,8 +847,8 @@ Kalau dark/light bermasalah             -> cek bagian 13 / 15 / 33
 </section>
 
 <section class="page" id="myaction">
-<div class="card"><div class="section-title"><h3>Corrective Action</h3><span>PIC workspace</span></div>
-<div class="notice">Tidak ada verification step. PIC melakukan perbaikan, upload evidence, lalu <b>Close Hazard</b>. Evidence + waktu + nama PIC tersimpan sebagai audit trail.</div>
+<div class="card"><div class="section-title"><h3>Corrective Action</h3><span>Assigned corrective action</span></div>
+<div class="notice">User yang ditunjuk sebagai PIC melakukan corrective action, upload evidence, lalu <b>Close Hazard</b>.</div>
 <div id="myTable"></div></div>
 </section>
 
@@ -933,9 +932,8 @@ Kalau dark/light bermasalah             -> cek bagian 13 / 15 / 33
   </div>
 
   <div class="grid">
-    <div class="info"><b>Reporter</b><br>Membuat Hazard Report dan memantau laporan.</div>
+    <div class="info"><b>Reporter</b><br>Membuat Hazard Report dan memantau laporan.<br>Melakukan corrective action, upload evidence, lalu <b>Close Hazard</b> jika ditunjuk sebagai PIC.</div>
     <div class="info"><b>HSE / Supervisor</b><br>Review, assign PIC, menentukan target selesai, dan follow up.</div>
-    <div class="info"><b>PIC</b><br>Melakukan corrective action, upload evidence, lalu Close Hazard.</div>
     <div class="info"><b>Administrator</b><br>Kelola user, role, master lokasi, kategori, dan konfigurasi sistem.</div>
   </div>
 
@@ -1317,11 +1315,7 @@ function table(data,mode='normal'){
    26. PIC - MY CORRECTIVE ACTION
 ========================================================= */
 function myActionTable(){
-  const list = reports.filter(r =>
-    r.pic &&
-    r.pic === CURRENT_USER.name &&
-    r.status !== 'Closed'
-  );
+  const list = reports.filter(r => isCurrentUserPIC(r) && r.status !== 'Closed');
 
   if(!list.length){
     return '<div class="empty">Tidak ada corrective action yang ditugaskan kepada Anda.</div>';
@@ -1367,36 +1361,61 @@ function closeModal(){$('detailModal').classList.remove('show')}
    28. ASSIGN PIC MODAL
 ========================================================= */
 function openAssign(id){
-  if(!can('assignPIC')){
-    alert('Akses ditolak: role ini tidak dapat menentukan PIC.');
-    return;
-  }
+ if(!can('assignPIC')){alert('Akses ditolak: Anda tidak memiliki hak untuk assign PIC.');return}
  const r=reports.find(x=>x.id===id);if(!r)return;
- $('assignBody').innerHTML=`<div class="notice"><b>${r.id}</b> — ${r.finding}</div><div class="grid">
- <div><label>PIC <span class="req">*</span></label><select id="assignPic"><option value="">Pilih PIC</option><option>Budi Santoso</option><option>Andi Pratama</option><option>Rizal Maulana</option></select></div>
- <div><label>Departemen PIC <span class="req">*</span></label><select id="assignDept"><option value="">Pilih departemen</option><option>Maintenance</option><option>IT</option><option>Engineering</option><option>Operation</option><option>HSE</option></select></div>
- <div><label>Target Selesai <span class="req">*</span></label><input id="assignTarget" type="date" value="${r.target||''}"></div></div>
+ const assignees=DEMO_USERS.filter(u=>u.status==='Active' && u.role!=='Administrator');
+ const options=assignees.map(u=>`<option value="${u.username}" data-name="${u.name}" data-dept="${u.department||''}">${u.name} — ${u.department||'-'} — ${u.company||'-'}</option>`).join('');
+ $('assignBody').innerHTML=`<div class="notice"><b>${r.id}</b> — ${r.finding}</div>
+ <div class="grid">
+  <div><label>PIC <span class="req">*</span></label><select id="assignPic"><option value="">Pilih PIC</option>${options}</select></div>
+  <div><label>Departemen PIC <span class="req">*</span></label><select id="assignDept"><option value="">Pilih departemen</option><option>Maintenance</option><option>IT</option><option>Engineering</option><option>Operation</option><option>HSE</option><option>HRGA</option><option>Geology</option><option>Environment</option><option>Warehouse</option></select></div>
+  <div><label>Target Selesai <span class="req">*</span></label><input id="assignTarget" type="date" value="${r.target||''}"></div>
+ </div>
  <div class="actions"><button class="btn secondary" onclick="closeAssign()">Batal</button><button class="btn primary" onclick="saveAssign('${id}')">Assign PIC →</button></div>`;
  $('assignModal').classList.add('show');
+ if(r.picUsername){
+   $('assignPic').value=r.picUsername;
+ }else if(r.pic){
+   const oldUser=assignees.find(u=>u.name===r.pic);if(oldUser)$('assignPic').value=oldUser.username;
+ }
+ if(r.picDept)$('assignDept').value=r.picDept;
 }
 function closeAssign(){$('assignModal').classList.remove('show')}
 /* =========================================================
    29. SAVE ASSIGNMENT
 ========================================================= */
 function saveAssign(id){
- const r=reports.find(x=>x.id===id);if(!$('assignPic').value||!$('assignDept').value||!$('assignTarget').value){alert('Lengkapi PIC, departemen, dan target');return}
- r.pic=$('assignPic').value;r.picDept=$('assignDept').value;r.target=$('assignTarget').value;r.status='On Progress';
- r.history.push({type:'PIC ditugaskan',by:'HSE / Supervisor',at:new Date().toLocaleString('id-ID')});save();logActivity('ASSIGN_PIC','Assign & Follow Up',`PIC ${r.pic}, target ${r.target}`,r.id,'SUCCESS');pushNotification('assign','PIC ditugaskan',`${r.id} → ${r.pic}`,r.id);toast('PIC assigned',`${r.pic} bertanggung jawab pada ${r.id}`);closeAssign();render();
+ const r=reports.find(x=>x.id===id);
+ const picUsername=$('assignPic').value,dept=$('assignDept').value,target=$('assignTarget').value;
+ if(!picUsername||!dept||!target){alert('Lengkapi PIC, departemen, dan target');return}
+ const picUser=DEMO_USERS.find(u=>u.username===picUsername && u.status==='Active' && u.role!=='Administrator');
+ if(!picUser){alert('User PIC tidak ditemukan atau tidak aktif');return}
+ r.pic=picUser.name;
+ r.picUsername=picUser.username;
+ r.picDept=dept;
+ r.target=target;
+ r.status='On Progress';
+ r.history.push({type:'PIC ditugaskan',by:CURRENT_USER.name,at:new Date().toLocaleString('id-ID')});
+ save();
+ logActivity('ASSIGN_PIC','Assign & Follow Up',`PIC ${r.pic}, target ${r.target}`,r.id,'SUCCESS');
+ pushNotification('assign','PIC ditugaskan',`${r.id} → ${r.pic}`,r.id);
+ toast('PIC assigned',`${r.pic} bertanggung jawab pada ${r.id}`);
+ closeAssign();render();
 }
 /* =========================================================
    30. CLOSE HAZARD MODAL
 ========================================================= */
 function openClose(id){
-  if(!can('closeAssigned')){
-    alert('Akses ditolak: hanya PIC yang ditunjuk atau Administrator yang dapat melakukan closing.');
-    return;
-  }
- const r=reports.find(x=>x.id===id);if(!r)return;
+ if(!can('closeAssigned')){
+   alert('Akses ditolak: Anda tidak memiliki hak closing.');
+   return;
+ }
+ const r=reports.find(x=>x.id===id);
+ if(!r)return;
+ if(!canCloseReport(r)){
+   alert('Akses ditolak: hanya user yang ditunjuk sebagai PIC yang dapat melakukan closing.');
+   return;
+ }
  $('closeBody').innerHTML=`<div class="notice"><b>${r.id}</b> — ${r.finding}<br>PIC: <b>${r.pic}</b></div>
  <label>Corrective Action <span class="req">*</span></label><textarea id="closeAction" placeholder="Apa yang sudah diperbaiki?">${r.corrective||''}</textarea>
  <div style="height:11px"></div><label>Evidence Perbaikan <span class="req">*</span></label><input id="evidence" type="file" accept="image/png,image/jpeg"><div class="hint">Foto kondisi setelah perbaikan • maksimal 5 MB</div><img id="evidencePreview" class="preview">
@@ -1897,43 +1916,29 @@ function applyLoggedInUser(u){
 
 
 const ROLE_PERMISSIONS = {
-  'Reporter':{
-    createHazard:true,
-    assignPIC:true,
-    closeOwnAssigned:false,
-    closeAssigned:false,
-    assignAnyPIC:false,
-    manageUsers:false,
-    deleteUsers:false
+  'Administrator': {
+    createHazard:true, assignPIC:true, correctiveOwn:true, correctiveAssigned:true,
+    closeOwn:false, closeAssigned:true, manageUsers:true, viewAll:true
   },
-  'PIC':{
-    createHazard:false,
-    assignPIC:false,
-    closeOwnAssigned:true,
-    closeAssigned:true,
-    assignAnyPIC:false,
-    manageUsers:false,
-    deleteUsers:false
+  'Reporter': {
+    createHazard:true, assignPIC:true, correctiveOwn:true, correctiveAssigned:true,
+    closeOwn:true, closeAssigned:true, manageUsers:false, viewAll:true
   },
-  'HSE / Supervisor':{
-    createHazard:true,
-    assignPIC:true,
-    closeOwnAssigned:false,
-    closeAssigned:false,
-    assignAnyPIC:true,
-    manageUsers:false,
-    deleteUsers:false
-  },
-  'Administrator':{
-    createHazard:true,
-    assignPIC:true,
-    closeOwnAssigned:true,
-    closeAssigned:true,
-    assignAnyPIC:true,
-    manageUsers:true,
-    deleteUsers:true
+  'HSE / Supervisor': {
+    createHazard:true, assignPIC:true, correctiveOwn:true, correctiveAssigned:true,
+    closeOwn:false, closeAssigned:true, manageUsers:false, viewAll:true
   }
 };
+
+function isCurrentUserPIC(r){
+  return !!r && (
+    (r.picUsername && r.picUsername===CURRENT_USER.username) ||
+    (!r.picUsername && r.pic===CURRENT_USER.name && r.company===CURRENT_USER.company)
+  );
+}
+function canCloseReport(r){
+  return !!r && isCurrentUserPIC(r) && ['Reporter','HSE / Supervisor','Administrator'].includes(CURRENT_USER.role);
+}
 
 function can(action){
   const p = ROLE_PERMISSIONS[CURRENT_USER.role] || {};
@@ -1954,7 +1959,8 @@ function roleName(){
 }
 
 function setRoleDemo(role){
-  CURRENT_USER.role = role;
+  if(!ROLE_PERMISSIONS[role]) role='Reporter';
+  CURRENT_USER.role=role;
   if(role==='Administrator'){
     CURRENT_USER.position='Administrator';
     CURRENT_USER.name='Ikang Zulfikar';
@@ -1970,11 +1976,6 @@ function setRoleDemo(role){
     CURRENT_USER.name='Budi Santoso';
     CURRENT_USER.company='PT Kaia Pilar Indonesia';
     CURRENT_USER.department='HSE';
-  }else if(role==='PIC'){
-    CURRENT_USER.position='PIC Maintenance';
-    CURRENT_USER.name='Rizal Maulana';
-    CURRENT_USER.company='PT Bakti Pertiwi Nusantara';
-    CURRENT_USER.department='Maintenance';
   }
   updateUserUI();
   render();
